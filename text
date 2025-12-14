@@ -1,0 +1,169 @@
+https://chatgpt.com/s/t_693f364e38208191a9ac363ac69edef4
+
+Vou te mostrar **o jeito padrão e simples** de criar um projeto de site usando **Node.js**, passo a passo. Isso já serve tanto para estudo quanto para subir depois no **GitHub / Vercel / Render**.
+
+---
+
+## 1️⃣ Verificar se o Node.js está instalado
+
+No terminal (PowerShell ou CMD):
+
+```bash
+node -v
+npm -v
+```
+
+Se aparecer a versão (como no seu caso 👍), está tudo certo.
+
+---
+
+## 2️⃣ Criar a pasta do projeto
+
+```bash
+mkdir meu-site-node
+cd meu-site-node
+```
+
+---
+
+## 3️⃣ Iniciar o projeto Node.js
+
+```bash
+npm init -y
+```
+
+Isso cria o arquivo **package.json**, que é o “coração” do projeto.
+
+---
+
+## 4️⃣ Instalar o Express (framework para sites)
+
+```bash
+npm install express
+```
+
+O **Express** facilita MUITO a criação de sites e rotas.
+
+---
+
+## 5️⃣ Criar o arquivo principal
+
+Crie um arquivo chamado:
+
+```
+index.js
+```
+
+E coloque isso dentro:
+
+```js
+const express = require('express');
+const app = express();
+
+// Permite usar HTML estático
+app.use(express.static('public'));
+
+app.get('/', (req, res) => {
+  res.send('Meu site Node.js está funcionando!');
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
+});
+```
+
+---
+
+## 6️⃣ Criar a pasta do site (HTML, CSS, JS)
+
+```bash
+mkdir public
+```
+
+Dentro dela, crie:
+
+### 📄 `public/index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Meu Site Node</title>
+</head>
+<body>
+  <h1>Site rodando com Node.js 🚀</h1>
+</body>
+</html>
+```
+
+---
+
+## 7️⃣ Rodar o projeto
+
+No terminal:
+
+```bash
+node index.js
+```
+
+Abra no navegador:
+
+```
+http://localhost:3000
+```
+
+---
+
+## 8️⃣ (Opcional) Rodar automaticamente com Nodemon
+
+Instalar:
+
+```bash
+npm install -D nodemon
+```
+
+No **package.json**, altere:
+
+```json
+"scripts": {
+  "start": "node index.js",
+  "dev": "nodemon index.js"
+}
+```
+
+Rodar:
+
+```bash
+npm run dev
+```
+
+---
+
+## 📂 Estrutura final do projeto
+
+```
+meu-site-node/
+│
+├─ node_modules/
+├─ public/
+│  └─ index.html
+├─ index.js
+├─ package.json
+└─ package-lock.json
+```
+
+---
+
+## Quer ir além?
+
+Posso te ensinar:
+
+* 🔹 usar **EJS** ou **Handlebars**
+* 🔹 criar páginas múltiplas
+* 🔹 conectar com **banco de dados**
+* 🔹 preparar para **GitHub Pages / Vercel / Render**
+* 🔹 transformar em site **profissional**
+
+👉 Me diz: você quer um **site simples**, **portfólio** ou algo mais avançado (login, API, banco)?
