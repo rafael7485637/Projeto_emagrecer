@@ -1,11 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Projeto Emagrecer</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        form { margin-bottom: 20px; }
+        input, button { margin: 5px; padding: 8px; }
+    </style>
 </head>
 <body>
-    <h1>hello world</h1>
+    <h1>Projeto Emagrecer</h1>
+
+    <h2>Criar Usuário</h2>
+    <form id="usuarioForm">
+        <input type="text" id="nome" placeholder="Nome" required>
+        <input type="number" id="idade" placeholder="Idade" required>
+        <input type="number" id="altura" placeholder="Altura (cm)" required>
+        <button type="submit">Criar</button>
+    </form>
+
+    <h2>Adicionar Peso</h2>
+    <form id="pesoForm">
+        <input type="number" id="usuarioId" placeholder="ID do Usuário" required>
+        <input type="number" step="0.01" id="peso" placeholder="Peso (kg)" required>
+        <button type="submit">Adicionar</button>
+    </form>
+
+    <h2>Calcular IMC</h2>
+    <form id="imcForm">
+        <input type="number" id="imcUsuarioId" placeholder="ID do Usuário" required>
+        <button type="submit">Calcular</button>
+    </form>
+    <p id="imcResult"></p>
+
+    <h2>Listar Pesos</h2>
+    <form id="pesosForm">
+        <input type="number" id="pesosUsuarioId" placeholder="ID do Usuário" required>
+        <button type="submit">Listar</button>
+    </form>
+    <ul id="pesosList"></ul>
+
+    <script>
+        // Criar usuário
+        document.getElementById('usuarioForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const nome = document.getElementById('nome').value;
+            const idade = parseInt(document.getElementById('idade').value);
+            const altura = parseFloat(document.getElementById('altura').value);
+            const response = await fetch('/usuario', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, idade, altura })
+            });
+            const result = await response.json();
+            alert(result.message || result.error);
+        });
+
+        // Adicionar peso
+        document.getElementById('pesoForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const usuario_id = parseInt(document.getElementById('usuarioId').value);
+            const peso = parseFloat(document.getElementById('peso').value);
+            const response = await fetch('/peso', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usuario_id, peso })
+            });
+            const result = await response.json();
+            alert(result.message || result.error);
+        });
+
+        // Calcular IMC
+        document.getElementById('imcForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('imcUsuarioId').value;
+            const response = await fetch(`/imc/${id}`);
+            const result = await response.json();
+            document.getElementById('imcResult').textContent = result.imc ? `IMC: ${result.imc}` : result.error;
+        });
+
+        // Listar pesos
+        document.getElementById('pesosForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('pesosUsuarioId').value;
+            const response = await fetch(`/pesos/${id}`);
+            const pesos = await response.json();
+            const list = document.getElementById('pesosList');
+            list.innerHTML = '';
+            pesos.forEach(p => {
+                const li = document.createElement('li');
+                li.textContent = `${p.peso} kg em ${new Date(p.data).toLocaleDateString()}`;
+                list.appendChild(li);
+            });
+        });
+    </script>
 </body>
 </html>
