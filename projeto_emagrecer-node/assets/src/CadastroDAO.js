@@ -1,0 +1,72 @@
+const Util = require("./Util");
+const pool = require("./conexaoBD"); // sua conexão já pronta
+
+class CadastroDAO {
+
+  //função salvar video
+  async salvar(dados) {
+    if (
+      Util.isEmpty(dados.titulo) ||
+      Util.isEmpty(dados.descricao) ||
+      Util.isEmpty(dados.link)
+    ) {
+      throw new Error("Todos os campos são obrigatórios.");
+    }
+
+    if (!Util.validarURL(dados.link)) {
+      throw new Error("Link inválido.");
+    }
+
+    const titulo = Util.sanitizarString(dados.titulo);
+    const descricao = Util.sanitizarString(dados.descricao);
+    const link = Util.sanitizarString(dados.link);
+    const imagem = dados.imagem || null;
+    const idcategoria = dados.idcategoria || null;
+
+    const sql = `
+      INSERT INTO video (titulo, descricao, link, imagem, idcategoria)
+      VALUES ($1, $2, $3, $4, $5)
+      RETURNING idvideo
+    `;
+
+    const result = await pool.query(sql, [
+      titulo,
+      descricao,
+      link,
+      imagem,
+      idcategoria
+    ]);
+
+    return result.rows[0]; // Retorna o vídeo inserido com idvideo
+  }
+
+ //função listar todos os videos
+  async listarVideos() {
+    const sql = `
+      SELECT v.*, c.nome_categoria AS categoria
+      FROM video v
+      LEFT JOIN categorias c ON c.idcategoria = v.idcategoria
+      ORDER BY v.idvideo DESC
+    `;
+    const { rows } = await pool.query(sql);
+    return rows;
+  }
+
+  //função deletar video
+  async deletar(idvideo) {
+    const sql = `DELETE FROM video WHERE idvideo = $1`;
+    const result = await pool.query(sql, [idvideo]);
+
+    if (result.rowCount === 0) {
+      throw new Error("Vídeo não encontrado.");
+    }
+  }
+
+  //função atualizar imagem
+  async atualizarImagem(idvideo, imagemPath) {
+    const sql = `UPDATE video SET imagem = $1 WHERE idvideo = $2`;
+    await pool.query(sql, [imagemPath, idvideo]);
+  }
+}
+
+module.exports = CadastroDAO;

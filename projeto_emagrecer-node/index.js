@@ -1,85 +1,123 @@
-const express = require('express');
-const pool = require('./assets/src/ConexaoBD');
+const express = require("express");
+const path = require("path");
+const fs = require("fs");
+const multer = require("multer");
+
+const CadastroDAO = require("./assets/src/CadastroDAO");
+const CategoriaDAO = require("./assets/src/CategoriaDAO");
+
 const app = express();
 
-// Middleware para parsear JSON
+// =====================
+// Middlewares básicos
+// =====================
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Permite usar HTML estático
-app.use(express.static('public'));
+// Servir arquivos estáticos (HTML, CSS, JS, uploads)
+app.use(express.static(path.join(__dirname, "public")));
 
-// Rota inicial
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
+// =====================
+// Configuração do Multer para upload de imagens
+// =====================
+const uploadDir = path.join(__dirname, "public", "uploads");
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
+// Usar memory storage para controlar quando salvar a imagem (apenas após validações)
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+// =====================
+// Rotas de páginas (Frontend)
+// =====================
+
+// Página inicial
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Rota para criar um novo usuário
-app.post('/usuario', async (req, res) => {
-  const { nome, idade, altura } = req.body;
-  try {
-    const result = await pool.query(
-      'INSERT INTO usuarios (nome, idade, altura) VALUES ($1, $2, $3) RETURNING id',
-      [nome, idade, altura]
-    );
-    res.status(201).json({ id: result.rows[0].id, message: 'Usuário criado com sucesso' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao criar usuário' });
-  }
+// Página de cadastro de vídeo
+app.get("/cadastro", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "cadastro.html"));
 });
 
-// Rota para adicionar peso a um usuário
-app.post('/peso', async (req, res) => {
-  const { usuario_id, peso, data } = req.body;
-  try {
-    await pool.query(
-      'INSERT INTO pesos (usuario_id, peso, data) VALUES ($1, $2, $3)',
-      [usuario_id, peso, data || new Date()]
-    );
-    res.status(201).json({ message: 'Peso adicionado com sucesso' });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao adicionar peso' });
-  }
-});
+// =====================
+// Rotas de API (Backend)
+// =====================
 
-// Rota para calcular IMC de um usuário (baseado no último peso)
-app.get('/imc/:id', async (req, res) => {
-  const { id } = req.params;
+// Cadastrar vídeo
+app.post("/cadastrar-video", upload.single("imagem"), async (req, res) => {
+  const { titulo, descricao, url } = req.body;
+
+  const dao = new CadastroDAO();
+
   try {
-    const usuario = await pool.query('SELECT altura FROM usuarios WHERE id = $1', [id]);
-    const peso = await pool.query(
-      'SELECT peso FROM pesos WHERE usuario_id = $1 ORDER BY data DESC LIMIT 1',
-      [id]
-    );
-    if (usuario.rows.length === 0 || peso.rows.length === 0) {
-      return res.status(404).json({ error: 'Usuário ou peso não encontrado' });
+    // Primeiro, salvar no banco (validações ocorrem aqui)
+    const video = await dao.salvar({ titulo, descricao, url, imagem: null });
+
+    // Se cadastro ok, salvar a imagem no disco se existir
+    if (req.file) {
+      const uniqueName = Date.now() + "-" + req.file.originalname;
+      const filePath = path.join(uploadDir, uniqueName);
+      fs.writeFileSync(filePath, req.file.buffer);
+      const imagemPath = `/uploads/${uniqueName}`;
+      // Atualizar o registro com o caminho da imagem
+      await dao.atualizarImagem(video.idvideo, imagemPath);
     }
-    const altura = usuario.rows[0].altura / 100; // em metros
-    const imc = peso.rows[0].peso / (altura * altura);
-    res.json({ imc: imc.toFixed(2) });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao calcular IMC' });
+
+    res.redirect("/");
+  } catch (error) {
+    console.error("Erro ao cadastrar vídeo:", error);
+    res.status(500).send("Erro ao cadastrar vídeo: " + error.message);
   }
 });
 
-// Rota para listar pesos de um usuário
-app.get('/pesos/:id', async (req, res) => {
-  const { id } = req.params;
+// Listar todos os vídeos
+app.get("/videos", async (req, res) => {
+  const dao = new CadastroDAO();
+
   try {
-    const result = await pool.query(
-      'SELECT peso, data FROM pesos WHERE usuario_id = $1 ORDER BY data DESC',
-      [id]
-    );
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Erro ao buscar pesos' });
+    const videos = await dao.listarVideos();
+    res.json(videos);
+  } catch (error) {
+    console.error("Erro ao buscar vídeos:", error);
+    res.status(500).json({ error: "Erro ao buscar vídeos" });
   }
 });
 
-const PORT = 3000;
+// Listar categorias
+app.get("/categorias", async (req, res) => {
+  const dao = new CategoriaDAO();
+
+  try {
+    const categorias = await dao.listarCategorias();
+    res.json(categorias);
+  } catch (error) {
+    console.error("Erro ao buscar categorias:", error);
+    res.status(500).json({ error: "Erro ao buscar categorias" });
+  }
+});
+
+// Deletar vídeo por ID
+app.delete("/videos/:id", async (req, res) => {
+  const { id } = req.params;
+  const dao = new CadastroDAO();
+
+  try {
+    await dao.deletar(id);
+    res.json({ message: "Vídeo deletado com sucesso" });
+  } catch (error) {
+    console.error("Erro ao deletar vídeo:", error);
+    res.status(500).json({ error: "Erro ao deletar vídeo: " + error.message });
+  }
+});
+
+// =====================
+// Inicialização do servidor
+// =====================
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
