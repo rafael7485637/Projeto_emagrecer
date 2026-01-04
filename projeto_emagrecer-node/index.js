@@ -3,23 +3,21 @@ const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
 
-const CadastroDAO = require("./assets/src/CadastroDAO");
+const VideosDAO = require("./assets/src/VideosDAO");
 const CategoriaDAO = require("./assets/src/CategoriaDAO");
 
 const app = express();
 
-// =====================
+
 // Middlewares básicos
-// =====================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir arquivos estáticos (HTML, CSS, JS, uploads)
 app.use(express.static(path.join(__dirname, "public")));
 
-// =====================
+
 // Configuração do Multer para upload de imagens
-// =====================
 const uploadDir = path.join(__dirname, "public", "uploads");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
@@ -43,19 +41,24 @@ app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "cadastro.html"));
 });
 
+// Pagina de feed dos videos
+app.get("/feed_videos", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "feed_videos.html"));
+});
+
 // =====================
 // Rotas de API (Backend)
 // =====================
 
 // Cadastrar vídeo
 app.post("/cadastrar-video", upload.single("imagem"), async (req, res) => {
-  const { titulo, descricao, url } = req.body;
+  const { titulo, descricao, url: link, idcategoria } = req.body;
 
-  const dao = new CadastroDAO();
+  const dao = new VideosDAO();
 
   try {
     // Primeiro, salvar no banco (validações ocorrem aqui)
-    const video = await dao.salvar({ titulo, descricao, url, imagem: null });
+    const video = await dao.salvar({ titulo, descricao, link, imagem: null, idcategoria });
 
     // Se cadastro ok, salvar a imagem no disco se existir
     if (req.file) {
@@ -76,7 +79,7 @@ app.post("/cadastrar-video", upload.single("imagem"), async (req, res) => {
 
 // Listar todos os vídeos
 app.get("/videos", async (req, res) => {
-  const dao = new CadastroDAO();
+  const dao = new VideosDAO();
 
   try {
     const videos = await dao.listarVideos();
@@ -86,6 +89,20 @@ app.get("/videos", async (req, res) => {
     res.status(500).json({ error: "Erro ao buscar vídeos" });
   }
 });
+
+// Buscar vídeo por ID para mostrar no player
+app.get('/video/:id', async (req, res) => {
+  const dao = new VideosDAO();
+  const id = req.params.id;
+
+  try {
+    const video = await dao.buscarPorId(id);
+    res.json(video);
+  } catch (err) {
+    res.status(404).json({ erro: 'Vídeo não encontrado' });
+  }
+});
+
 
 // Listar categorias
 app.get("/categorias", async (req, res) => {
@@ -100,10 +117,24 @@ app.get("/categorias", async (req, res) => {
   }
 });
 
+// Buscar vídeo por ID
+app.get("/video/:id", async (req, res) => {
+  const { id } = req.params;
+  const dao = new VideosDAO();
+
+  try {
+    const video = await dao.buscarPorId(id);
+    res.json(video);
+  } catch (error) {
+    console.error("Erro ao buscar vídeo:", error);
+    res.status(500).json({ error: "Erro ao buscar vídeo: " + error.message });
+  }
+});
+
 // Deletar vídeo por ID
 app.delete("/videos/:id", async (req, res) => {
   const { id } = req.params;
-  const dao = new CadastroDAO();
+  const dao = new VideosDAO();
 
   try {
     await dao.deletar(id);
@@ -121,3 +152,4 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
+

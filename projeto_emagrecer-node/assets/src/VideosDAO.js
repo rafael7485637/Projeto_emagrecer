@@ -1,7 +1,7 @@
 const Util = require("./Util");
 const pool = require("./conexaoBD"); // sua conexão já pronta
 
-class CadastroDAO {
+class VideosDAO {
 
   //função salvar video
   async salvar(dados) {
@@ -67,6 +67,16 @@ class CadastroDAO {
     const sql = `UPDATE video SET imagem = $1 WHERE idvideo = $2`;
     await pool.query(sql, [imagemPath, idvideo]);
   }
+
+  //função buscar video por id
+  async buscarPorId(idvideo) {
+    const sql = `SELECT * FROM video WHERE idvideo = $1`;
+    const { rows } = await pool.query(sql, [idvideo]);
+    if (rows.length === 0) {
+      throw new Error("Vídeo não encontrado");
+    }
+    return rows[0];
+  }
 }
 
-module.exports = CadastroDAO;
+module.exports = VideosDAO;

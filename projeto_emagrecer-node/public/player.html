@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Vídeo</title>
+</head>
+<body>
+
+<h1 id="titulo"></h1>
+
+<div id="player"> 
+   
+</div>
+
+<p id="descricao"></p>
+
+<script>
+  // Pega o ID da URL
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+
+  async function carregarVideo() {
+    const resposta = await fetch(`/video/${id}`);
+    const video = await resposta.json();
+
+    document.getElementById('titulo').textContent = video.titulo;
+    document.getElementById('descricao').textContent = video.descricao;
+
+    const player = document.getElementById('player');
+
+    // Verificar se é um link do YouTube
+    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const match = video.link.match(youtubeRegex);
+
+    if (match) {
+      // É YouTube, usar iframe embed
+      const videoId = match[1];
+      player.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+    } else {
+      // Não é YouTube, tentar como vídeo direto
+      player.innerHTML = `<video controls width="560" height="315"><source src="${video.link}" type="video/mp4">Seu navegador não suporta vídeo.</video>`;
+    }
+  }
+
+  carregarVideo();
+</script>
+
+</body>
+</html>
