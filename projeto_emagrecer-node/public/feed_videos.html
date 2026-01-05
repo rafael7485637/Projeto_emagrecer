@@ -49,38 +49,72 @@
         color: #4CAF50;
         font-weight: bold;
         }
+
+        .filtro {
+        margin-bottom: 20px;
+        }
+
+        .filtro select {
+        padding: 10px;
+        font-size: 16px;
+        }
     </style>
 </head>
 <body>
+    <div class="filtro">
+        <label for="categoria">Filtrar por categoria:</label>
+        <select id="categoria">
+            <option value="">Todas as categorias</option>
+        </select>
+    </div>
     <div class="feed" id="feed"></div>
 
     <script>
 
-        async function carregarFeed() {
-        const resposta = await fetch('/videos');
-        const videos = await resposta.json();
+        const select = document.getElementById('categoria');
 
-        const feed = document.getElementById('feed');
+        async function carregarCategorias() {
+        const res = await fetch('/categorias');
+        const categorias = await res.json();
 
-        videos.forEach(video => {
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            card.innerHTML = `
-            <img src="${video.imagem}" alt="${video.titulo}">
-            <div class="card-content">
-                <h3>${video.titulo}</h3>
-                <p>${video.descricao}</p>
-                <a href="player.html?id=${video.idvideo}">Ver mais</a>
-            </div>
-            `;
-
-            feed.appendChild(card);
+        categorias.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat.idcategoria;
+            opt.textContent = cat.nome;
+            select.appendChild(opt);
         });
         }
 
-        carregarFeed();
+        async function carregarVideos(categoriaId = '') {
+            const url = categoriaId ? `/videos?categoria=${categoriaId}` : '/videos';
 
+            const res = await fetch(url);
+            const videos = await res.json();
+
+            const feed = document.getElementById('feed');
+            feed.innerHTML = '';
+
+            videos.forEach(video => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                <img src="${video.imagem || 'placeholder.jpg'}" alt="${video.titulo}">
+                <div class="card-content">
+                    <h3>${video.titulo}</h3>
+                    <p>${video.descricao}</p>
+                    <a href="player.html?id=${video.idvideo}">Ver vídeo</a>
+                </div>
+                `;
+                feed.appendChild(card);
+            });
+        }
+
+        select.addEventListener('change', () => {
+            carregarVideos(select.value);
+        });
+
+        carregarCategorias();
+        carregarVideos();
     </script>
 </body>
 </html>

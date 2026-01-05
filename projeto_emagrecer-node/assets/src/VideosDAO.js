@@ -40,17 +40,21 @@ class VideosDAO {
     return result.rows[0]; // Retorna o vídeo inserido com idvideo
   }
 
- //função listar todos os videos
-  async listarVideos() {
+ 
+
+  //função listar videos por categoria
+  async listarPorCategoria(idcategoria) {
     const sql = `
       SELECT v.*, c.nome_categoria AS categoria
       FROM video v
       LEFT JOIN categorias c ON c.idcategoria = v.idcategoria
+      WHERE v.idcategoria = $1
       ORDER BY v.idvideo DESC
     `;
-    const { rows } = await pool.query(sql);
+    const { rows } = await pool.query(sql, [idcategoria]);
     return rows;
   }
+
 
   //função deletar video
   async deletar(idvideo) {

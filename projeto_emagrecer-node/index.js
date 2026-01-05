@@ -38,7 +38,7 @@ app.get("/", (req, res) => {
 
 // Página de cadastro de vídeo
 app.get("/cadastro", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "cadastro.html"));
+  res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
 });
 
 // Pagina de feed dos videos
@@ -77,18 +77,25 @@ app.post("/cadastrar-video", upload.single("imagem"), async (req, res) => {
   }
 });
 
-// Listar todos os vídeos
+// Listar todos os vídeos ou filtrar por categoria
 app.get("/videos", async (req, res) => {
   const dao = new VideosDAO();
+  const { categoria } = req.query;
 
   try {
-    const videos = await dao.listarVideos();
+    let videos;
+    if (categoria) {
+      videos = await dao.listarPorCategoria(categoria);
+    } else {
+      videos = await dao.listarVideos();
+    }
     res.json(videos);
   } catch (error) {
     console.error("Erro ao buscar vídeos:", error);
     res.status(500).json({ error: "Erro ao buscar vídeos" });
   }
 });
+
 
 // Buscar vídeo por ID para mostrar no player
 app.get('/video/:id', async (req, res) => {
