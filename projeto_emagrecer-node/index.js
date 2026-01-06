@@ -5,6 +5,7 @@ const multer = require("multer");
 
 const VideosDAO = require("./assets/src/VideosDAO");
 const CategoriaDAO = require("./assets/src/CategoriaDAO");
+const UsuarioDAO = require("./assets/src/CadastroDAO");
 
 const app = express();
 
@@ -50,9 +51,26 @@ app.get("/feed_videos", (req, res) => {
 // Rotas de API (Backend)
 // =====================
 
-// Cadastrar vídeo
-app.post("/cadastrar-video", upload.single("imagem"), async (req, res) => {
-  const { titulo, descricao, url: link, idcategoria } = req.body;
+// Cadastrar usuário
+app.post("/cadastrar-usuario", async (req, res) => {
+  const { nome, gmail, nascimento, cpf, peso, altura, telefone, endereco } = req.body;
+
+  const dao = new UsuarioDAO();
+
+  try {
+    // Salvar no banco (validações ocorrem aqui)
+    const usuario = await dao.salvar({ nome, gmail, nascimento, cpf, peso, altura, telefone, endereco });
+
+    res.redirect("/");
+  } catch (error) {
+    console.error("Erro ao cadastrar usuário:", error);
+    res.status(500).send("Erro ao cadastrar usuário: " + error.message);
+  }
+});
+
+//cadastra usuario
+app.post("/cadastrar-usuario", async (req, res) => {
+  const { nome, gmail, nascimento, CPF, peso, altura, telefone, endereco } = req.body;
 
   const dao = new VideosDAO();
 

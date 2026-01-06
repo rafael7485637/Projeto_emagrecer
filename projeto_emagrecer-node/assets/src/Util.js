@@ -44,6 +44,43 @@ class Util {
   static isEmpty(str) {
     return !str || str.trim().length === 0;
   }
+
+  /**
+   * Valida se um email é válido
+   * @param {string} email - O email a ser validado
+   * @returns {boolean} - True se válido, false caso contrário
+   */
+  static validarEmail(email) {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  }
+
+  /**
+   * Valida se um CPF é válido (formato básico)
+   * @param {string} cpf - O CPF a ser validado
+   * @returns {boolean} - True se válido, false caso contrário
+   */
+  static validarCPF(cpf) {
+    cpf = cpf.replace(/[^\d]/g, ''); // Remove não dígitos
+    if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false; // Verifica tamanho e repetição
+
+    // Cálculo dos dígitos verificadores
+    let soma = 0;
+    for (let i = 0; i < 9; i++) {
+      soma += parseInt(cpf[i]) * (10 - i);
+    }
+    let digito1 = 11 - (soma % 11);
+    if (digito1 > 9) digito1 = 0;
+
+    soma = 0;
+    for (let i = 0; i < 10; i++) {
+      soma += parseInt(cpf[i]) * (11 - i);
+    }
+    let digito2 = 11 - (soma % 11);
+    if (digito2 > 9) digito2 = 0;
+
+    return digito1 === parseInt(cpf[9]) && digito2 === parseInt(cpf[10]);
+  }
 }
 
 module.exports = Util;
