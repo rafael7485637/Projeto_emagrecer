@@ -28,7 +28,7 @@ async salvar(dados) {
   const sql = `
     INSERT INTO usuario 
     (nome, gmail, data_nascimento, cpf, peso, altura, telefone, endereco, status)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'inativo')
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente')
   `;
 
   await pool.query(sql, [
@@ -54,15 +54,14 @@ async salvar(dados) {
   }
 
   // Função atualizar status do usuário (ex.: bloquear/desbloquear)
-  async atualizarStatus(idusuario, status) {
-    const sql = `UPDATE usuario SET status = $1 WHERE idusuario = $2`;
-    const result = await pool.query(sql, [status, idusuario]);
-
-    if (result.rowCount === 0) {
-      throw new Error("Usuário não encontrado.");
-    }
+  async atualizarStatus(id, status) {
+  const sql = `
+    UPDATE usuario
+    SET status = $1
+    WHERE idusuario = $2
+  `;
+  await pool.query(sql, [status, id]);
   }
-
 }
 
 module.exports = CadastroDAO;

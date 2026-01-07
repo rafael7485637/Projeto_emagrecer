@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Admin - Lista de Usuários</title>
+    <style>
+        :root {
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --primary-text: #333;
+            --secondary-text: #666;
+            --accent-color: #4a90e2;
+            --border-color: #eee;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
+            color: var(--primary-text);
+            margin-bottom: 20px;
+        }
+
+        /* Container do Feed */
+        .user-feed {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* Estilo do Card */
+        .user-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            border-left: 5px solid var(--accent-color);
+            transition: transform 0.2s;
+        }
+
+        .user-card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Cabeçalho do Card (Nome e Status) */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .user-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .status-badge {
+            font-size: 0.8rem;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: #e1f5fe;
+            color: #0288d1;
+            text-transform: uppercase;
+        }
+
+        /* Grid de Informações */
+        .user-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .info-item {
+            color: var(--secondary-text);
+        }
+
+        .info-item strong {
+            color: var(--primary-text);
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        @media (max-width: 480px) {
+            .user-info-grid {
+                grid-template-columns: 1fr;
+            }
+            .full-width {
+                grid-column: span 1;
+            }
+        }
+
+        .card-actions {
+  margin-top: 15px;
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: opacity 0.2s;
+}
+
+.btn:hover {
+  opacity: 0.85;
+}
+
+.btn-ativar {
+  background: #4caf50;
+  color: white;
+}
+
+.btn-desativar {
+  background: #f44336;
+  color: white;
+}
+    </style>
+</head>
+<body>
+
+    <h2>Gerenciamento de Usuários</h2>
+
+    <div class="user-feed">
+        <div id="userFeed" class="user-feed">
+            <!-- Cards de usuários serão inseridos aqui via JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        async function carregarUsuarios() {
+        const response = await fetch("/usuarios");
+        const usuarios = await response.json();
+
+        const feed = document.getElementById("userFeed");
+        feed.innerHTML = "";
+
+        usuarios.forEach(user => {
+            const card = document.createElement("div");
+            card.className = "user-card";
+
+            card.innerHTML = `
+            <div class="card-header">
+                <div class="user-name">${user.nome}</div>
+                <span class="status-badge">${user.status || "Inativo"}</span>
+            </div>
+
+            <div class="user-info-grid">
+                <div class="info-item"><strong>Email</strong> ${user.gmail}</div>
+                <div class="info-item"><strong>CPF</strong> ${user.cpf}</div>
+                <div class="info-item"><strong>Nascimento</strong> ${formatarData(user.data_nascimento)}</div>
+                <div class="info-item"><strong>Telefone</strong> ${user.telefone}</div>
+                <div class="info-item"><strong>Peso</strong> ${user.peso} kg</div>
+                <div class="info-item"><strong>Altura</strong> ${user.altura} m</div>
+                <div class="info-item full-width"><strong>Endereço</strong> ${user.endereco}</div>
+            </div>
+
+            <div class="card-actions">
+                <button class="btn btn-ativar" onclick="alterarStatus(${user.idusuario}, 'Ativo')">
+                Pago
+                </button>
+                <button class="btn btn-desativar" onclick="alterarStatus(${user.idusuario}, 'Inativo')">
+                Não Pago
+                </button>
+            </div>
+            `;
+
+            feed.appendChild(card);
+        });
+        }
+
+        function formatarData(data) {
+        if (!data) return "";
+        return new Date(data).toLocaleDateString("pt-BR");
+        }
+
+        async function alterarStatus(id, status) {
+        if (!confirm(`Deseja alterar o status para ${status}?`)) return;
+
+        const response = await fetch(`/usuarios/${id}/status`, {
+            method: "PUT",
+            headers: {
+            "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ status })
+        });
+
+        if (response.ok) {
+            alert("Status atualizado com sucesso!");
+            carregarUsuarios(); // recarrega a lista
+        } else {
+            alert("Erro ao atualizar status");
+        }
+        }
+
+        carregarUsuarios();
+
+    </script>
+
+</body>
+</html>

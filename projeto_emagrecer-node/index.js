@@ -47,6 +47,16 @@ app.get("/feed_videos", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "feed_videos.html"));
 });
 
+// Página de cadastro de usuário
+app.get("/cadastro", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "cadastro.html"));
+});
+
+// Página de lista de usuários
+app.get("/lista_usuarios", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));
+});
+
 // =====================
 // Rotas de API (Backend)
 // =====================
@@ -85,6 +95,35 @@ app.post("/cadastrar-usuario", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(400).send(error.message);
+  }
+});
+
+// Listar usuários
+app.get("/usuarios", async (req, res) => {
+  const dao = new CadastroDAO();
+
+  try {
+    const usuarios = await dao.listarUsuarios();
+    res.json(usuarios);
+  } catch (error) {
+    console.error("Erro ao listar usuários:", error);
+    res.status(500).json({ error: "Erro ao listar usuários" });
+  }
+});
+
+// Atualizar status do usuário
+app.put("/usuarios/:id/status", async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  const dao = new CadastroDAO();
+
+  try {
+    await dao.atualizarStatus(id, status);
+    res.json({ message: "Status atualizado" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Erro ao atualizar status" });
   }
 });
 
