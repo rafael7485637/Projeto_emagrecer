@@ -2,21 +2,21 @@ const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
+const cors = require("cors");
 
 const VideosDAO = require("./assets/src/VideosDAO");
 const CategoriaDAO = require("./assets/src/CategoriaDAO");
-const UsuarioDAO = require("./assets/src/CadastroDAO");
+const CadastroDAO = require("./assets/src/CadastroDAO");
 
 const app = express();
 
-
 // Middlewares básicos
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir arquivos estáticos (HTML, CSS, JS, uploads)
 app.use(express.static(path.join(__dirname, "public")));
-
 
 // Configuração do Multer para upload de imagens
 const uploadDir = path.join(__dirname, "public", "uploads");
@@ -38,11 +38,11 @@ app.get("/", (req, res) => {
 });
 
 // Página de cadastro de vídeo
-app.get("/cadastro", (req, res) => {
+app.get("/cadastroVideos", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
 });
 
-// Pagina de feed dos videos
+// Página de feed dos vídeos
 app.get("/feed_videos", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "feed_videos.html"));
 });
@@ -52,25 +52,45 @@ app.get("/feed_videos", (req, res) => {
 // =====================
 
 // Cadastrar usuário
-app.post("/cadastrar-usuario", async (req, res) => {
-  const { nome, gmail, nascimento, cpf, peso, altura, telefone, endereco } = req.body;
 
-  const dao = new UsuarioDAO();
+app.post("/cadastrar-usuario", async (req, res) => {
+  console.log('req.body:', req.body);
+
+  const {
+    nome,
+    gmail,
+    data_nascimento,
+    cpf,
+    peso,
+    altura,
+    telefone,
+    endereco
+  } = req.body;
+
+  const dao = new CadastroDAO();
 
   try {
-    // Salvar no banco (validações ocorrem aqui)
-    const usuario = await dao.salvar({ nome, gmail, nascimento, cpf, peso, altura, telefone, endereco });
+    await dao.salvar({
+      nome,
+      gmail,
+      data_nascimento,
+      cpf,
+      peso,
+      altura,
+      telefone,
+      endereco
+    });
 
-    res.redirect("/");
+    res.status(201).send('Usuário cadastrado');
   } catch (error) {
-    console.error("Erro ao cadastrar usuário:", error);
-    res.status(500).send("Erro ao cadastrar usuário: " + error.message);
+    console.error(error);
+    res.status(400).send(error.message);
   }
 });
 
-//cadastra usuario
-app.post("/cadastrar-usuario", async (req, res) => {
-  const { nome, gmail, nascimento, CPF, peso, altura, telefone, endereco } = req.body;
+// Cadastrar vídeo
+app.post("/cadastrar-video", upload.single('imagem'), async (req, res) => {
+  const { titulo, descricao, link, idcategoria } = req.body;
 
   const dao = new VideosDAO();
 
@@ -114,20 +134,19 @@ app.get("/videos", async (req, res) => {
   }
 });
 
-
 // Buscar vídeo por ID para mostrar no player
-app.get('/video/:id', async (req, res) => {
+app.get("/video/:id", async (req, res) => {
+  const { id } = req.params;
   const dao = new VideosDAO();
-  const id = req.params.id;
 
   try {
     const video = await dao.buscarPorId(id);
     res.json(video);
-  } catch (err) {
-    res.status(404).json({ erro: 'Vídeo não encontrado' });
+  } catch (error) {
+    console.error("Erro ao buscar vídeo:", error);
+    res.status(500).json({ error: "Erro ao buscar vídeo: " + error.message });
   }
 });
-
 
 // Listar categorias
 app.get("/categorias", async (req, res) => {
@@ -139,20 +158,6 @@ app.get("/categorias", async (req, res) => {
   } catch (error) {
     console.error("Erro ao buscar categorias:", error);
     res.status(500).json({ error: "Erro ao buscar categorias" });
-  }
-});
-
-// Buscar vídeo por ID
-app.get("/video/:id", async (req, res) => {
-  const { id } = req.params;
-  const dao = new VideosDAO();
-
-  try {
-    const video = await dao.buscarPorId(id);
-    res.json(video);
-  } catch (error) {
-    console.error("Erro ao buscar vídeo:", error);
-    res.status(500).json({ error: "Erro ao buscar vídeo: " + error.message });
   }
 });
 

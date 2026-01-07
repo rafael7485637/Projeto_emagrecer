@@ -62,18 +62,18 @@
 <body>
     <div class="form-container">
         <h2>Inscreva-se</h2>
-        <form action="/cadastrar-usuario" method="post">
+        <form id="formCadastro">
             <label for="nome">Nome Completo</label>
             <input type="text" id="nome" name="nome" required>
 
             <label for="gmail">E-mail:</label>
             <input type="email" id="gmail" name="gmail" required>
 
-            <label for="nascimento">Data de nascimento:</label>
-            <input type="date" id="nascimento" name="nascimento" required>
+            <label for="data_nascimento">Data de nascimento:</label>
+            <input type="date" id="data_nascimento" name="data_nascimento" required>
 
-            <label for="CPF">CPF:</label>
-            <input type="text" id="CPF" name="CPF" required>
+            <label for="cpf">CPF:</label>
+            <input type="text" id="cpf" name="cpf" required>
 
             <label for="peso">Peso:</label>
             <input type="text" id="peso" name="peso" required>
@@ -93,30 +93,35 @@
         <a href="index.html">Voltar à Página Inicial</a>
     </div>
 
-    <script>
-        document.querySelector('form').addEventListener('submit', async function(event) {
-            event.preventDefault(); // Impede o envio padrão
+  <script>
+    document.getElementById('formCadastro').addEventListener('submit', async function(event) {
+    event.preventDefault();
 
-            const formData = new FormData(this);
+    const data = {
+        nome: document.getElementById('nome').value,
+        gmail: document.getElementById('gmail').value,
+        data_nascimento: document.getElementById('data_nascimento').value,
+        cpf: document.getElementById('cpf').value,
+        peso: document.getElementById('peso').value,
+        altura: document.getElementById('altura').value,
+        telefone: document.getElementById('telefone').value,
+        endereco: document.getElementById('endereco').value
+    };
 
-            try {
-                const response = await fetch('/cadastrar-video', {
-                    method: 'POST',
-                    body: formData
-                });
+    const response = await fetch('/cadastrar-usuario', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
 
-                if (response.ok) {
-                    alert('Cadastro realizado com sucesso!');
-                    window.location.href = 'index.html'; // Redireciona após sucesso
-                } else {
-                    const errorText = await response.text();
-                    alert('Erro ao cadastrar: ' + errorText);
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                alert('Erro de conexão. Tente novamente.');
-            }
-        });
-    </script>
+    if (response.ok) {
+        alert('Cadastro realizado com sucesso!');
+        window.location.href = '/';
+    } else {
+        alert(await response.text());
+    }
+    });
+  </script>
+
 </body>
 </html>
