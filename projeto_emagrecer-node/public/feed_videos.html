@@ -70,7 +70,6 @@
     <div class="feed" id="feed"></div>
 
     <script>
-
         const select = document.getElementById('categoria');
 
         async function carregarCategorias() {
@@ -85,36 +84,37 @@
         });
         }
 
-        async function carregarVideos(categoriaId = '') {
-            const url = categoriaId ? `/videos?categoria=${categoriaId}` : '/videos';
+        async function carregarVideos(idcategoria = '') {
+        const url = idcategoria ? `/videos?idcategoria=${idcategoria}` : '/videos';
 
-            const res = await fetch(url);
-            const videos = await res.json();
+        const res = await fetch(url);
+        const videos = await res.json();
 
-            const feed = document.getElementById('feed');
-            feed.innerHTML = '';
+        const feed = document.getElementById('feed');
+        feed.innerHTML = '';
 
-            videos.forEach(video => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.innerHTML = `
-                <img src="${video.imagem || 'placeholder.jpg'}" alt="${video.titulo}">
-                <div class="card-content">
-                    <h3>${video.titulo}</h3>
-                    <p>${video.descricao}</p>
-                    <a href="player.html?id=${video.idvideo}">Ver vídeo</a>
-                </div>
-                `;
-                feed.appendChild(card);
-            });
+        videos.forEach(video => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+            <img src="${video.imagem || 'placeholder.jpg'}" alt="${video.titulo}">
+            <div class="card-content">
+                <h3>${video.titulo}</h3>
+                <p>${video.descricao}</p>
+                <a href="player.html?id=${video.idvideo}">Ver vídeo</a>
+            </div>
+            `;
+            feed.appendChild(card);
+        });
         }
 
         select.addEventListener('change', () => {
-            carregarVideos(select.value);
+        carregarVideos(select.value);
         });
 
         carregarCategorias();
         carregarVideos();
+
     </script>
 </body>
 </html>

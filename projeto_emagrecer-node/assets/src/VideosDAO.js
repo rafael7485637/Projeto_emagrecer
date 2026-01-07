@@ -42,18 +42,29 @@ class VideosDAO {
 
  
 
-  //função listar videos por categoria
-  async listarPorCategoria(idcategoria) {
-    const sql = `
-      SELECT v.*, c.nome_categoria AS categoria
-      FROM video v
-      LEFT JOIN categorias c ON c.idcategoria = v.idcategoria
-      WHERE v.idcategoria = $1
-      ORDER BY v.idvideo DESC
-    `;
-    const { rows } = await pool.query(sql, [idcategoria]);
-    return rows;
+  // função listar vídeos (com ou sem categoria)
+async listarPorCategoria(idcategoria) {
+  let sql = `
+    SELECT 
+      v.*, 
+      c.nome_categoria AS categorias
+    FROM video v
+    LEFT JOIN categorias c ON c.idcategoria = v.idcategoria
+  `;
+
+  const params = [];
+
+  // só aplica o filtro se tiver categoria válida
+  if (idcategoria && idcategoria !== "") {
+    sql += ` WHERE v.idcategoria = $1`;
+    params.push(idcategoria);
   }
+
+  sql += ` ORDER BY v.idvideo DESC`;
+
+  const { rows } = await pool.query(sql, params);
+  return rows;
+}
 
 
   //função deletar video

@@ -157,15 +157,10 @@ app.post("/cadastrar-video", upload.single('imagem'), async (req, res) => {
 // Listar todos os vídeos ou filtrar por categoria
 app.get("/videos", async (req, res) => {
   const dao = new VideosDAO();
-  const { categoria } = req.query;
+  const { idcategoria } = req.query;
 
   try {
-    let videos;
-    if (categoria) {
-      videos = await dao.listarPorCategoria(categoria);
-    } else {
-      videos = await dao.listarVideos();
-    }
+    const videos = await dao.listarPorCategoria(idcategoria);
     res.json(videos);
   } catch (error) {
     console.error("Erro ao buscar vídeos:", error);
