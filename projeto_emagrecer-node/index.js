@@ -15,6 +15,10 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Servir fotos de usuários
+app.use("/foto", express.static(path.join(__dirname, "public", "foto")));
+
+
 // Servir arquivos estáticos (HTML, CSS, JS, uploads)
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -24,9 +28,28 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
 
+//Configuração do Multer para upload de fotos de usuários
+const userPhotoDir = path.join(__dirname, "public", "foto");
+
+if (!fs.existsSync(userPhotoDir)) {
+  fs.mkdirSync(userPhotoDir, { recursive: true });
+}
+
+
 // Usar memory storage para controlar quando salvar a imagem (apenas após validações)
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    if (file.mimetype.startsWith("image/")) {
+      cb(null, true);
+    } else {
+      cb(new Error("Apenas imagens são permitidas"));
+    }
+  }
+});
+
 
 // =====================
 // Rotas de páginas (Frontend)
@@ -62,9 +85,7 @@ app.get("/lista_usuarios", (req, res) => {
 // =====================
 
 // Cadastrar usuário
-
-app.post("/cadastrar-usuario", async (req, res) => {
-  console.log('req.body:', req.body);
+app.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
 
   const {
     nome,
@@ -80,7 +101,9 @@ app.post("/cadastrar-usuario", async (req, res) => {
   const dao = new CadastroDAO();
 
   try {
-    await dao.salvar({
+
+    // 1️⃣ Salva usuário SEM foto
+    const usuario = await dao.salvar({
       nome,
       gmail,
       data_nascimento,
@@ -88,15 +111,29 @@ app.post("/cadastrar-usuario", async (req, res) => {
       peso,
       altura,
       telefone,
-      endereco
+      endereco,
+      foto: null
     });
 
-    res.status(201).send('Usuário cadastrado');
+    // 2️⃣ Se existir foto, salva no disco e atualiza banco
+    if (req.file) {
+      const uniqueName = Date.now() + "-" + req.file.originalname;
+      const filePath = path.join(userPhotoDir, uniqueName);
+
+      fs.writeFileSync(filePath, req.file.buffer);
+
+      const fotoPath = `/foto/${uniqueName}`;
+      await dao.atualizarFoto(usuario.idusuario, fotoPath);
+    }
+
+    res.status(201).send("Usuário cadastrado");
+
   } catch (error) {
     console.error(error);
     res.status(400).send(error.message);
   }
 });
+
 
 // Listar usuários
 app.get("/usuarios", async (req, res) => {

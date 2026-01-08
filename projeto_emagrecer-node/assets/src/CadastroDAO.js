@@ -4,6 +4,7 @@ const pool = require("./conexaoBD"); // sua conexão já pronta
 class CadastroDAO {
 
 async salvar(dados) {
+
   if (
     Util.isEmpty(dados.nome) ||
     Util.isEmpty(dados.gmail) ||
@@ -26,12 +27,13 @@ async salvar(dados) {
   }
 
   const sql = `
-    INSERT INTO usuario 
-    (nome, gmail, data_nascimento, cpf, peso, altura, telefone, endereco, status)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,'pendente')
+    INSERT INTO usuario
+    (nome, gmail, data_nascimento, cpf, peso, altura, telefone, endereco, foto, status)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'pendente')
+    RETURNING idusuario
   `;
 
-  await pool.query(sql, [
+  const { rows } = await pool.query(sql, [
     Util.sanitizarString(dados.nome),
     Util.sanitizarString(dados.gmail),
     dados.data_nascimento,
@@ -39,8 +41,11 @@ async salvar(dados) {
     parseFloat(dados.peso),
     parseFloat(dados.altura),
     Util.sanitizarString(dados.telefone),
-    Util.sanitizarString(dados.endereco)
+    Util.sanitizarString(dados.endereco),
+    dados.foto // null inicialmente
   ]);
+
+  return rows[0];
 }
 
   // Função listar usuários
@@ -62,6 +67,19 @@ async salvar(dados) {
   `;
   await pool.query(sql, [status, id]);
   }
+
+  // Atualizar foto do usuário
+async atualizarFoto(idusuario, fotoPath) {
+  const sql = `
+    UPDATE usuario
+    SET foto = $1
+    WHERE idusuario = $2
+  `;
+  await pool.query(sql, [fotoPath, idusuario]);
 }
+}
+
+
+
 
 module.exports = CadastroDAO;

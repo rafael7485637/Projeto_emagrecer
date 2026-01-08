@@ -138,6 +138,14 @@
   background: #f44336;
   color: white;
 }
+
+.user-foto img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-color);
+}
     </style>
 </head>
 <body>
@@ -151,6 +159,7 @@
     </div>
 
     <script>
+
         async function carregarUsuarios() {
         const response = await fetch("/usuarios");
         const usuarios = await response.json();
@@ -159,63 +168,106 @@
         feed.innerHTML = "";
 
         usuarios.forEach(user => {
+
+            // 1️⃣ Criar card
             const card = document.createElement("div");
             card.className = "user-card";
 
-            card.innerHTML = `
-            <div class="card-header">
-                <div class="user-name">${user.nome}</div>
-                <span class="status-badge">${user.status || "Inativo"}</span>
-            </div>
+            // 2️⃣ Criar imagem
+            const img = document.createElement("img");
 
-            <div class="user-info-grid">
-                <div class="info-item"><strong>Email</strong> ${user.gmail}</div>
-                <div class="info-item"><strong>CPF</strong> ${user.cpf}</div>
-                <div class="info-item"><strong>Nascimento</strong> ${formatarData(user.data_nascimento)}</div>
-                <div class="info-item"><strong>Telefone</strong> ${user.telefone}</div>
-                <div class="info-item"><strong>Peso</strong> ${user.peso} kg</div>
-                <div class="info-item"><strong>Altura</strong> ${user.altura} m</div>
-                <div class="info-item full-width"><strong>Endereço</strong> ${user.endereco}</div>
-            </div>
+            // 3️⃣ Se existir foto no banco
+            if (user.foto) {
+            img.src = user.foto;
+            } else {
+            img.src = "/foto/default.png"; // imagem padrão
+            }
 
-            <div class="card-actions">
-                <button class="btn btn-ativar" onclick="alterarStatus(${user.idusuario}, 'Ativo')">
-                Pago
-                </button>
-                <button class="btn btn-desativar" onclick="alterarStatus(${user.idusuario}, 'Inativo')">
-                Não Pago
-                </button>
-            </div>
+            img.alt = "Foto do usuário";
+
+            img.onerror = () => {
+            img.src = "/foto/default.png";
+            };
+
+            // 4️⃣ Criar container da foto
+            const fotoDiv = document.createElement("div");
+            fotoDiv.className = "user-foto";
+            fotoDiv.appendChild(img);
+
+            // 5️⃣ Header
+            const header = document.createElement("div");
+            header.className = "card-header";
+
+            header.innerHTML = `
+            <div class="user-name">${user.nome}</div>
+            <span class="status-badge">${user.status || "Inativo"}</span>
             `;
+
+            header.prepend(fotoDiv);
+
+            // 6️⃣ Corpo
+            const info = document.createElement("div");
+            info.className = "user-info-grid";
+            info.innerHTML = `
+            <div class="info-item"><strong>Email</strong> ${user.gmail}</div>
+            <div class="info-item"><strong>CPF</strong> ${user.cpf}</div>
+            <div class="info-item"><strong>Nascimento</strong> ${formatarData(user.data_nascimento)}</div>
+            <div class="info-item"><strong>Telefone</strong> ${user.telefone}</div>
+            <div class="info-item"><strong>Peso</strong> ${user.peso} kg</div>
+            <div class="info-item"><strong>Altura</strong> ${user.altura} m</div>
+            <div class="info-item full-width"><strong>Endereço</strong> ${user.endereco}</div>
+            `;
+
+            // 7️⃣ Ações
+            const actions = document.createElement("div");
+            actions.className = "card-actions";
+            actions.innerHTML = `
+            <button class="btn btn-ativar" onclick="alterarStatus(${user.idusuario}, 'Pago')">
+                Pago
+            </button>
+            <button class="btn btn-desativar" onclick="alterarStatus(${user.idusuario}, 'Não Pago')">
+                Não Pago
+            </button>
+            `;
+
+            // 8️⃣ Montar card
+            card.appendChild(header);
+            card.appendChild(info);
+            card.appendChild(actions);
 
             feed.appendChild(card);
         });
         }
-
-        function formatarData(data) {
-        if (!data) return "";
-        return new Date(data).toLocaleDateString("pt-BR");
+        function formatarData(dataStr) {
+        if (!dataStr) return "";
+        const data = new Date(dataStr);
+        return data.toLocaleDateString("pt-BR");
         }
 
-        async function alterarStatus(id, status) {
-        if (!confirm(`Deseja alterar o status para ${status}?`)) return;
+        async function alterarStatus(idusuario, status) {
+            try{
+                const response = await fetch(`/usuarios/${idusuario}/status`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    status: status
+                })
+                });
 
-        const response = await fetch(`/usuarios/${id}/status`, {
-            method: "PUT",
-            headers: {
-            "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ status })
-        });
+                if (!response.ok) {
+                throw new Error("Erro ao atualizar status");
+                }
 
-        if (response.ok) {
-            alert("Status atualizado com sucesso!");
-            carregarUsuarios(); // recarrega a lista
-        } else {
-            alert("Erro ao atualizar status");
+                // atualiza a lista depois de mudar o status
+                carregarUsuarios();
+
+            }catch(error){
+               console.error(error);
+                alert("Erro ao alterar status do usuário");
+            }
         }
-        }
-
         carregarUsuarios();
 
     </script>
