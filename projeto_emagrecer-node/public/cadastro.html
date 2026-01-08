@@ -91,6 +91,10 @@
             <label for="endereco">Endereço:</label>
             <input type="text" id="endereco" name="endereco" required>
 
+             <label for="senha_usuario">Senha:</label>
+            <input type="text" id="senha_usuario" name="senha_usuario" required>
+
+
             <button type="submit">Se insecrever</button>
         </form>
         <br>
@@ -115,6 +119,7 @@
   formData.append("altura", altura.value);
   formData.append("telefone", telefone.value);
   formData.append("endereco", endereco.value);
+  formData.append("senha_usuario", senha_usuario.value);
 
   const response = await fetch("/cadastrar-usuario", {
     method: "POST",

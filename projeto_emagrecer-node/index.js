@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const multer = require("multer");
 const cors = require("cors");
+const bcrypt = require('bcrypt'); // ou 'bcryptjs'
 
 const VideosDAO = require("./assets/src/VideosDAO");
 const CategoriaDAO = require("./assets/src/CategoriaDAO");
@@ -79,6 +80,10 @@ app.get("/cadastro", (req, res) => {
 app.get("/lista_usuarios", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));
 });
+// Página de Login
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
 
 // =====================
 // Rotas de API (Backend)
@@ -95,24 +100,28 @@ app.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
     peso,
     altura,
     telefone,
-    endereco
+    endereco,
+    senha_usuario
   } = req.body;
 
   const dao = new CadastroDAO();
-
-  try {
-
-    // 1️⃣ Salva usuário SEM foto
-    const usuario = await dao.salvar({
-      nome,
-      gmail,
-      data_nascimento,
-      cpf,
-      peso,
-      altura,
-      telefone,
-      endereco,
-      foto: null
+  try{
+    //quantidade de criptografia do hash
+    const saltRounds = 10;
+    //gerar o hash da senha
+    const senhaHash = await bcrypt.hash(senha_usuario, saltRounds);
+    //salva no banco a senha com hash
+    const usuario =await dao.salvar({
+    nome,
+    gmail,
+    data_nascimento,
+    cpf,
+    peso,
+    altura,
+    telefone,
+    endereco,
+    senha_usuario: senhaHash,
+    foto: null
     });
 
     // 2️⃣ Se existir foto, salva no disco e atualiza banco
@@ -133,6 +142,8 @@ app.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
     res.status(400).send(error.message);
   }
 });
+
+//login do usuário
 
 
 // Listar usuários

@@ -1,16 +1,106 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Página Inicial Simples</title>
+    <style>
+       * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        nav {
+            background-color: #fff;
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4A90E2;
+            text-decoration: none;
+        }
+
+        /* Estilizando os links para parecerem botões */
+        .btn {
+            padding: 0.6rem 1.2rem;
+            margin-left: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none; /* Remove o sublinhado */
+            display: inline-block;
+            transition: 0.3s;
+        }
+
+        .btn-login {
+            border: 1px solid #4A90E2;
+            color: #4A90E2;
+        }
+
+        .btn-login:hover {
+            background: #f0f7ff;
+        }
+
+        .btn-signup {
+            background: #4A90E2;
+            border: 1px solid #4A90E2;
+            color: white;
+        }
+
+        .btn-signup:hover {
+            background: #357ABD;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem;
+            background-color: #f9f9f9;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 1.5rem;
+        }
+    </style>
 </head>
 <body>
-   <a href="cadastroVideos.html">cadastro de videos</a>
-   <a href="feed_videos.html">feed_videos</a>
-   <a href="cadastro.html">Inscreva-se</a>
-    <a href="lista_usuarios.html">Lista de Usuários</a>
 
+    <nav>
+        <a href="/" class="logo">MinhaLogo</a>
+        <div class="nav-buttons">
+            <a href="/login" class="btn btn-login">Login</a>
+            <a href="/cadastro" class="btn btn-signup">Inscreva-se</a>
+            <a href="/feed_videos" class="btn btn-signup">Feed de Vídeos</a>
+        </div>
+    </nav>
 
+    <main>
+        <h1>Bem-vindo ao nosso site</h1>
+        <p>Agora os botões de navegação utilizam tags de link (&lt;a&gt;), facilitando o redirecionamento entre as páginas do seu sistema.</p>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Minha Empresa. Todos os direitos reservados.</p>
+    </footer>
 </body>
 </html>

@@ -13,7 +13,8 @@ async salvar(dados) {
     Util.isEmpty(dados.peso) ||
     Util.isEmpty(dados.altura) ||
     Util.isEmpty(dados.telefone) ||
-    Util.isEmpty(dados.endereco)
+    Util.isEmpty(dados.endereco) ||
+    Util.isEmpty(dados.senha_usuario)
   ) {
     throw new Error("Todos os campos são obrigatórios.");
   }
@@ -28,8 +29,8 @@ async salvar(dados) {
 
   const sql = `
     INSERT INTO usuario
-    (nome, gmail, data_nascimento, cpf, peso, altura, telefone, endereco, foto, status)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'pendente')
+    (nome, gmail, data_nascimento, cpf, peso, altura, telefone, endereco, foto, status, senha_usuario)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'pendente', $10)
     RETURNING idusuario
   `;
 
@@ -42,7 +43,8 @@ async salvar(dados) {
     parseFloat(dados.altura),
     Util.sanitizarString(dados.telefone),
     Util.sanitizarString(dados.endereco),
-    dados.foto // null inicialmente
+    dados.foto, // null inicialmente
+    dados.senha_usuario
   ]);
 
   return rows[0];

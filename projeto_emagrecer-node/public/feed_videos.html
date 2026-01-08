@@ -4,63 +4,160 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Card Básico</title>
-    <style>
-        .feed {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 20px;
+<style>
+        /* Reset e Configurações Gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        .card {
-        background: white;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        transition: transform 0.2s;
+        body {
+            background-color: #f4f4f9;
+            padding: 20px;
+            padding-top: 80px; /* Espaço para a nav não cobrir o conteúdo */
         }
 
-        .card:hover {
-        transform: scale(1.03);
+        /* --- ESTILO DA NAV --- */
+        nav {
+            background-color: #fff;
+            padding: 0 5%;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: fixed; /* Fixa no topo */
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
 
-        .card img {
-        width: 100%;
-        height: 160px;
-        object-fit: cover;
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #4A90E2;
+            text-decoration: none;
         }
 
-        .card-content {
-        padding: 15px;
+        .btn {
+            padding: 0.6rem 1.2rem;
+            margin-left: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.3s;
+            font-size: 14px;
         }
 
-        .card-content h3 {
-        margin: 0 0 10px;
+        .btn-login {
+            border: 1px solid #4A90E2;
+            color: #4A90E2;
         }
 
-        .card-content p {
-        color: #555;
-        font-size: 14px;
+        .btn-login:hover {
+            background: #f0f7ff;
         }
 
-        .card-content a {
-        display: inline-block;
-        margin-top: 10px;
-        text-decoration: none;
-        color: #4CAF50;
-        font-weight: bold;
+        .btn-signup {
+            background: #4A90E2;
+            border: 1px solid #4A90E2;
+            color: white;
         }
 
+        .btn-signup:hover {
+            background: #357ABD;
+        }
+
+        /* --- ESTILO DOS FILTROS E FEED --- */
         .filtro {
-        margin-bottom: 20px;
+            margin-bottom: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .filtro label {
+            font-weight: bold;
+            margin-right: 10px;
         }
 
         .filtro select {
-        padding: 10px;
-        font-size: 16px;
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+            outline: none;
+        }
+
+        .feed {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.03);
+        }
+
+        .card img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-content h3 {
+            margin: 0 0 10px;
+            font-size: 1.2rem;
+        }
+
+        .card-content p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.4;
+            height: 40px; /* Limita altura da descrição */
+            overflow: hidden;
+        }
+
+        .card-content a {
+            display: inline-block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #4A90E2;
+            font-weight: bold;
+        }
+
+        .card-content a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
 <body>
+
+      <nav>
+        <a href="/" class="logo">MinhaLogo</a>
+        <div class="nav-buttons">
+            <a href="/lista_usuarios" class="btn btn-login">Usuarios</a>
+            <a href="/cadastroVideos" class="btn btn-signup">Cadastrar videos</a>
+        </div>
+    </nav>
+
     <div class="filtro">
         <label for="categoria">Filtrar por categoria:</label>
         <select id="categoria">

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="url"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Login</h2>
+        <form id="formLogin">
+
+            <label for="gmail">E-mail:</label>
+            <input type="email" id="gmail" name="gmail" required>
+
+             <label for="senha_usuario">Senha:</label>
+            <input type="password" id="senha_usuario" name="senha_usuario" required>
+
+
+            <button type="submit">Entrar</button>
+        </form>
+        <br>
+        <a href="index.html">Voltar à Página Inicial</a>
+    </div>
+
+  <script>
+    document.getElementById("formLogin").addEventListener("submit", async (e) =>{
+        e.preventDefault();
+    
+        const gmail = document.getElementById("gmail").value;
+        const senha_usuario = document.getElementById("senha_usuario").value;
+    
+        const response = await fetch("/login", {
+            method: "POST",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ gmail, senha_usuario }),
+        });
+    
+        if (response.ok) {
+            // Login bem-sucedido
+            alert("Login realizado com sucesso!");
+            window.location.href = "/feed_videos"; // Redireciona para a página de feed de vídeos
+        } else {
+            // Falha no login
+            const errorData = await response.json();
+            alert("Erro no login: " + errorData.message);
+        }
+    })
+  </script>
+
+</body>
+</html>
