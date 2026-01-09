@@ -22,6 +22,10 @@ app.use("/foto", express.static(path.join(__dirname, "public", "foto")));
 
 // Servir arquivos estáticos (HTML, CSS, JS, uploads)
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/assets", express.static(path.join(__dirname, "assets")));
+
+//carregar componentes
+app.use("/components", express.static(path.join(__dirname, "assets", "components")));
 
 // Configuração do Multer para upload de imagens
 const uploadDir = path.join(__dirname, "public", "uploads");
@@ -74,6 +78,11 @@ app.get("/feed_videos", (req, res) => {
 // Página de cadastro de usuário
 app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "cadastro.html"));
+});
+
+// Página de cadastro de usuário
+app.get("/cadastroAdm", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "cadastroAdm.html"));
 });
 
 // Página de lista de usuários

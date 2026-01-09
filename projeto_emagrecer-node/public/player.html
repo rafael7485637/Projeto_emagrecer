@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <title>Vídeo</title>
+  <link rel="stylesheet" href="../assets/css/player.css">
 </head>
 <body>
+    <nav id="navbar"></nav>
 
 <h1 id="titulo"></h1>
 
@@ -15,6 +17,13 @@
 <p id="descricao"></p>
 
 <script>
+    // Carregar navbar
+    fetch("../assets/components/navbar.html")
+        .then(r => r.text())
+        .then(html => {
+            document.getElementById("navbar").innerHTML = html;
+        });
+
   // Pega o ID da URL
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
