@@ -9,11 +9,9 @@ async salvar(dados) {
     Util.isEmpty(dados.nome) ||
     Util.isEmpty(dados.gmail) ||
     Util.isEmpty(dados.data_nascimento) ||
-    Util.isEmpty(dados.cpf) ||
     Util.isEmpty(dados.peso) ||
     Util.isEmpty(dados.altura) ||
     Util.isEmpty(dados.telefone) ||
-    Util.isEmpty(dados.endereco) ||
     Util.isEmpty(dados.senha_usuario)
   ) {
     throw new Error("Todos os campos são obrigatórios.");
@@ -23,9 +21,6 @@ async salvar(dados) {
     throw new Error("E-mail inválido.");
   }
 
-  if (!Util.validarCPF(dados.cpf)) {
-    throw new Error("CPF inválido.");
-  }
 
   const sql = `
     INSERT INTO usuario
@@ -38,11 +33,9 @@ async salvar(dados) {
     Util.sanitizarString(dados.nome),
     Util.sanitizarString(dados.gmail),
     dados.data_nascimento,
-    Util.sanitizarString(dados.cpf),
     parseFloat(dados.peso),
     parseFloat(dados.altura),
     Util.sanitizarString(dados.telefone),
-    Util.sanitizarString(dados.endereco),
     dados.foto, // null inicialmente
     dados.senha_usuario
   ]);
