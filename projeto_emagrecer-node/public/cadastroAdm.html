@@ -19,8 +19,8 @@
             <label for="gmail">E-mail:</label>
             <input type="email" id="gmail" name="gmail" required>
 
-             <label for="senha_usuario">Senha:</label>
-            <input type="text" id="senha_usuario" name="senha_usuario" required>
+             <label for="senha_adm">Senha:</label>
+            <input type="text" id="senha_adm" name="senha_adm" required>
 
 
             <button type="submit">Adicionar</button>
@@ -44,7 +44,7 @@
 
   formData.append("nome", nome.value);
   formData.append("gmail", gmail.value);
-  formData.append("senha_usuario", senha_usuario.value);
+  formData.append("senha_adm", senha_adm.value);
 
   const response = await fetch("/cadastrar-usuario", {
     method: "POST",

@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt'); // ou 'bcryptjs'
 const VideosDAO = require("./assets/src/VideosDAO");
 const CategoriaDAO = require("./assets/src/CategoriaDAO");
 const CadastroDAO = require("./assets/src/CadastroDAO");
+const AdministradorDAO = require("./assets/src/AdministradorDAO");
 
 const app = express();
 
