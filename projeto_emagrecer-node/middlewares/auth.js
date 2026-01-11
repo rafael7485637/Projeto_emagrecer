@@ -27,7 +27,7 @@ function apenasAdmin(req, res, next) {
 }
 
 function apenasUsuario(req, res, next) {
-  if (req.user.tipo !== "usuario") {
+  if (req.user.tipo !== "usuario" && req.user.tipo !== "admin") {
     return res.status(403).json({ error: "Acesso negado" });
   }
   next();

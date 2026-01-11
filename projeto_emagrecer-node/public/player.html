@@ -17,6 +17,11 @@
 <p id="descricao"></p>
 
 <script>
+    // Verificar se o usuário está logado
+    if (!localStorage.getItem('token')) {
+        window.location.href = '/login';
+    }
+
     // Carregar navbar
     fetch("../assets/components/navbar.html")
         .then(r => r.text())
@@ -29,7 +34,11 @@
   const id = params.get('id');
 
   async function carregarVideo() {
-    const resposta = await fetch(`/video/${id}`);
+    const resposta = await fetch(`/video/${id}`, {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+    });
     const video = await resposta.json();
 
     document.getElementById('titulo').textContent = video.titulo;

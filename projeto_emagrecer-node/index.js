@@ -59,20 +59,20 @@ const upload = multer({
 
 //proteger rotas 
   //somente admin
-  app.get("/cadastroAdm", auth, apenasAdmin, (req, res) => {
+  app.get("/cadastroAdm", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "cadastroAdm.html"));
   });
 
-  app.get("/cadastroVideos", auth, apenasAdmin, (req, res) => {
+  app.get("/cadastroVideos", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
   });
 
-  app.get("/lista_usuarios", auth, apenasAdmin, (req, res) => {
+  app.get("/lista_usuarios", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));
   });
 
   //somente usuario
-  app.get("/feed_videos", auth, apenasUsuario, (req, res) => {
+  app.get("/feed_videos", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "feed_videos.html"));
   });
 
@@ -148,7 +148,7 @@ app.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
 
 
 // Listar usuários
-app.get("/usuarios", async (req, res) => {
+app.get("/usuarios", auth, apenasAdmin, async (req, res) => {
   const dao = new CadastroDAO();
 
   try {
@@ -161,7 +161,7 @@ app.get("/usuarios", async (req, res) => {
 });
 
 // Atualizar status do usuário
-app.put("/usuarios/:id/status", async (req, res) => {
+app.put("/usuarios/:id/status", auth, apenasAdmin, async (req, res) => {
   const { id } = req.params;
   const { status } = req.body;
 
@@ -177,7 +177,7 @@ app.put("/usuarios/:id/status", async (req, res) => {
 });
 
 // cadastrar administrador
-app.post("/cadastrar-adm", async (req, res) => {
+app.post("/cadastrar-adm", auth, apenasAdmin, async (req, res) => {
   const { nome_adm, gmail_adm, senha_adm } = req.body;
   const dao = new AdministradorDAO();
 
@@ -201,7 +201,7 @@ app.post("/cadastrar-adm", async (req, res) => {
 
 
 // Cadastrar vídeo
-app.post("/cadastrar-video", upload.single('imagem'), async (req, res) => {
+app.post("/cadastrar-video", auth, apenasAdmin, upload.single('imagem'), async (req, res) => {
   const { titulo, descricao, link, idcategoria } = req.body;
 
   const dao = new VideosDAO();
@@ -228,7 +228,7 @@ app.post("/cadastrar-video", upload.single('imagem'), async (req, res) => {
 });
 
 // Listar todos os vídeos ou filtrar por categoria
-app.get("/videos", async (req, res) => {
+app.get("/videos", auth, apenasUsuario, async (req, res) => {
   const dao = new VideosDAO();
   const { idcategoria } = req.query;
 
@@ -242,7 +242,7 @@ app.get("/videos", async (req, res) => {
 });
 
 // Buscar vídeo por ID para mostrar no player
-app.get("/video/:id", async (req, res) => {
+app.get("/video/:id", auth, apenasUsuario, async (req, res) => {
   const { id } = req.params;
   const dao = new VideosDAO();
 
@@ -269,7 +269,7 @@ app.get("/categorias", async (req, res) => {
 });
 
 // Deletar vídeo por ID
-app.delete("/videos/:id", async (req, res) => {
+app.delete("/videos/:id", auth, apenasAdmin, async (req, res) => {
   const { id } = req.params;
   const dao = new VideosDAO();
 

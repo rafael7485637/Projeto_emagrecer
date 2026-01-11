@@ -18,6 +18,11 @@
     </div>
 
     <script>
+        // Verificar se o usuário está logado
+        if (!localStorage.getItem('token')) {
+            window.location.href = '/login';
+        }
+
         // Carregar navbar
         fetch("../assets/components/navbar.html")
             .then(r => r.text())
@@ -26,7 +31,11 @@
             });
 
         async function carregarUsuarios() {
-        const response = await fetch("/usuarios");
+        const response = await fetch("/usuarios", {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
         const usuarios = await response.json();
 
         const feed = document.getElementById("userFeed");
@@ -112,7 +121,8 @@
                 const response = await fetch(`/usuarios/${idusuario}/status`, {
                 method: "PUT",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify({
                     status: status

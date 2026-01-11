@@ -30,6 +30,11 @@
     </div>
 
   <script>
+    // Verificar se o usuário está logado
+    if (!localStorage.getItem('token')) {
+        window.location.href = '/login';
+    }
+
    document.getElementById("formCadastro").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -42,7 +47,8 @@
   const response = await fetch("/cadastrar-adm", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
     },
     body: JSON.stringify(dados)
   });

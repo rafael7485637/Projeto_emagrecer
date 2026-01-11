@@ -20,6 +20,11 @@
 
     <script>
 
+        // Verificar se o usuário está logado
+        if (!localStorage.getItem('token')) {
+            window.location.href = '/login';
+        }
+
         //conectar nos componentes 
 
         // carregar navbar
@@ -32,7 +37,11 @@
         const select = document.getElementById('categoria');
 
         async function carregarCategorias() {
-        const res = await fetch('/categorias');
+        const res = await fetch('/categorias', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
         const categorias = await res.json();
 
         categorias.forEach(cat => {
@@ -46,7 +55,11 @@
         async function carregarVideos(idcategoria = '') {
         const url = idcategoria ? `/videos?idcategoria=${idcategoria}` : '/videos';
 
-        const res = await fetch(url);
+        const res = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
         const videos = await res.json();
 
         const feed = document.getElementById('feed');
