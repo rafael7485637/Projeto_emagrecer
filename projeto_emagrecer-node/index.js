@@ -10,6 +10,8 @@ const CategoriaDAO = require("./assets/src/CategoriaDAO");
 const CadastroDAO = require("./assets/src/CadastroDAO");
 const AdministradorDAO = require("./assets/src/AdministradorDAO");
 const app = express();
+const { auth, apenasAdmin, apenasUsuario } = require("./middlewares/auth");
+
 
 // Middlewares básicos
 app.use(cors());
@@ -55,44 +57,37 @@ const upload = multer({
   }
 });
 
+//proteger rotas 
+  //somente admin
+  app.get("/cadastroAdm", auth, apenasAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "cadastroAdm.html"));
+  });
 
-// =====================
-// Rotas de páginas (Frontend)
-// =====================
+  app.get("/cadastroVideos", auth, apenasAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
+  });
 
-// Página inicial
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+  app.get("/lista_usuarios", auth, apenasAdmin, (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));
+  });
 
-// Página de cadastro de vídeo
-app.get("/cadastroVideos", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
-});
-
-// Página de feed dos vídeos
-app.get("/feed_videos", (req, res) => {
+  //somente usuario
+  app.get("/feed_videos", auth, apenasUsuario, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "feed_videos.html"));
-});
+  });
 
-// Página de cadastro de usuário
-app.get("/cadastro", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "cadastro.html"));
-});
+  //publico
+  app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.html"));
+  });
 
-// Página de cadastro de usuário
-app.get("/cadastroAdm", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "cadastroAdm.html"));
-});
+  app.get("/login", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+  });
 
-// Página de lista de usuários
-app.get("/lista_usuarios", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));
-});
-// Página de Login
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
-});
+  app.get("/cadastro", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "cadastro.html"));
+  });
 
 // =====================
 // Rotas de API (Backend)
@@ -138,6 +133,9 @@ app.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
 
       const fotoPath = `/foto/${uniqueName}`;
       await dao.atualizarFoto(usuario.idusuario, fotoPath);
+    }
+    if (await dao.emailExisteComoAdm(gmail)) {
+      return res.status(400).send("Email pertence a um administrador");
     }
 
     res.status(201).send("Usuário cadastrado");

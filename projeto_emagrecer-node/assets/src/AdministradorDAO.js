@@ -37,13 +37,13 @@ async salvar(dados) {
 // Função buscar administrador por email
 async buscarPorEmail(gmail) {
   const sql = `
-    SELECT idadministrador, gmail_adm, senha_adm
-    FROM administrador
+    SELECT * FROM administrador
     WHERE gmail_adm = $1
   `;
   const { rows } = await pool.query(sql, [gmail]);
   return rows[0];
 }
+
 
 }
 
