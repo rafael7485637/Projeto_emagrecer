@@ -9,7 +9,6 @@ const VideosDAO = require("./assets/src/VideosDAO");
 const CategoriaDAO = require("./assets/src/CategoriaDAO");
 const CadastroDAO = require("./assets/src/CadastroDAO");
 const AdministradorDAO = require("./assets/src/AdministradorDAO");
-
 const app = express();
 
 // Middlewares básicos
@@ -106,11 +105,9 @@ app.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
     nome,
     gmail,
     data_nascimento,
-    cpf,
     peso,
     altura,
     telefone,
-    endereco,
     senha_usuario
   } = req.body;
 
@@ -125,11 +122,9 @@ app.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
     nome,
     gmail,
     data_nascimento,
-    cpf,
     peso,
     altura,
     telefone,
-    endereco,
     senha_usuario: senhaHash,
     foto: null
     });
@@ -152,8 +147,6 @@ app.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
     res.status(400).send(error.message);
   }
 });
-
-//login do usuário
 
 
 // Listar usuários
@@ -184,6 +177,30 @@ app.put("/usuarios/:id/status", async (req, res) => {
     res.status(500).json({ error: "Erro ao atualizar status" });
   }
 });
+
+// cadastrar administrador
+app.post("/cadastrar-adm", async (req, res) => {
+  const { nome_adm, gmail_adm, senha_adm } = req.body;
+  const dao = new AdministradorDAO();
+
+  try {
+    const saltRounds = 10;
+    const senhaHash = await bcrypt.hash(senha_adm, saltRounds);
+
+    await dao.salvar({
+      nome_adm,
+      gmail_adm,
+      senha_adm: senhaHash
+    });
+
+    res.status(201).send("Administrador cadastrado");
+
+  } catch (error) {
+    console.error(error);
+    res.status(400).send(error.message);
+  }
+});
+
 
 // Cadastrar vídeo
 app.post("/cadastrar-video", upload.single('imagem'), async (req, res) => {
@@ -264,6 +281,66 @@ app.delete("/videos/:id", async (req, res) => {
   } catch (error) {
     console.error("Erro ao deletar vídeo:", error);
     res.status(500).json({ error: "Erro ao deletar vídeo: " + error.message });
+  }
+});
+
+//login
+const jwt = require("jsonwebtoken");
+const SECRET = "segredo_super_importante"; // depois coloque em .env
+
+app.post("/login", async (req, res) => {
+  const { gmail, senha } = req.body;
+
+  try {
+    // 🔎 1. ADMIN
+    const admDao = new AdministradorDAO();
+    const admin = await admDao.buscarPorEmail(gmail);
+
+    if (admin) {
+      const ok = await bcrypt.compare(senha, admin.senha_adm);
+
+      if (!ok) {
+        return res.status(401).json({ error: "Senha inválida" });
+      }
+
+      const token = jwt.sign(
+        { id: admin.idadministrador, tipo: "admin" },
+        SECRET,
+        { expiresIn: "1d" }
+      );
+
+      return res.json({ tipo: "admin", token });
+    }
+
+    // 🔎 2. USUÁRIO
+    const userDao = new CadastroDAO();
+    const usuario = await userDao.buscarPorEmail(gmail);
+
+    if (!usuario) {
+      return res.status(401).json({ error: "Usuário não encontrado" });
+    }
+
+    if (usuario.status !== "Pago") {
+      return res.status(403).json({ error: "Usuário não autorizado" });
+    }
+
+    const ok = await bcrypt.compare(senha, usuario.senha_usuario);
+
+    if (!ok) {
+      return res.status(401).json({ error: "Senha inválida" });
+    }
+
+    const token = jwt.sign(
+      { id: usuario.idusuario, tipo: "usuario" },
+      SECRET,
+      { expiresIn: "1d" }
+    );
+
+    res.json({ tipo: "usuario", token });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erro no login" });
   }
 });
 

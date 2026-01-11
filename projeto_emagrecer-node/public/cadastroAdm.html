@@ -13,14 +13,14 @@
         <h2>Adicionar Administrador</h2>
         <form id="formCadastro">
 
-            <label for="nome">Nome Completo</label>
-            <input type="text" id="nome" name="nome" required>
+            <label for="nome_adm">Nome Completo</label>
+            <input type="text" id="nome_adm" name="nome_adm" required>
 
-            <label for="gmail">E-mail:</label>
-            <input type="email" id="gmail" name="gmail" required>
-
+            <label for="gmail_adm">E-mail:</label>
+            <input type="email" id="gmail_adm" name="gmail_adm" required>
+            
              <label for="senha_adm">Senha:</label>
-            <input type="text" id="senha_adm" name="senha_adm" required>
+            <input type="password" id="senha_adm" name="senha_adm" required>
 
 
             <button type="submit">Adicionar</button>
@@ -30,34 +30,31 @@
     </div>
 
   <script>
-    // Carregar navbar
-    fetch("../assets/components/navbar.html")
-        .then(r => r.text())
-        .then(html => {
-            document.getElementById("navbar").innerHTML = html;
-        });
-
-    document.getElementById("formCadastro").addEventListener("submit", async (e) => {
+   document.getElementById("formCadastro").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const formData = new FormData();
+  const dados = {
+    nome_adm: document.getElementById("nome_adm").value,
+    gmail_adm: document.getElementById("gmail_adm").value,
+    senha_adm: document.getElementById("senha_adm").value
+  };
 
-  formData.append("nome", nome.value);
-  formData.append("gmail", gmail.value);
-  formData.append("senha_adm", senha_adm.value);
-
-  const response = await fetch("/cadastrar-usuario", {
+  const response = await fetch("/cadastrar-adm", {
     method: "POST",
-    body: formData
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(dados)
   });
 
   if (response.ok) {
-    alert("Cadastro realizado com sucesso!");
+    alert("Administrador cadastrado com sucesso!");
     window.location.href = "/";
   } else {
     alert(await response.text());
   }
 });
+
   </script>
 
 </body>
