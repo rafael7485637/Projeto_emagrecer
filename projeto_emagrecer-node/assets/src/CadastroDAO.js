@@ -25,7 +25,7 @@ async salvar(dados) {
   const sql = `
     INSERT INTO usuario
     (nome, gmail, data_nascimento, peso, altura, telefone, foto, status, senha_usuario)
-    VALUES ($1,$2,$3,$4,$5,$6,$7,'Pago', $8)
+    VALUES ($1,$2,$3,$4,$5,$6,$7,'Pendente', $8)
     RETURNING idusuario
   `;
 
@@ -88,7 +88,8 @@ async atualizarFoto(idusuario, fotoPath) {
 //buscar usuario por gmail
 async buscarPorEmail(gmail) {
   const sql = `
-    SELECT * FROM usuario
+    SELECT idusuario, gmail, senha_usuario, status
+    FROM usuario
     WHERE gmail = $1
   `;
   const { rows } = await pool.query(sql, [gmail]);

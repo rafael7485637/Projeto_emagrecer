@@ -1,4 +1,4 @@
-const pool = require("/ConexaoBD");
+const pool = require("./conexaoBD");
 const bcrypt = require("bcrypt");
 
 class LoginDAO {

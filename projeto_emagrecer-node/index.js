@@ -4,11 +4,13 @@ const fs = require("fs");
 const multer = require("multer");
 const cors = require("cors");
 const bcrypt = require('bcrypt'); // ou 'bcryptjs'
+require("dotenv").config();
 
 const VideosDAO = require("./assets/src/VideosDAO");
 const CategoriaDAO = require("./assets/src/CategoriaDAO");
 const CadastroDAO = require("./assets/src/CadastroDAO");
 const AdministradorDAO = require("./assets/src/AdministradorDAO");
+const LoginDAO = require("./assets/src/LoginDAO");
 const app = express();
 const { auth, apenasAdmin, apenasUsuario } = require("./middlewares/auth");
 
@@ -87,6 +89,9 @@ const upload = multer({
 
   app.get("/cadastro", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "cadastro.html"));
+  });
+  app.get("/contato", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "contato.html"));
   });
 
 // =====================
@@ -284,18 +289,19 @@ app.delete("/videos/:id", auth, apenasAdmin, async (req, res) => {
 
 //login
 const jwt = require("jsonwebtoken");
-const SECRET = "segredo_super_importante"; // depois coloque em .env
+const SECRET = process.env.JWT_SECRET;
 
 app.post("/login", async (req, res) => {
   const { gmail, senha } = req.body;
 
   try {
+    const loginDao = new LoginDAO();
+
     // 🔎 1. ADMIN
-    const admDao = new AdministradorDAO();
-    const admin = await admDao.buscarPorEmail(gmail);
+    const admin = await loginDao.buscarAdminPorEmail(gmail);
 
     if (admin) {
-      const ok = await bcrypt.compare(senha, admin.senha_adm);
+      const ok = await loginDao.validarSenha(senha, admin.senha_adm);
 
       if (!ok) {
         return res.status(401).json({ error: "Senha inválida" });
@@ -311,18 +317,13 @@ app.post("/login", async (req, res) => {
     }
 
     // 🔎 2. USUÁRIO
-    const userDao = new CadastroDAO();
-    const usuario = await userDao.buscarPorEmail(gmail);
+    const usuario = await loginDao.buscarUsuarioPorEmail(gmail);
 
     if (!usuario) {
-      return res.status(401).json({ error: "Usuário não encontrado" });
+      return res.status(401).json({ error: "Usuário não encontrado ou não autorizado" });
     }
 
-    if (usuario.status !== "Pago") {
-      return res.status(403).json({ error: "Usuário não autorizado" });
-    }
-
-    const ok = await bcrypt.compare(senha, usuario.senha_usuario);
+    const ok = await loginDao.validarSenha(senha, usuario.senha_usuario);
 
     if (!ok) {
       return res.status(401).json({ error: "Senha inválida" });
