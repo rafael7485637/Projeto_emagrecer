@@ -52,6 +52,9 @@
 
     if (!res.ok) {
         alert(data.error);
+        if (data.redirect) {
+            window.location.href = data.redirect;
+        }
         return;
     }
 

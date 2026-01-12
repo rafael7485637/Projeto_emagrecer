@@ -12,7 +12,7 @@ class LoginDAO {
   async buscarUsuarioPorEmail(gmail) {
     const sql = `
       SELECT * FROM usuario
-      WHERE gmail = $1 AND status = 'Pago'
+      WHERE gmail = $1
     `;
     const { rows } = await pool.query(sql, [gmail]);
     return rows[0];

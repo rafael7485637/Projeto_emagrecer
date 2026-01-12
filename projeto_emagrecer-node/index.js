@@ -323,6 +323,10 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Usuário não encontrado ou não autorizado" });
     }
 
+    if (usuario.status !== 'Pago') {
+      return res.status(403).json({ error: "Acesso negado. Conta não ativada.", redirect: "/contato" });
+    }
+
     const ok = await loginDao.validarSenha(senha, usuario.senha_usuario);
 
     if (!ok) {
@@ -346,7 +350,7 @@ app.post("/login", async (req, res) => {
 // =====================
 // Inicialização do servidor
 // =====================
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);
 });

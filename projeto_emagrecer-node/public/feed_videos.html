@@ -21,9 +21,10 @@
     <script>
 
         // Verificar se o usuário está logado
-        if (!localStorage.getItem('token')) {
-            window.location.href = '/login';
-        }
+          const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login';
+            }
 
         //conectar nos componentes 
 
