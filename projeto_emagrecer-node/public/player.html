@@ -17,46 +17,79 @@
 <p id="descricao"></p>
 
 <script>
-    // Verificar se o usuário está logado
-    if (!localStorage.getItem('token')) {
-        window.location.href = '/login';
-    }
+   const token = localStorage.getItem("token");
+  if (!token) {
+    window.location.href = "/login";
+  }
 
-    // Carregar navbar
-    fetch("../assets/components/navbar.html")
-        .then(r => r.text())
-        .then(html => {
-            document.getElementById("navbar").innerHTML = html;
-        });
+  // Carregar navbar
+  fetch("../assets/components/navbar.html")
+    .then(r => r.text())
+    .then(html => {
+      document.getElementById("navbar").innerHTML = html;
+    });
 
   // Pega o ID da URL
   const params = new URLSearchParams(window.location.search);
-  const id = params.get('id');
+  const id = params.get("id");
+
+  // Registrar visualização
+  async function registrarVisualizacao() {
+    try {
+      await fetch("/registrar-visualizacao", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ idvideo: id })
+      });
+    } catch (err) {
+      console.error("Erro ao registrar visualização", err);
+    }
+  }
 
   async function carregarVideo() {
     const resposta = await fetch(`/video/${id}`, {
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`
-        }
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
     });
+
     const video = await resposta.json();
 
-    document.getElementById('titulo').textContent = video.titulo;
-    document.getElementById('descricao').textContent = video.descricao;
+    document.getElementById("titulo").textContent = video.titulo;
+    document.getElementById("descricao").textContent = video.descricao;
 
-    const player = document.getElementById('player');
+    const player = document.getElementById("player");
 
-    // Verificar se é um link do YouTube
-    const youtubeRegex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    // Regex do YouTube
+    const youtubeRegex =
+      /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+
     const match = video.link.match(youtubeRegex);
 
     if (match) {
-      // É YouTube, usar iframe embed
       const videoId = match[1];
-      player.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+
+      player.innerHTML = `
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/${videoId}"
+          frameborder="0"
+          allowfullscreen>
+        </iframe>
+      `;
+
+      // Evita contar várias vezes no F5
+      const chaveView = `view_video_${id}`;
+      if (!sessionStorage.getItem(chaveView)) {
+        registrarVisualizacao();
+        sessionStorage.setItem(chaveView, "true");
+      }
     } else {
-      // Não é YouTube, tentar como vídeo direto
-      player.innerHTML = `<video controls width="560" height="315"><source src="${video.link}" type="video/mp4">Seu navegador não suporta vídeo.</video>`;
+      player.innerHTML = "<p>Vídeo inválido</p>";
     }
   }
 

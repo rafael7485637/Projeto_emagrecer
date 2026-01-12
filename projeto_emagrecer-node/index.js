@@ -11,6 +11,8 @@ const CategoriaDAO = require("./assets/src/CategoriaDAO");
 const CadastroDAO = require("./assets/src/CadastroDAO");
 const AdministradorDAO = require("./assets/src/AdministradorDAO");
 const LoginDAO = require("./assets/src/LoginDAO");
+const VisualizacaoDAO = require("./assets/src/VisualizacaoDAO");
+
 const app = express();
 const { auth, apenasAdmin, apenasUsuario } = require("./middlewares/auth");
 
@@ -297,7 +299,7 @@ app.post("/login", async (req, res) => {
   try {
     const loginDao = new LoginDAO();
 
-    // 🔎 1. ADMIN
+    //  1. ADMIN
     const admin = await loginDao.buscarAdminPorEmail(gmail);
 
     if (admin) {
@@ -316,7 +318,7 @@ app.post("/login", async (req, res) => {
       return res.json({ tipo: "admin", token });
     }
 
-    // 🔎 2. USUÁRIO
+    //  2. USUÁRIO
     const usuario = await loginDao.buscarUsuarioPorEmail(gmail);
 
     if (!usuario) {
@@ -344,6 +346,22 @@ app.post("/login", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Erro no login" });
+  }
+});
+
+//visualização de videos
+app.post("/registrar-visualizacao", auth, apenasUsuario, async (req, res) => {
+  const { idvideo } = req.body;
+  const idusuario = req.user.id; // vem do JWT
+
+  const dao = new VisualizacaoDAO();
+
+  try {
+    await dao.registrar(idusuario, idvideo);
+    res.sendStatus(201);
+  } catch (error) {
+    console.error("Erro ao registrar visualização:", error);
+    res.status(500).json({ error: "Erro ao registrar visualização" });
   }
 });
 
