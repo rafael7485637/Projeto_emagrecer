@@ -1,7 +1,7 @@
 const express = require("express");
+const helmet = require("helmet");
 const path = require("path");
 const cors = require("cors");
-const helmet = require("helmet");
 const fs = require("fs");
 const multer = require('multer');
 require("dotenv").config();
@@ -10,18 +10,41 @@ require("dotenv").config();
 const app = express();
 
 // Rotas
-const userRoutes = require("../routes/users");
-const videoRoutes = require("../routes/videos");
-const authRoutes = require("../routes/auth");
+const userRoutes = require("./routes/users");
+const videoRoutes = require("./routes/videos");
+const authRoutes = require("./routes/auth");
 
 // Middlewares de segurança
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: [
+          "'self'",
+          "https://www.youtube.com",
+          "https://www.google.com",
+          "blob:"
+        ],
+        frameSrc: ["https://www.youtube.com"],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "blob:",
+          "https://i.ytimg.com"
+        ],
+        styleSrc: ["'self'", "'unsafe-inline'"]
+      }
+    }
+  })
+);
+
 app.use(cors());
 app.use(express.json({ limit: '10mb' })); // Limitar tamanho do JSON
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Servir fotos de usuários
-app.use("/foto", express.static(path.join(__dirname, "public", "foto")));
+app.use("/foto", express.static(path.join(__dirname, "public", "uploads", "foto")));
 
 
 // Servir arquivos estáticos (HTML, CSS, JS, uploads)
@@ -32,19 +55,21 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/videos", videoRoutes);
 
+// Garantir que as pastas de upload existam
+const ensureDirectoriesExist = () => {
+  const dirs = [
+    path.join(__dirname, "public", "uploads", "foto"),
+    path.join(__dirname, "public", "uploads", "imagem")
+  ];
+  dirs.forEach(dir => {
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+      console.log(`Pasta criada: ${dir}`);
+    }
+  });
+};
 
-// Configuração do Multer para upload de imagens
-const uploadDir = path.join(__dirname, "public", "uploads");
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
-
-//Configuração do Multer para upload de fotos de usuários
-const userPhotoDir = path.join(__dirname, "public", "foto");
-
-if (!fs.existsSync(userPhotoDir)) {
-  fs.mkdirSync(userPhotoDir, { recursive: true });
-}
+ensureDirectoriesExist();
 
 
 // Usar memory storage para controlar quando salvar a imagem (apenas após validações)

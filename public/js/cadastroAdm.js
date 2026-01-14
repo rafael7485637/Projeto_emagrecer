@@ -20,7 +20,7 @@
     senha_adm: document.getElementById("senha_adm").value
   };
 
-  const response = await fetch("/cadastrar-adm", {
+  const response = await fetch("/api/users/cadastrar-adm", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

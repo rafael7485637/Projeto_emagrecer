@@ -12,7 +12,7 @@
             });
 
         async function carregarUsuarios() {
-        const response = await fetch("/usuarios", {
+        const response = await fetch("/api/users/usuarios", {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -74,14 +74,30 @@
             // 7️⃣ Ações
             const actions = document.createElement("div");
             actions.className = "card-actions";
-            actions.innerHTML = `
-            <button class="btn btn-ativar" onclick="alterarStatus(${user.idusuario}, 'Pago')">
-                Pago
-            </button>
-            <button class="btn btn-desativar" onclick="alterarStatus(${user.idusuario}, 'Não Pago')">
-                Não Pago
-            </button>
-            `;
+            const btnPago = document.createElement("button");
+            btnPago.className = "btn btn-ativar";
+            btnPago.textContent = "Pago";
+            btnPago.dataset.id = user.idusuario;
+            btnPago.dataset.status = "Pago";
+
+            const btnNaoPago = document.createElement("button");
+            btnNaoPago.className = "btn btn-desativar";
+            btnNaoPago.textContent = "Não Pago";
+            btnNaoPago.dataset.id = user.idusuario;
+            btnNaoPago.dataset.status = "Não Pago";
+
+            actions.appendChild(btnPago);
+            actions.appendChild(btnNaoPago);
+
+            // Eventos dos botões
+            btnPago.addEventListener("click", () => {
+                alterarStatus(user.idusuario, "Pago");
+            });
+
+            btnNaoPago.addEventListener("click", () => {
+                alterarStatus(user.idusuario, "Não Pago");
+            });
+
 
             // 8️⃣ Montar card
             card.appendChild(header);
@@ -99,7 +115,7 @@
 
         async function alterarStatus(idusuario, status) {
             try{
-                const response = await fetch(`/usuarios/${idusuario}/status`, {
+                const response = await fetch(`/api/users/usuarios/${idusuario}/status`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

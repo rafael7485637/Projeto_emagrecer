@@ -16,7 +16,7 @@
         const select = document.getElementById('categoria');
 
         async function carregarCategorias() {
-        const res = await fetch('/categorias', {
+        const res = await fetch('/api/videos/categorias', {
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`
             }
@@ -33,7 +33,7 @@
 
         //carrega os videos para mostrar no feed
         async function carregarVideos(idcategoria = '') {
-        const url = idcategoria ? `/videos?idcategoria=${idcategoria}` : '/videos';
+        const url = idcategoria ? `/api/videos/videos?idcategoria=${idcategoria}` : '/api/videos/videos';
 
         const res = await fetch(url, {
             headers: {

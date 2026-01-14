@@ -14,7 +14,7 @@
         // Carregar categorias ao carregar a página
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('/categorias', {
+                const response = await fetch('/api/videos/categorias', {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -46,7 +46,7 @@
             }
 
             try {
-                const response = await fetch('/cadastrar-video', {
+                const response = await fetch('/api/videos/cadastrar-video', {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`

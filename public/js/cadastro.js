@@ -22,7 +22,7 @@
   formData.append("telefone", telefone.value);
   formData.append("senha_usuario", senha_usuario.value);
 
-  const response = await fetch("/cadastrar-usuario", {
+  const response = await fetch("/api/users/cadastrar-usuario", {
     method: "POST",
     body: formData
   });

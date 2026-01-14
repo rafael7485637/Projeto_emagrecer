@@ -22,7 +22,7 @@
     visualizacaoRegistrada = true;
 
     try {
-      await fetch("/registrar-visualizacao", {
+      await fetch("/api/videos/registrar-visualizacao", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +36,7 @@
   }
 
   async function carregarVideo() {
-    const resposta = await fetch(`/video/${id}`, {
+    const resposta = await fetch(`/api/videos/video/${id}`, {
       headers: {
         "Authorization": `Bearer ${token}`
       }
@@ -63,7 +63,13 @@
 
     playerDiv.innerHTML = `<div id="yt-player"></div>`;
 
-    window.onYouTubeIframeAPIReady = function () {
+    if (window.YT && YT.Player) {
+        criarPlayer(videoId);
+      } else {
+        window.onYouTubeIframeAPIReady = () => criarPlayer(videoId);
+      }
+
+      function criarPlayer(videoId) {
       playerYT = new YT.Player("yt-player", {
         height: "315",
         width: "560",
@@ -72,9 +78,8 @@
           onStateChange: onPlayerStateChange
         }
       });
-    };
+    }
   }
-
   function onPlayerStateChange(event) {
     // PLAY
     if (event.data === YT.PlayerState.PLAYING) {

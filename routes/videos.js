@@ -9,7 +9,7 @@ const VisualizacaoDAO = require("../src/VisualizacaoDAO");
 const { auth, apenasAdmin, apenasUsuario } = require("../middlewares/auth");
 
 // Configuração do Multer para upload de imagens de vídeos
-const uploadDir = path.join(__dirname, "..", "public", "uploads");
+const uploadDir = path.join(__dirname, "..", "public", "uploads", "imagem");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -38,7 +38,7 @@ router.post("/cadastrar-video", auth, apenasAdmin, upload.single('imagem'), asyn
       const uniqueName = Date.now() + "-" + req.file.originalname;
       const filePath = path.join(uploadDir, uniqueName);
       fs.writeFileSync(filePath, req.file.buffer);
-      const imagemPath = `/uploads/${uniqueName}`;
+      const imagemPath = `/uploads/imagem/${uniqueName}`;
       await dao.atualizarImagem(video.idvideo, imagemPath);
     }
 

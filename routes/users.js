@@ -9,7 +9,7 @@ const AdministradorDAO = require("../src/AdministradorDAO");
 const { auth, apenasAdmin } = require("../middlewares/auth");
 
 // Configuração do Multer para upload de fotos de usuários
-const userPhotoDir = path.join(__dirname, ".", "public", "foto");
+const userPhotoDir = path.join(__dirname, "..", "public", "uploads", "foto");
 if (!fs.existsSync(userPhotoDir)) {
   fs.mkdirSync(userPhotoDir, { recursive: true });
 }

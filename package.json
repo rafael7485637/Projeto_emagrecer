@@ -2,10 +2,10 @@
   "name": "projeto_emagrecer-node",
   "version": "1.0.0",
   "description": "Aplicativo de emagrecimento",
-  "main": "public/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "node public/index.js",
-    "dev": "nodemon public/index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
