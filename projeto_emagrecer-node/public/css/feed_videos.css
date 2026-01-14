@@ -139,3 +139,14 @@ nav {
 .card-content a:hover {
     text-decoration: underline;
 }
+
+.check {
+  display: none;
+  color: green;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.video-card.assistido .check {
+  display: inline;
+}

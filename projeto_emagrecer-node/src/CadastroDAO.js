@@ -21,6 +21,11 @@ async salvar(dados) {
     throw new Error("E-mail inválido.");
   }
 
+  // Verificar se o email já existe como usuário
+  const usuarioExistente = await this.buscarPorEmail(dados.gmail);
+  if (usuarioExistente) {
+    throw new Error("E-mail já cadastrado como usuário.");
+  }
 
   const sql = `
     INSERT INTO usuario
@@ -85,20 +90,7 @@ async atualizarFoto(idusuario, fotoPath) {
   await pool.query(sql, [fotoPath, idusuario]);
 }
 
-//buscar usuario por gmail
-async buscarPorEmail(gmail) {
-  const sql = `
-    SELECT idusuario, gmail, senha_usuario, status
-    FROM usuario
-    WHERE gmail = $1
-  `;
-  const { rows } = await pool.query(sql, [gmail]);
-  return rows[0];
-}
-
-
-
-// analizar se o gmail ja existe como adm
+// analisar se o gmail ja existe como adm
 async emailExisteComoAdm(gmail) {
   const sql = "SELECT 1 FROM administrador WHERE gmail_adm = $1";
   const { rowCount } = await pool.query(sql, [gmail]);

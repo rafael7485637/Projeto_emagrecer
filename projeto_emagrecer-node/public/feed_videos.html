@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Card Básico</title>
-    <link rel="stylesheet" href="../assets/css/feed_videos.css">
+    <link rel="stylesheet" href="../css/feed_videos.css">
 </head>
 <body>
 
@@ -70,11 +70,17 @@
         videos.forEach(video => {
             const card = document.createElement('div');
             card.className = 'card';
+
+            if (video.assistido) {
+                card.classList.add('assistido');
+            }
+
             card.innerHTML = `
             <img src="${video.imagem || 'placeholder.jpg'}" alt="${video.titulo}">
             <div class="card-content">
                 <h3>${video.titulo}</h3>
                 <p>${video.descricao}</p>
+                <span class="check">✓ Assistido</span>
                 <a href="player.html?id=${video.idvideo}">Ver vídeo</a>
             </div>
             `;
@@ -85,6 +91,8 @@
         select.addEventListener('change', () => {
         carregarVideos(select.value);
         });
+
+        
 
         carregarCategorias();
         carregarVideos();

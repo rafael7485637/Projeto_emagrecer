@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Vídeo</title>
-  <link rel="stylesheet" href="../assets/css/player.css">
+  <link rel="stylesheet" href="../css/player.css">
 </head>
 <body>
     <nav id="navbar"></nav>
@@ -16,8 +16,10 @@
 
 <p id="descricao"></p>
 
+<script src="https://www.youtube.com/iframe_api"></script>
+
 <script>
-   const token = localStorage.getItem("token");
+    const token = localStorage.getItem("token");
   if (!token) {
     window.location.href = "/login";
   }
@@ -29,12 +31,17 @@
       document.getElementById("navbar").innerHTML = html;
     });
 
-  // Pega o ID da URL
   const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
-  // Registrar visualização
+  let playerYT;
+  let visualizacaoRegistrada = false;
+
   async function registrarVisualizacao() {
+    if (visualizacaoRegistrada) return;
+
+    visualizacaoRegistrada = true;
+
     try {
       await fetch("/registrar-visualizacao", {
         method: "POST",
@@ -61,35 +68,38 @@
     document.getElementById("titulo").textContent = video.titulo;
     document.getElementById("descricao").textContent = video.descricao;
 
-    const player = document.getElementById("player");
+    const playerDiv = document.getElementById("player");
 
-    // Regex do YouTube
     const youtubeRegex =
       /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
 
     const match = video.link.match(youtubeRegex);
 
-    if (match) {
-      const videoId = match[1];
+    if (!match) {
+      playerDiv.innerHTML = "<p>Vídeo inválido</p>";
+      return;
+    }
 
-      player.innerHTML = `
-        <iframe
-          width="560"
-          height="315"
-          src="https://www.youtube.com/embed/${videoId}"
-          frameborder="0"
-          allowfullscreen>
-        </iframe>
-      `;
+    const videoId = match[1];
 
-      // Evita contar várias vezes no F5
-      const chaveView = `view_video_${id}`;
-      if (!sessionStorage.getItem(chaveView)) {
-        registrarVisualizacao();
-        sessionStorage.setItem(chaveView, "true");
-      }
-    } else {
-      player.innerHTML = "<p>Vídeo inválido</p>";
+    playerDiv.innerHTML = `<div id="yt-player"></div>`;
+
+    window.onYouTubeIframeAPIReady = function () {
+      playerYT = new YT.Player("yt-player", {
+        height: "315",
+        width: "560",
+        videoId: videoId,
+        events: {
+          onStateChange: onPlayerStateChange
+        }
+      });
+    };
+  }
+
+  function onPlayerStateChange(event) {
+    // PLAY
+    if (event.data === YT.PlayerState.PLAYING) {
+      registrarVisualizacao();
     }
   }
 
