@@ -10,9 +10,9 @@ require("dotenv").config();
 const app = express();
 
 // Rotas
-const userRoutes = require("./routes/users");
-const videoRoutes = require("./routes/videos");
-const authRoutes = require("./routes/auth");
+const userRoutes = require("../routes/users");
+const videoRoutes = require("../routes/videos");
+const authRoutes = require("../routes/auth");
 
 // Middlewares de segurança
 app.use(helmet());
@@ -62,6 +62,23 @@ const upload = multer({
 });
 
 //proteger rotas 
+  //públicas
+  app.get("/login", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "login.html"));
+  });
+
+  app.get("/cadastro", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "cadastro.html"));
+  });
+
+  app.get("/contato", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "contato.html"));
+  });
+
+  app.get("/player", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "player.html"));
+  });
+
   //somente admin
   app.get("/cadastroAdm", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "cadastroAdm.html"));

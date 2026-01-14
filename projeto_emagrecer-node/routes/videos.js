@@ -123,7 +123,7 @@ router.post("/registrar-visualizacao", auth, apenasUsuario, async (req, res) => 
 router.get("/videos-feed", auth, async (req, res) => {
   try {
     const idusuario = req.user.id;
-    const pool = require("../assets/src/conexaoBD");
+    const pool = require("../src/conexaoBD");
 
     const sql = `
       SELECT
