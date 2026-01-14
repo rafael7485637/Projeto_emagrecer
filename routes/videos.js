@@ -123,31 +123,39 @@ router.post("/registrar-visualizacao", auth, apenasUsuario, async (req, res) => 
 router.get("/videos-feed", auth, async (req, res) => {
   try {
     const idusuario = req.user.id;
+    const { idcategoria } = req.query;
     const pool = require("../src/conexaoBD");
 
-    const sql = `
+    let sql = `
       SELECT
         v.idvideo,
         v.titulo,
         v.descricao,
         v.link,
-        CASE
-          WHEN vis.idvisualizacao IS NOT NULL THEN true
-          ELSE false
-        END AS assistido
+        v.imagem,
+        EXISTS (
+          SELECT 1
+          FROM visualizacao vis
+          WHERE vis.idvideo = v.idvideo
+            AND vis.idusuario = $1
+        ) AS assistido
       FROM video v
-      LEFT JOIN visualizacao vis
-        ON v.idvideo = vis.idvideo
-        AND vis.idusuario = $1
-      ORDER BY v.idvideo DESC
     `;
 
-    const { rows } = await pool.query(sql, [idusuario]);
+    const params = [idusuario];
+
+    if (idcategoria) {
+      sql += " WHERE v.idcategoria = $2";
+      params.push(idcategoria);
+    }
+
+    sql += " ORDER BY v.idvideo DESC";
+
+    const { rows } = await pool.query(sql, params);
     res.json(rows);
   } catch (err) {
     console.error("Erro ao carregar feed:", err);
     res.status(500).json({ erro: "Erro ao carregar feed" });
   }
 });
-
 module.exports = router;

@@ -4,7 +4,6 @@
                 window.location.href = '/login';
             }
 
-        //conectar nos componentes 
 
         // carregar navbar
         fetch("/components/navbar.html")
@@ -13,6 +12,9 @@
             document.getElementById("navbar").innerHTML = html;
         });
 
+
+
+        //carrega as categorias no select
         const select = document.getElementById('categoria');
 
         async function carregarCategorias() {
@@ -32,39 +34,56 @@
         }
 
         //carrega os videos para mostrar no feed
-        async function carregarVideos(idcategoria = '') {
-        const url = idcategoria ? `/api/videos/videos?idcategoria=${idcategoria}` : '/api/videos/videos';
+        async function carregarVideos(idcategoria = "") {
+        let url = "/api/videos/videos-feed";
+
+        if (idcategoria) {
+            url += `?idcategoria=${idcategoria}`;
+        }
 
         const res = await fetch(url, {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            Authorization: `Bearer ${localStorage.getItem("token")}`
             }
         });
+
+        if (!res.ok) {
+            console.error("Erro HTTP:", res.status);
+            return;
+        }
+
         const videos = await res.json();
 
-        const feed = document.getElementById('feed');
-        feed.innerHTML = '';
+        const feed = document.getElementById("feed");
+        feed.innerHTML = "";
 
         videos.forEach(video => {
-            const card = document.createElement('div');
-            card.className = 'card';
+            const card = document.createElement("div");
+            card.className = "card";
 
             if (video.assistido) {
-                card.classList.add('assistido');
+            card.classList.add("assistido");
             }
 
             card.innerHTML = `
-            <img src="${video.imagem || 'placeholder.jpg'}" alt="${video.titulo}">
+            <img src="${video.imagem}" alt="${video.titulo}">
             <div class="card-content">
-                <h3>${video.titulo}</h3>
+                <h3>
+                    ${video.titulo}
+                    ${video.assistido ? "<span class='check'>✓</span>" : ""}
+                </h3>
                 <p>${video.descricao}</p>
-                <span class="check">✓ Assistido</span>
                 <a href="/player?id=${video.idvideo}">Ver vídeo</a>
             </div>
             `;
+
             feed.appendChild(card);
         });
         }
+        
+
+
+
 
         select.addEventListener('change', () => {
         carregarVideos(select.value);
