@@ -42,7 +42,7 @@ router.post("/cadastrar-video", auth, apenasAdmin, upload.single('imagem'), asyn
       await dao.atualizarImagem(video.idvideo, imagemPath);
     }
 
-    res.redirect("/");
+    res.status(200).json({ message: "Vídeo cadastrado com sucesso!" });
   } catch (error) {
     console.error("Erro ao cadastrar vídeo:", error);
     res.status(500).send("Erro ao cadastrar vídeo: " + error.message);
