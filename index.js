@@ -5,9 +5,24 @@ const cors = require("cors");
 const fs = require("fs");
 const multer = require('multer');
 require("dotenv").config();
-
+const { auth, apenasAdmin, apenasUsuario } = require("./middlewares/auth");
+const session = require("express-session");
 
 const app = express();
+
+// Configuração da sessão
+app.use(
+  session({
+    name: "connect.sid",
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 // 1 dia
+    }
+  })
+);
 
 // Rotas
 const userRoutes = require("./routes/users");
@@ -109,7 +124,7 @@ const upload = multer({
     res.sendFile(path.join(__dirname, "public", "cadastroAdm.html"));
   });
 
-  app.get("/cadastroVideos", (req, res) => {
+  app.get("/cadastroVideos",(req, res) => {
     res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
   });
 

@@ -1,11 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
-require("dotenv").config();
+const bcrypt = require("bcrypt");
 const LoginDAO = require("../src/LoginDAO");
-
-const SECRET = process.env.JWT_SECRET;
 
 // Login
 router.post("/login", async (req, res) => {
@@ -14,7 +10,7 @@ router.post("/login", async (req, res) => {
   try {
     const loginDao = new LoginDAO();
 
-    // Tentar login como admin
+    //  ADMIN
     const admin = await loginDao.buscarAdminPorEmail(gmail);
     if (admin) {
       const ok = await loginDao.validarSenha(senha, admin.senha_adm);
@@ -22,23 +18,26 @@ router.post("/login", async (req, res) => {
         return res.status(401).json({ error: "Senha inválida" });
       }
 
-      const token = jwt.sign(
-        { id: admin.idadministrador, tipo: "admin" },
-        SECRET,
-        { expiresIn: "1d" }
-      );
+      //  cria sessão
+      req.session.user = {
+        id: admin.idadministrador,
+        tipo: "admin"
+      };
 
-      return res.json({ tipo: "admin", token });
+      return res.json({ tipo: "admin" });
     }
 
-    // Tentar login como usuário
+    //  USUÁRIO
     const usuario = await loginDao.buscarUsuarioPorEmail(gmail);
     if (!usuario) {
-      return res.status(401).json({ error: "Usuário não encontrado ou não autorizado" });
+      return res.status(401).json({ error: "Usuário não encontrado" });
     }
 
-    if (usuario.status !== 'Pago') {
-      return res.status(403).json({ error: "Acesso negado. Conta não ativada.", redirect: "/contato" });
+    if (usuario.status !== "Pago") {
+      return res.status(403).json({
+        error: "Acesso negado. Conta não ativada.",
+        redirect: "/contato"
+      });
     }
 
     const ok = await loginDao.validarSenha(senha, usuario.senha_usuario);
@@ -46,17 +45,42 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ error: "Senha inválida" });
     }
 
-    const token = jwt.sign(
-      { id: usuario.idusuario, tipo: "usuario" },
-      SECRET,
-      { expiresIn: "1d" }
-    );
+    //  cria sessão
+    req.session.user = {
+      id: usuario.idusuario,
+      tipo: "usuario"
+    };
 
-    res.json({ tipo: "usuario", token });
+    res.json({ tipo: "usuario" });
   } catch (err) {
     console.error("Erro no login:", err);
     res.status(500).json({ error: "Erro no login" });
   }
+
+});
+
+  //logout
+router.post("/logout", (req, res) => {
+  req.session.destroy(err => {
+    if (err) {
+      return res.status(500).json({ error: "Erro ao sair" });
+    }
+
+    res.clearCookie("connect.sid");
+    res.sendStatus(200);
+  });
+});
+
+
+router.get("/me", (req, res) => {
+  if (!req.session.user) {
+    return res.status(401).json({ logado: false });
+  }
+
+  res.json({
+    logado: true,
+    tipo: req.session.user.tipo
+  });
 });
 
 module.exports = router;

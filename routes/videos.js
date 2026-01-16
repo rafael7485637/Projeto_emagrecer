@@ -50,7 +50,7 @@ router.post("/cadastrar-video", auth, apenasAdmin, upload.single('imagem'), asyn
 });
 
 // Listar vídeos por categoria
-router.get("/videos", auth, apenasUsuario, async (req, res) => {
+router.get("/videos", async (req, res) => {
   const dao = new VideosDAO();
   const { idcategoria } = req.query;
 
@@ -64,7 +64,7 @@ router.get("/videos", auth, apenasUsuario, async (req, res) => {
 });
 
 // Buscar vídeo por ID
-router.get("/video/:id", auth, apenasUsuario, async (req, res) => {
+router.get("/video/:id", async (req, res) => {
   const { id } = req.params;
   const dao = new VideosDAO();
 

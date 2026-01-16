@@ -1,37 +1,51 @@
-const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const SECRET = process.env.JWT_SECRET;
 
 function auth(req, res, next) {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).json({ error: "Token não fornecido" });
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: "Não autenticado" });
   }
-
-  const token = authHeader.split(" ")[1];
-
-  try {
-    const decoded = jwt.verify(token, SECRET);
-    req.user = decoded;
-    next();
-  } catch {
-    res.status(401).json({ error: "Token inválido" });
-  }
+  next();
 }
 
 function apenasAdmin(req, res, next) {
-  if (req.user.tipo !== "admin") {
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: "Não autenticado" });
+  }
+
+  if (req.session.user.tipo !== "admin") {
     return res.status(403).json({ error: "Acesso negado" });
   }
+
   next();
 }
 
 function apenasUsuario(req, res, next) {
-  if (req.user.tipo !== "usuario" && req.user.tipo !== "admin") {
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: "Não autenticado" });
+  }
+
+  if (req.session.user.tipo !== "usuario") {
     return res.status(403).json({ error: "Acesso negado" });
   }
+
   next();
 }
 
-module.exports = { auth, apenasAdmin, apenasUsuario };
+function usuarioEAadm(req, res, next) {
+  if (!req.session || !req.session.user) {
+    return res.status(401).json({ error: "Não autenticado" });
+  }
+
+  if (!["usuario", "admin"].includes(req.session.user.tipo)) {
+    return res.status(403).json({ error: "Acesso negado" });
+  }
+
+  next();
+}
+
+module.exports = {
+  auth,
+  apenasAdmin,
+  apenasUsuario,
+  usuarioEAadm
+};
