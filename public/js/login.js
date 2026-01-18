@@ -20,30 +20,11 @@
 })();
 
 
-// CARREGAR NAVBAR + LOGOUT
+// CARREGAR NAVBAR 
 fetch("/components/navbar_form.html")
   .then(r => r.text())
   .then(html => {
     document.getElementById("navbar").innerHTML = html;
-
-    //  AGORA o botão existe
-    const btnLogout = document.getElementById("btnLogout");
-
-    if (btnLogout) {
-      btnLogout.addEventListener("click", async (e) => {
-        e.preventDefault();
-
-        const certeza = confirm("Você tem certeza que deseja sair?");
-        if (!certeza) return;
-
-        await fetch("/api/auth/logout", {
-          method: "POST",
-          credentials: "include"
-        });
-
-        window.location.href = "/index.html";
-      });
-    }
   });
 
 

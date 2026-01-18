@@ -1,9 +1,12 @@
  // Verificar se o usuário está logado
-          const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/login';
-            }
-
+    (async () => { 
+        const res = await fetch("/api/auth/me", {
+        credentials: "include"
+    });
+    if (!res.ok) {
+        window.location.href = "/login";
+    }
+    })();
 
         // carregar navbar
         fetch("/components/navbar.html")
@@ -19,9 +22,7 @@
 
         async function carregarCategorias() {
         const res = await fetch('/api/videos/categorias', {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
+            credentials: "include"
         });
         const categorias = await res.json();
 
@@ -42,9 +43,7 @@
         }
 
         const res = await fetch(url, {
-            headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-            }
+            credentials: "include"
         });
 
         if (!res.ok) {

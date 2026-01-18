@@ -11,18 +11,16 @@ const session = require("express-session");
 const app = express();
 
 // Configuração da sessão
-app.use(
-  session({
-    name: "connect.sid",
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 // 1 dia
-    }
-  })
-);
+app.use(session({
+  name: "connect.sid",
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: "lax"
+  }
+}));
 
 // Rotas
 const userRoutes = require("./routes/users");
@@ -37,6 +35,7 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: [
           "'self'",
+          "'unsafe-inline'",
           "https://www.youtube.com",
           "https://www.google.com",
           "blob:"
@@ -138,13 +137,7 @@ const upload = multer({
   });
 
 
-// =====================
-// Rotas de API (Backend)
-// =====================
-
-// =====================
 // Inicialização do servidor
-// =====================
 const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
   console.log(`Servidor rodando em http://localhost:${PORT}`);

@@ -7,6 +7,7 @@ const VideosDAO = require("../src/VideosDAO");
 const CategoriaDAO = require("../src/CategoriaDAO");
 const VisualizacaoDAO = require("../src/VisualizacaoDAO");
 const { auth, apenasAdmin, apenasUsuario } = require("../middlewares/auth");
+ const pool = require("../src/conexaoBD");
 
 // Configuração do Multer para upload de imagens de vídeos
 const uploadDir = path.join(__dirname, "..", "public", "uploads", "imagem");
@@ -107,7 +108,7 @@ router.delete("/videos/:id", auth, apenasAdmin, async (req, res) => {
 // Registrar visualização
 router.post("/registrar-visualizacao", auth, apenasUsuario, async (req, res) => {
   const { idvideo } = req.body;
-  const idusuario = req.user.id;
+  const idusuario = req.session.user.id;
   const dao = new VisualizacaoDAO();
 
   try {
@@ -122,9 +123,9 @@ router.post("/registrar-visualizacao", auth, apenasUsuario, async (req, res) => 
 // Feed de vídeos com visualizações
 router.get("/videos-feed", auth, async (req, res) => {
   try {
-    const idusuario = req.user.id;
+    const idusuario = req.session.user.id;
     const { idcategoria } = req.query;
-    const pool = require("../src/conexaoBD");
+   
 
     let sql = `
       SELECT
