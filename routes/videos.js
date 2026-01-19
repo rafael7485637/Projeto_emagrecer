@@ -92,7 +92,7 @@ router.get("/categorias", async (req, res) => {
 });
 
 // Deletar vídeo
-router.delete("/videos/:id", auth, apenasAdmin, async (req, res) => {
+router.delete("/:id", auth, apenasAdmin, async (req, res) => {
   const { id } = req.params;
   const dao = new VideosDAO();
 

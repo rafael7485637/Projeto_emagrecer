@@ -1,9 +1,29 @@
-// 1. Carregar navbar
-fetch("/components/navbar.html")
-  .then(r => r.text())
-  .then(html => {
-    document.getElementById("navbar").innerHTML = html;
-  });
+// Carregar a navbar com base no tipo de usuário
+(async () => {
+  try {
+    const res = await fetch("/api/auth/me", {
+      credentials: "include"
+    });
+
+    if (!res.ok) return;
+
+    const user = await res.json();
+    const nav = document.getElementById("navbar");
+
+    const navbarFile =
+      user.tipo === "admin"
+        ? "/components/navbar_adm.html"
+        : "/components/navbar_usuario.html";
+
+    const html = await fetch(navbarFile).then(r => r.text());
+    nav.innerHTML = html;
+
+  } catch (err) {
+    console.error("Erro ao carregar navbar", err);
+  }
+})();
+
+
 
 const params = new URLSearchParams(window.location.search);
 const id = params.get("id");

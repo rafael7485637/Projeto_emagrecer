@@ -1,6 +1,6 @@
 
 // Carregar navbar
-fetch("/components/navbar.html")
+fetch("/components/navbar_adm.html")
     .then(r => r.text())
     .then(html => {
         document.getElementById("navbar").innerHTML = html;

@@ -1,9 +1,11 @@
-   // Carregar navbar
-        fetch("/components/navbar.html")
-            .then(r => r.text())
-            .then(html => {
-                document.getElementById("navbar").innerHTML = html;
-            });
+ // Carregar navbar
+fetch("/components/navbar_adm.html")
+    .then(r => r.text())
+    .then(html => {
+        document.getElementById("navbar").innerHTML = html;
+    });
+
+
 
    document.getElementById("formCadastro").addEventListener("submit", async (e) => {
   e.preventDefault();
