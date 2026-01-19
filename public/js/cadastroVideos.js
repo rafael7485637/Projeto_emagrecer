@@ -1,8 +1,3 @@
-// Verificar se o usuário está logado
-const token = localStorage.getItem('token');
-if (!token) {
-    window.location.href = '/login';
-}
 
 // Carregar navbar
 fetch("/components/navbar.html")
@@ -15,14 +10,15 @@ fetch("/components/navbar.html")
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch('/api/videos/categorias', {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+           credentials: "include"
         });
 
-        if (!response.ok) {
-            throw new Error('Erro ao buscar categorias');
+        if (response.status === 401 ) {
+            window.location.href = '/index.html';
+            return;
         }
+
+        if (!response.ok) throw new Error('Erro ao buscar categorias');
 
         const categorias = await response.json();
         const select = document.getElementById('categoria');
@@ -36,7 +32,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     } catch (error) {
         console.error('Erro ao carregar categorias:', error);
-        alert('Erro ao carregar categorias');
     }
 });
 
@@ -58,24 +53,19 @@ document.getElementById('formCadastroVideo').addEventListener('submit', async (e
     try {
         const response = await fetch('/api/videos/cadastrar-video', {
             method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            },
+            credentials: "include",
             body: formData
         });
 
-        // 👇 lê a resposta com segurança (mesmo se vier vazia)
+        // lê a resposta com segurança (mesmo se vier vazia)
         const text = await response.text();
         let data = null;
 
         try {
-            data = text ? JSON.parse(text) : null;
-        } catch {
+            data =  JSON.parse(text);;
+        } catch (e) {
             // resposta não é JSON, ignora
         }
-
-        console.log('Status:', response.status);
-        console.log('Resposta:', data || text);
 
         // 👇 considera sucesso qualquer 2xx
         if (response.ok) {
@@ -87,8 +77,18 @@ document.getElementById('formCadastroVideo').addEventListener('submit', async (e
             alert(data?.message || text || 'Erro ao cadastrar vídeo');
         }
 
+        if (response.ok) {
+            alert(data?.message || 'Vídeo cadastrado com sucesso!');
+            window.location.href = '/feed_videos'; // Removido .html se o back cuida das rotas
+        } else if (response.status === 401 || response.status === 403) {
+            alert("Sessão expirada. Por favor, faça login novamente.");
+            window.location.href = "/login";
+        } else {
+            alert(data?.message || text || 'Erro ao cadastrar vídeo');
+        }
+
     } catch (error) {
         console.error('Erro ao cadastrar vídeo:', error);
-        alert('Erro ao cadastrar vídeo');
+        alert('Erro de conexão com o servidor.');
     }
 });

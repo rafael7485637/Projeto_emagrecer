@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const bcrypt = require("bcrypt");
 const LoginDAO = require("../src/LoginDAO");
 
 // Login
@@ -73,14 +72,13 @@ router.post("/logout", (req, res) => {
 
 
 router.get("/me", (req, res) => {
-  if (!req.session.user) {
-    return res.status(401).json({ logado: false });
-  }
-
-  res.json({
-    logado: true,
-    tipo: req.session.user.tipo
-  });
+    if (req.session && req.session.user) {
+        // Se houver usuário na sessão, retorna os dados dele
+        res.json(req.session.user);
+    } else {
+        // Se não houver, retorna erro 401
+        res.status(401).json({ error: "Não autorizado" });
+    }
 });
 
 module.exports = router;

@@ -1,141 +1,136 @@
-// Verificar se o usuário está logado
-         const token = localStorage.getItem('token');
-            if (!token) {
-                window.location.href = '/login';
-            }
+// 1. Carregar navbar
+fetch("/components/navbar.html")
+    .then(r => r.text())
+    .then(html => {
+        document.getElementById("navbar").innerHTML = html;
+    });
 
-        // Carregar navbar
-        fetch("/components/navbar.html")
-            .then(r => r.text())
-            .then(html => {
-                document.getElementById("navbar").innerHTML = html;
-            });
+// Função auxiliar para lidar com respostas do servidor
+async function handleResponse(response) {
+    if (response.status === 401 || response.status === 403) {
+        window.location.href = "/login";
+        return null;
+    }
+    if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || "Erro na requisição");
+    }
+    return response.json();
+}
 
-        async function carregarUsuarios() {
+async function carregarUsuarios() {
+    try {
         const response = await fetch("/api/users/usuarios", {
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
+            method: "GET",
+            credentials: "include" // Essencial para cookies de sessão
         });
-        const usuarios = await response.json();
+
+        const usuarios = await handleResponse(response);
+        if (!usuarios) return;
 
         const feed = document.getElementById("userFeed");
         feed.innerHTML = "";
 
         usuarios.forEach(user => {
-
-            // 1️⃣ Criar card
             const card = document.createElement("div");
             card.className = "user-card";
 
-            // 2️⃣ Criar imagem
+            // Criar imagem
             const img = document.createElement("img");
-
-            // 3️⃣ Se existir foto no banco
-            if (user.foto) {
-            img.src = user.foto;
-            } else {
-            img.src = "/foto/default.png"; // imagem padrão
-            }
-
+            img.src = user.foto ? user.foto : "/foto/default.png";
             img.alt = "Foto do usuário";
+            img.onerror = () => { img.src = "/foto/default.png"; };
 
-            img.onerror = () => {
-            img.src = "/foto/default.png";
-            };
-
-            // 4️⃣ Criar container da foto
             const fotoDiv = document.createElement("div");
             fotoDiv.className = "user-foto";
             fotoDiv.appendChild(img);
 
-            // 5️⃣ Header
+            // Header
             const header = document.createElement("div");
             header.className = "card-header";
-
             header.innerHTML = `
-            <div class="user-name">${user.nome}</div>
-            <span class="status-badge">${user.status || "Inativo"}</span>
+                <div class="user-name">${user.nome}</div>
+                <span class="status-badge ${user.status === 'Pago' ? 'pago' : 'pendente'}">${user.status || "Inativo"}</span>
             `;
-
             header.prepend(fotoDiv);
 
-            // 6️⃣ Corpo
+            // Corpo
             const info = document.createElement("div");
             info.className = "user-info-grid";
             info.innerHTML = `
-            <div class="info-item"><strong>Email</strong> ${user.gmail}</div>
-            <div class="info-item"><strong>Nascimento</strong> ${formatarData(user.data_nascimento)}</div>
-            <div class="info-item"><strong>Telefone</strong> ${user.telefone}</div>
-            <div class="info-item"><strong>Peso</strong> ${user.peso} kg</div>
-            <div class="info-item"><strong>Altura</strong> ${user.altura} m</div>
+                <div class="info-item"><strong>Email</strong> ${user.gmail}</div>
+                <div class="info-item"><strong>Nascimento</strong> ${formatarData(user.data_nascimento)}</div>
+                <div class="info-item"><strong>Telefone</strong> ${user.telefone}</div>
+                <div class="info-item"><strong>Peso</strong> ${user.peso} kg</div>
+                <div class="info-item"><strong>Altura</strong> ${user.altura} m</div>
             `;
 
-            // 7️⃣ Ações
+            // Ações
             const actions = document.createElement("div");
             actions.className = "card-actions";
-            const btnPago = document.createElement("button");
-            btnPago.className = "btn btn-ativar";
-            btnPago.textContent = "Pago";
-            btnPago.dataset.id = user.idusuario;
-            btnPago.dataset.status = "Pago";
 
-            const btnNaoPago = document.createElement("button");
-            btnNaoPago.className = "btn btn-desativar";
-            btnNaoPago.textContent = "Não Pago";
-            btnNaoPago.dataset.id = user.idusuario;
-            btnNaoPago.dataset.status = "Não Pago";
+            const btnPago = criarBotao("btn btn-ativar", "Pago", () => alterarStatus(user.idusuario, "Pago"));
+            const btnNaoPago = criarBotao("btn btn-desativar", "Não Pago", () => alterarStatus(user.idusuario, "Não Pago"));
+            const btnEx = criarBotao("btn btn-excluir", "Excluir", () => excluirUsuario(user.idusuario, user.nome));
 
-            actions.appendChild(btnPago);
-            actions.appendChild(btnNaoPago);
+            actions.append(btnPago, btnNaoPago, btnEx);
 
-            // Eventos dos botões
-            btnPago.addEventListener("click", () => {
-                alterarStatus(user.idusuario, "Pago");
-            });
-
-            btnNaoPago.addEventListener("click", () => {
-                alterarStatus(user.idusuario, "Não Pago");
-            });
-
-
-            // 8️⃣ Montar card
-            card.appendChild(header);
-            card.appendChild(info);
-            card.appendChild(actions);
-
+            card.append(header, info, actions);
             feed.appendChild(card);
         });
+    } catch (error) {
+        console.error(error);
+        alert("Erro ao carregar usuários");
+    }
+}
+
+// Funções auxiliares de UI
+function criarBotao(classe, texto, onClick) {
+    const btn = document.createElement("button");
+    btn.className = classe;
+    btn.textContent = texto;
+    btn.onclick = onClick;
+    return btn;
+}
+
+function formatarData(dataStr) {
+    if (!dataStr) return "";
+    const data = new Date(dataStr);
+    return data.toLocaleDateString("pt-BR");
+}
+
+async function alterarStatus(idusuario, status) {
+    try {
+        const response = await fetch(`/api/users/usuarios/${idusuario}/status`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ status })
+        });
+
+        if (await handleResponse(response)) {
+            carregarUsuarios();
         }
-        function formatarData(dataStr) {
-        if (!dataStr) return "";
-        const data = new Date(dataStr);
-        return data.toLocaleDateString("pt-BR");
+    } catch (error) {
+        alert("Erro ao alterar status");
+    }
+}
+
+async function excluirUsuario(idusuario, nome) {
+    if (!confirm(`Tem certeza que deseja excluir o usuário ${nome}?`)) return;
+
+    try {
+        const response = await fetch(`/api/users/usuarios/${idusuario}`, {
+            method: "DELETE",
+            credentials: "include"
+        });
+
+        if (await handleResponse(response)) {
+            carregarUsuarios();
         }
+    } catch (error) {
+        alert("Erro ao excluir usuário");
+    }
+}
 
-        async function alterarStatus(idusuario, status) {
-            try{
-                const response = await fetch(`/api/users/usuarios/${idusuario}/status`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json",
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                body: JSON.stringify({
-                    status: status
-                })
-                });
-
-                if (!response.ok) {
-                throw new Error("Erro ao atualizar status");
-                }
-
-                // atualiza a lista depois de mudar o status
-                carregarUsuarios();
-
-            }catch(error){
-               console.error(error);
-                alert("Erro ao alterar status do usuário");
-            }
-        }
-        carregarUsuarios();
+carregarUsuarios();

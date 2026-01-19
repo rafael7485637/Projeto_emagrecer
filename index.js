@@ -100,41 +100,43 @@ const upload = multer({
   }
 });
 
-//proteger rotas 
-  //públicas
-  app.get("/login", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "login.html"));
-  });
+// PROTEGER ROTAS DE ARQUIVOS
 
-  app.get("/cadastro", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "cadastro.html"));
-  });
+// Públicas
+app.get("/login", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "login.html"));
+});
 
-  app.get("/contato", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "contato.html"));
-  });
+app.get("/cadastro", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "cadastro.html"));
+});
 
-  app.get("/player", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "player.html"));
-  });
+// Somente usuários logados (qualquer tipo) podem ver o player e contato
+app.get("/player", auth, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "player.html"));
+});
 
-  //somente admin
-  app.get("/cadastroAdm", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "cadastroAdm.html"));
-  });
+app.get("/contato", auth, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "contato.html"));
+});
 
-  app.get("/cadastroVideos",(req, res) => {
-    res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
-  });
+// Somente ADMIN
+app.get("/cadastroAdm", auth, apenasAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "cadastroAdm.html"));
+});
 
-  app.get("/lista_usuarios", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));
-  });
+app.get("/cadastroVideos", auth, apenasAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
+});
 
-  //somente usuario
-  app.get("/feed_videos", (req, res) => {
+app.get("/lista_usuarios", auth, apenasAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));
+});
+
+// Somente USUÁRIO comum (ou conforme sua lógica de 'apenasUsuario')
+app.get("/feed_videos", auth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "feed_videos.html"));
-  });
+});
 
 
 // Inicialização do servidor

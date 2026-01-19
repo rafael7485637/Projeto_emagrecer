@@ -5,6 +5,8 @@
             document.getElementById("navbar").innerHTML = html;
         });
 
+
+        
     document.getElementById("formCadastro").addEventListener("submit", async (e) => {
   e.preventDefault();
 

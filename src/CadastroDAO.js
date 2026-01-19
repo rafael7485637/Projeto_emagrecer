@@ -96,6 +96,12 @@ async emailExisteComoAdm(gmail) {
   const { rowCount } = await pool.query(sql, [gmail]);
   return rowCount > 0;
 }
+
+//excluir usuario
+async excluirUsuario(idusuario) {
+  const sql = "DELETE FROM usuario WHERE idusuario = $1";
+  await pool.query(sql, [idusuario]);
 }
 
+}
 module.exports = CadastroDAO;

@@ -126,4 +126,16 @@ router.post("/cadastrar-adm", auth, apenasAdmin, async (req, res) => {
   }
 });
 
+//excluir usuario
+router.delete("/usuarios/:id", auth, apenasAdmin, async (req, res) => {
+  const { id } = req.params;
+  const dao = new CadastroDAO();
+  try {
+    await dao.excluirUsuario(id);
+    res.json({ message: "Usuário excluído" });
+  } catch (error) {
+    console.error("Erro ao excluir usuário:", error);
+    res.status(500).json({ error: "Erro ao excluir usuário" });
+  }
+});
 module.exports = router;
