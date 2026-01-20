@@ -26,6 +26,7 @@ app.use(session({
 const userRoutes = require("./routes/users");
 const videoRoutes = require("./routes/videos");
 const authRoutes = require("./routes/auth");
+const mailerRoutes = require("./routes/mailer");
 
 // Middlewares de segurança
 app.use(
@@ -68,6 +69,7 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/videos", videoRoutes);
+app.use("/api/mailer", mailerRoutes);
 
 // Garantir que as pastas de upload existam
 const ensureDirectoriesExist = () => {
@@ -103,6 +105,14 @@ const upload = multer({
 // PROTEGER ROTAS DE ARQUIVOS
 
 // Públicas
+app.get("/recovery", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "recovery.html"));
+});
+
+app.get("/reset-password", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "resetPassword.html"));
+});
+
 app.get("/login", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "login.html"));
 });
