@@ -1,5 +1,6 @@
 // 0. Define os elementos globais
-const select = document.getElementById("selecionar-categoria"); 
+const select = document.getElementById("selecionar-categoria");
+const txtBusca = document.getElementById("txtBusca"); 
 const feed = document.getElementById("feed");
 
 
@@ -75,9 +76,23 @@ async function excluirVideo(idvideo) {
 }
 
 // 3. Carrega os vídeos
-async function carregarVideos(idcategoria = "") {
+async function carregarVideos() {
+    const categoriaSelecionada = select ? select.value : "";
+    const termoBusca = txtBusca ? txtBusca.value.trim() : "";
+
+    // 1. Defina a URL BASE sem NENHUM "?"
     let url = "/api/videos/videos-feed";
-    if (idcategoria) url += `?idcategoria=${idcategoria}`;
+
+    // 2. Use APENAS o URLSearchParams para colocar os parâmetros
+    const params = new URLSearchParams();
+    if (categoriaSelecionada) params.append("idcategoria", categoriaSelecionada);
+    if (termoBusca) params.append("nome", termoBusca);
+
+    // 3. Só anexa se houver algo nos parâmetros
+    const queryString = params.toString();
+    if (queryString) {
+        url += `?${queryString}`;
+    }
 
     try {
         const res = await fetch(url, { credentials: "include" });
@@ -114,23 +129,25 @@ async function carregarVideos(idcategoria = "") {
             `;
             feed.appendChild(card);
         });
+
+        // Reatribui eventos de exclusão após renderizar
+        if (usuarioEAdmin) {
+            document.querySelectorAll(".btn-excluir").forEach(btn => {
+                btn.onclick = () => excluirVideo(btn.dataset.id);
+            });
+        }
     } catch (error) {
         console.error("Erro ao carregar vídeos:", error);
     }
-
-    if (usuarioEAdmin) {
-        document.querySelectorAll(".btn-excluir").forEach(btn => {
-            btn.addEventListener("click", () => {
-            excluirVideo(btn.dataset.id);
-            });
-        });
-    }
-
 }
 
 // Eventos e Inicialização
 if (select) {
     select.addEventListener('change', () => carregarVideos(select.value));
+}
+
+if (txtBusca) {
+    txtBusca.addEventListener('input', () => carregarVideos());
 }
 
 carregarCategorias();

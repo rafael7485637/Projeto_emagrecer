@@ -18,9 +18,9 @@ async function handleResponse(response) {
     return response.json();
 }
 
-async function carregarUsuarios() {
+async function carregarUsuarios(nome = "") {
     try {
-        const response = await fetch("/api/users/usuarios", {
+        const response = await fetch(`/api/users/usuarios?nome=${nome}`, {
             method: "GET",
             credentials: "include" // Essencial para cookies de sessão
         });
@@ -80,7 +80,6 @@ async function carregarUsuarios() {
         });
     } catch (error) {
         console.error(error);
-        alert("Erro ao carregar usuários");
     }
 }
 
@@ -131,6 +130,24 @@ async function excluirUsuario(idusuario, nome) {
     } catch (error) {
         alert("Erro ao excluir usuário");
     }
+}
+
+const inputBusca = document.getElementById("txtBusca");
+
+if (inputBusca) {
+    inputBusca.addEventListener("input", (e) => {
+        const termoBusca = e.target.value.trim(); // .trim() remove espaços vazios
+        
+        if (termoBusca.length > 0) {
+            // Se houver texto, aplica o filtro
+            carregarUsuarios(termoBusca);
+        } else {
+            // Se o campo for limpo, volta a listar todos (comportamento de reset)
+            // Se você preferir que a tela fique VAZIA quando não digitar nada, 
+            // basta comentar a linha abaixo e usar: document.getElementById("userFeed").innerHTML = "";
+            carregarUsuarios(); 
+        }
+    });
 }
 
 carregarUsuarios();

@@ -48,6 +48,58 @@ nav {
     text-decoration: none;
 }
 
+#divBusca {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 25px; /* Bordas mais arredondadas ficam mais modernas */
+    width: 100%;
+    max-width: 400px;
+    padding: 5px 15px;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+/* Efeito ao clicar na barra */
+#divBusca:focus-within {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 8px rgba(74, 144, 226, 0.2);
+}
+
+/* Campo de Texto */
+#txtBusca {
+    flex: 1; /* Ocupa todo o espaço disponível */
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 16px;
+    height: 35px;
+    color: var(--primary-text);
+}
+
+/* Ícone de Busca */
+#btnBusca {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: 0.2s;
+}
+
+#btnBusca:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+#containerBotao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+}
+
 .btn {
     padding: 0.6rem 1.2rem;
     margin-left: 10px;

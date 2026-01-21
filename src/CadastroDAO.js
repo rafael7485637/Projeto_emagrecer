@@ -48,15 +48,22 @@ async salvar(dados) {
   return rows[0];
 }
 
-  // Função listar usuários
-  async listarUsuarios() {
-    const sql = `
-      SELECT * FROM usuario
-      ORDER BY idusuario DESC
-    `;
-    const { rows } = await pool.query(sql);
-    return rows;
+  // Função listar usuários e pesquisar por nome
+  async listarUsuarios(filtroNome) {
+  let sql = "SELECT * FROM usuario";
+  let valores = [];
+
+  // Verifica se filtroNome existe E não é apenas uma string vazia
+  if (filtroNome && filtroNome.trim() !== "") {
+    sql += " WHERE nome ILIKE $1";
+    valores.push(`%${filtroNome}%`);
   }
+
+  sql += " ORDER BY idusuario DESC";
+
+  const { rows } = await pool.query(sql, valores);
+  return rows;
+}
 
   // Função atualizar status do usuário (ex.: bloquear/desbloquear)
   async atualizarStatus(id, status) {
@@ -80,16 +87,6 @@ async salvar(dados) {
 }
 
 
-  // Atualizar foto do usuário
-async atualizarFoto(idusuario, fotoPath) {
-  const sql = `
-    UPDATE usuario
-    SET foto = $1
-    WHERE idusuario = $2
-  `;
-  await pool.query(sql, [fotoPath, idusuario]);
-}
-
 // analisar se o gmail ja existe como adm
 async emailExisteComoAdm(gmail) {
   const sql = "SELECT 1 FROM administrador WHERE gmail_adm = $1";
@@ -102,6 +99,8 @@ async excluirUsuario(idusuario) {
   const sql = "DELETE FROM usuario WHERE idusuario = $1";
   await pool.query(sql, [idusuario]);
 }
+
+
 
 }
 module.exports = CadastroDAO;

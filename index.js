@@ -121,14 +121,15 @@ app.get("/cadastro", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "cadastro.html"));
 });
 
+app.get("/contato", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "contato.html"));
+});
+
 // Somente usuários logados (qualquer tipo) podem ver o player e contato
 app.get("/player", auth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "player.html"));
 });
 
-app.get("/contato", auth, (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "contato.html"));
-});
 
 // Somente ADMIN
 app.get("/cadastroAdm", auth, apenasAdmin, (req, res) => {

@@ -77,11 +77,18 @@ router.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
   }
 });
 
-// Listar usuários
+// Listar usuários (funciona para todos ou para pesquisa)
 router.get("/usuarios", auth, apenasAdmin, async (req, res) => {
   const dao = new CadastroDAO();
+  
+  // Pega o parâmetro 'nome' da URL (ex: ?nome=joao)
+  const { nome } = req.query;
+
   try {
-    const usuarios = await dao.listarUsuarios();
+    // Passamos o 'nome' para o DAO.
+    // Se 'nome' for undefined, o DAO lista tudo. Se tiver valor, ele filtra.
+    const usuarios = await dao.listarUsuarios(nome);
+    
     res.json(usuarios);
   } catch (error) {
     console.error("Erro ao listar usuários:", error);

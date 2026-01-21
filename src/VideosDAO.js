@@ -41,23 +41,29 @@ class VideosDAO {
   }
 
  
-
-  // função listar vídeos (com ou sem categoria)
-async listarPorCategoria(idcategoria) {
+// Função listar vídeos com filtros combinados (categoria e/ou nome)
+async listarPorCategoria(idcategoria, nome) {
   let sql = `
     SELECT 
       v.*, 
       c.nome_categoria AS categorias
     FROM video v
     LEFT JOIN categorias c ON c.idcategoria = v.idcategoria
+    WHERE 1=1
   `;
 
   const params = [];
 
-  // só aplica o filtro se tiver categoria válida
+  // Filtro de Categoria
   if (idcategoria && idcategoria !== "") {
-    sql += ` WHERE v.idcategoria = $1`;
     params.push(idcategoria);
+    sql += ` AND v.idcategoria = $${params.length}`;
+  }
+
+  // Filtro de Nome (Busca)
+  if (nome && nome.trim() !== "") {
+    params.push(`%${nome.trim()}%`);
+    sql += ` AND v.titulo ILIKE $${params.length}`;
   }
 
   sql += ` ORDER BY v.idvideo DESC`;

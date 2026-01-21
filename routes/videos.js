@@ -53,10 +53,10 @@ router.post("/cadastrar-video", auth, apenasAdmin, upload.single('imagem'), asyn
 // Listar vídeos por categoria
 router.get("/videos", async (req, res) => {
   const dao = new VideosDAO();
-  const { idcategoria } = req.query;
+  const { idcategoria, nome } = req.query;
 
   try {
-    const videos = await dao.listarPorCategoria(idcategoria);
+    const videos = await dao.listarPorCategoria(idcategoria, nome);
     res.json(videos);
   } catch (error) {
     console.error("Erro ao buscar vídeos:", error);
@@ -124,30 +124,28 @@ router.post("/registrar-visualizacao", auth, apenasUsuario, async (req, res) => 
 router.get("/videos-feed", auth, async (req, res) => {
   try {
     const idusuario = req.session.user.id;
-    const { idcategoria } = req.query;
-   
+    const { idcategoria, nome } = req.query; // Captura os dois parâmetros
 
-    let sql = `
-      SELECT
-        v.idvideo,
-        v.titulo,
-        v.descricao,
-        v.link,
-        v.imagem,
-        EXISTS (
-          SELECT 1
-          FROM visualizacao vis
-          WHERE vis.idvideo = v.idvideo
-            AND vis.idusuario = $1
-        ) AS assistido
+    // Base da Query
+   let sql = `
+      SELECT v.*, 
+      EXISTS (SELECT 1 FROM visualizacao vis WHERE vis.idvideo = v.idvideo AND vis.idusuario = $1) AS assistido
       FROM video v
+      WHERE 1=1
     `;
-
+   
     const params = [idusuario];
 
+    // Filtro por Categoria
     if (idcategoria) {
-      sql += " WHERE v.idcategoria = $2";
       params.push(idcategoria);
+      sql += ` AND v.idcategoria = $${params.length}`;
+    }
+
+    // Filtro por Nome (Busca)
+    if (nome) {
+      params.push(`%${nome}%`);
+      sql += ` AND v.titulo ILIKE $${params.length}`;
     }
 
     sql += " ORDER BY v.idvideo DESC";
