@@ -121,21 +121,37 @@ router.post("/registrar-visualizacao", auth, apenasUsuario, async (req, res) => 
 });
 
 // Feed de vídeos com visualizações
+// Feed de vídeos com visualizações
 router.get("/videos-feed", auth, async (req, res) => {
   try {
-    const idusuario = req.session.user.id;
+    const { tipo, idusuario } = req.session.user;
     const { idcategoria, nome } = req.query; // Captura os dois parâmetros
 
     // Base da Query
-   let sql = `
-      SELECT v.*, 
-      EXISTS (SELECT 1 FROM visualizacao vis WHERE vis.idvideo = v.idvideo AND vis.idusuario = $1) AS assistido
-      FROM video v
-      WHERE 1=1
-    `;
+   let sql;
    
-    const params = [idusuario];
+    const params = [];
 
+    if (tipo === "admin"){
+      sql = `
+        SELECT v.*, false AS assistido
+        FROM video v
+        WHERE 1=1
+      `;
+    }else{
+      sql = `
+        SELECT v.*,
+        EXISTS (
+          SELECT 1 FROM visualizacao vis
+          WHERE vis.idvideo = v.idvideo
+            AND vis.idusuario = $1
+        ) AS assistido
+        FROM video v
+        WHERE 1=1
+      `;
+      params.push(idusuario);
+    }
+    
     // Filtro por Categoria
     if (idcategoria) {
       params.push(idcategoria);
