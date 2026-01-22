@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dieta | Painel da Professora</title>
+
+    <style>
+      :root {
+        --bg: #0d0c11;
+        --sidebar: #0a0910;
+        --card: #15141b;
+        --card-soft: #1c1b25;
+        --border: #262434;
+        --text: #ffffff;
+        --muted: #9c9ab3;
+        --primary: #8e2de2;
+        --primary-soft: #b36bff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: var(--sidebar);
+        border-right: 1px solid var(--border);
+        padding: 24px 16px;
+      }
+
+      .sidebar h2 {
+        color: var(--primary-soft);
+        margin-bottom: 30px;
+      }
+
+      .sidebar a {
+        display: block;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border-radius: 14px;
+        color: #cfcde8;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .sidebar a.active,
+      .sidebar a:hover {
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+      }
+
+      .main {
+        flex: 1;
+      }
+
+      .navbar {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        padding: 0 30px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(13, 12, 17, 0.85);
+        backdrop-filter: blur(10px);
+      }
+
+      .search {
+        background: var(--card);
+        border: 1px solid var(--border);
+        padding: 10px 16px;
+        border-radius: 14px;
+        width: 320px;
+        color: #ccc;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      .hero {
+        background: linear-gradient(135deg, #1b1233, #2b0f55);
+        border-radius: 26px;
+        padding: 44px;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 60px;
+        align-items: center;
+        margin-bottom: 30px;
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+      }
+
+      .hero h1 {
+        font-size: 34px;
+      }
+
+      .hero h1 span {
+        color: var(--primary-soft);
+      }
+
+      .hero p {
+        margin-top: 12px;
+        color: #d6d3ff;
+      }
+
+      .hero button {
+        margin-top: 24px;
+        padding: 15px 32px;
+        border: none;
+        border-radius: 16px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .diet-card {
+        background: linear-gradient(135deg, #1a1333, #120e22);
+        border-radius: 24px;
+        padding: 30px;
+        border: 1px solid var(--border);
+      }
+
+      .diet-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .diet-header h2 {
+        font-size: 24px;
+      }
+
+      .diet-info {
+        color: var(--muted);
+        margin-top: 10px;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+
+      .modal-overlay.active {
+        display: flex;
+      }
+
+      .modal-box {
+        background: linear-gradient(135deg, #1a1333, #120e22);
+        border-radius: 24px;
+        padding: 30px;
+        width: 90%;
+        max-width: 420px;
+        text-align: center;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+      }
+
+      .modal-box h3 {
+        margin-bottom: 10px;
+      }
+
+      .modal-box p {
+        color: var(--muted);
+        margin-bottom: 20px;
+      }
+
+      .file-input {
+        width: 100%;
+        padding: 14px;
+        background: #0f0e17;
+        border: 1px dashed var(--border);
+        border-radius: 14px;
+        color: #fff;
+        margin-bottom: 20px;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 14px;
+      }
+
+      .btn-cancel {
+        flex: 1;
+        background: #1c1b25;
+        color: #fff;
+        border: none;
+        padding: 12px;
+        border-radius: 14px;
+        cursor: pointer;
+      }
+
+      .btn-confirm {
+        flex: 1;
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+        border: none;
+        padding: 12px;
+        border-radius: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <h2>PROJETO<br />EMAGRECER</h2>
+      <a href="prof.html">Visão Geral</a>
+      <a href="alunosprof.html">Alunos</a>
+      <a href="treinosoverview.html">Treinos</a>
+      <a href="dietaoverview.html" class="active">Dieta</a>
+      <a href="#" onclick="openLogoutModal()">Sair</a>
+    </div>
+
+    <div class="main">
+      <div class="navbar">
+        <input class="search" placeholder="Buscar alunos..." />
+      </div>
+
+      <div class="content">
+        <!-- HERO -->
+        <div class="hero">
+          <div>
+            <h1>Nutrição com propósito.<br /><span>Resultados reais.</span></h1>
+            <p>
+              Envie planos alimentares personalizados e acompanhe a evolução
+              dos seus alunos.
+            </p>
+            <button onclick="openModal()">Enviar Dieta</button>
+          </div>
+        </div>
+
+        <div class="diet-card">
+          <div class="diet-header">
+            <h2>Dieta do Aluno</h2>
+          </div>
+          <div class="diet-info">
+            Nenhum plano alimentar foi enviado ainda.<br />
+            Utilize o botão <strong>“Enviar Dieta”</strong> para anexar um PDF.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL ENVIO DIETA -->
+    <div class="modal-overlay" id="dietModal">
+      <div class="modal-box">
+        <h3>Enviar Dieta em PDF</h3>
+        <p>Selecione o arquivo de dieta para o aluno.</p>
+
+        <input type="file" class="file-input" accept="application/pdf" />
+
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+          <button class="btn-confirm">Enviar</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="logoutModal">
+      <div class="modal-box">
+        <h3>Deseja sair?</h3>
+        <p>Você será desconectada da sua conta.</p>
+
+        <div class="modal-actions">
+          <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
+          <button class="btn-confirm" onclick="confirmLogout()">Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openModal() {
+        document.getElementById("dietModal").classList.add("active");
+      }
+
+      function closeModal() {
+        document.getElementById("dietModal").classList.remove("active");
+      }
+
+      function openLogoutModal() {
+        document.getElementById("logoutModal").classList.add("active");
+      }
+
+      function closeLogoutModal() {
+        document.getElementById("logoutModal").classList.remove("active");
+      }
+
+      function confirmLogout() {
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>

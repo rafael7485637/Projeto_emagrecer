@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Treinos | Professora</title>
+
+    <style>
+      :root {
+        --bg: #0d0c11;
+        --sidebar: #0a0910;
+        --card: #15141b;
+        --border: #262434;
+        --text: #ffffff;
+        --muted: #9c9ab3;
+        --primary: #8e2de2;
+        --primary-soft: #b36bff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: var(--sidebar);
+        border-right: 1px solid var(--border);
+        padding: 24px 16px;
+      }
+
+      .sidebar h2 {
+        color: var(--primary-soft);
+        margin-bottom: 30px;
+      }
+
+      .sidebar a {
+        display: block;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border-radius: 14px;
+        color: #cfcde8;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .sidebar a.active,
+      .sidebar a:hover {
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+      }
+
+      .main {
+        flex: 1;
+        padding: 40px;
+      }
+
+      .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 35px;
+      }
+
+      .navbar h1 {
+        font-size: 28px;
+      }
+
+      .btn-add {
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        border: none;
+        padding: 12px 24px;
+        border-radius: 18px;
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      .treinos {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 20px;
+      }
+
+      .treino-card {
+        background: var(--card);
+        padding: 16px;
+        border-radius: 18px;
+      }
+
+      .treino-card video {
+        width: 100%;
+        border-radius: 12px;
+        margin-bottom: 10px;
+      }
+
+      .treino-card h3 {
+        margin-bottom: 6px;
+      }
+
+      .treino-card p {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .treino-actions {
+        text-align: right;
+        margin-top: 10px;
+      }
+
+      .btn-delete {
+        background: #2a1a2a;
+        color: #ff9d9d;
+        border: none;
+        padding: 8px 14px;
+        border-radius: 12px;
+        cursor: pointer;
+      }
+
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+
+      .modal {
+        background: linear-gradient(135deg, #1a1333, #120e22);
+        padding: 32px;
+        border-radius: 26px;
+        width: 400px;
+        text-align: center;
+      }
+
+      .modal h2 {
+        margin-bottom: 8px;
+      }
+
+      .modal p {
+        color: var(--muted);
+        margin-bottom: 20px;
+      }
+
+      .modal form {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        text-align: left;
+      }
+
+      .modal label {
+        font-size: 13px;
+        color: #cfcde8;
+      }
+
+      .modal input[type="text"],
+      .modal textarea {
+        background: #1e1d2a;
+        border: 1px solid var(--border);
+        padding: 12px 14px;
+        border-radius: 14px;
+        color: #fff;
+      }
+
+      .modal textarea {
+        resize: none;
+        min-height: 80px;
+      }
+
+      .file-input {
+        background: #1e1d2a;
+        border: 1px dashed #3a3652;
+        padding: 14px;
+        border-radius: 14px;
+        cursor: pointer;
+        text-align: center;
+        color: #cfcde8;
+      }
+
+      .file-input input {
+        display: none;
+      }
+
+      .file-input span {
+        color: var(--primary-soft);
+        font-weight: 600;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 14px;
+        margin-top: 24px;
+      }
+
+      .btn-cancel {
+        flex: 1;
+        padding: 14px;
+        border-radius: 16px;
+        border: none;
+        background: #1e1d2a;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      .btn-confirm {
+        flex: 1;
+        padding: 14px;
+        border-radius: 16px;
+        border: none;
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <h2>PROJETO<br />EMAGRECER</h2>
+      <a href="prof.html">Visão Geral</a>
+      <a href="alunosprof.html">Alunos</a>
+      <a href="treinosoverview.html" class="active">Treinos</a>
+      <a href="dietaoverview.html">Dieta</a>
+      <a href="#" onclick="openLogout()">Sair</a>
+    </div>
+
+    <div class="main">
+      <div class="navbar">
+        <h1>Treinos</h1>
+        <button class="btn-add" onclick="openAddModal()">+ Adicionar treino</button>
+      </div>
+
+      <div class="treinos" id="treinosList"></div>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+      <div class="modal" id="modalContent"></div>
+    </div>
+
+    <script>
+      let deleteTarget = null;
+
+      function closeModal() {
+        document.getElementById("modal").style.display = "none";
+      }
+
+      function openLogout() {
+        document.getElementById("modalContent").innerHTML = `
+          <h2>Deseja sair?</h2>
+          <p>Você será desconectada da sua conta.</p>
+          <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+            <button class="btn-confirm" onclick="logout()">Sair</button>
+          </div>
+        `;
+        document.getElementById("modal").style.display = "flex";
+      }
+
+      function logout() {
+        window.location.href = "login.html";
+      }
+
+      function openAddModal() {
+        document.getElementById("modalContent").innerHTML = `
+          <h2>Adicionar treino</h2>
+          <p>Envie um vídeo ou informe uma URL</p>
+
+          <form onsubmit="addTreino(event)">
+            <label>Nome do treino</label>
+            <input type="text" id="nome" required>
+
+            <label>Descrição</label>
+            <textarea id="descricao" required></textarea>
+
+            <label>URL do vídeo (opcional)</label>
+            <input type="text" id="videoUrl" placeholder="https://exemplo.com/video.mp4">
+
+            <label class="file-input">
+              <input type="file" id="videoFile" accept="video/mp4">
+              <span>Ou selecione um vídeo MP4</span>
+            </label>
+
+            <div class="modal-actions">
+              <button type="button" class="btn-cancel" onclick="closeModal()">Cancelar</button>
+              <button type="submit" class="btn-confirm">Adicionar</button>
+            </div>
+          </form>
+        `;
+        document.getElementById("modal").style.display = "flex";
+      }
+
+      function addTreino(e) {
+        e.preventDefault();
+
+        const nome = document.getElementById("nome").value;
+        const desc = document.getElementById("descricao").value;
+        const url = document.getElementById("videoUrl").value.trim();
+        const file = document.getElementById("videoFile").files[0];
+
+        let videoSrc = "";
+
+        if (url) {
+          videoSrc = url;
+        } else if (file) {
+          videoSrc = URL.createObjectURL(file);
+        } else {
+          alert("Informe uma URL ou selecione um vídeo MP4.");
+          return;
+        }
+
+        const card = document.createElement("div");
+        card.className = "treino-card";
+        card.innerHTML = `
+          <video controls src="${videoSrc}"></video>
+          <h3>${nome}</h3>
+          <p>${desc}</p>
+          <div class="treino-actions">
+            <button class="btn-delete" onclick="openDeleteModal(this)">Excluir</button>
+          </div>
+        `;
+
+        document.getElementById("treinosList").appendChild(card);
+        closeModal();
+      }
+
+      function openDeleteModal(button) {
+        deleteTarget = button.closest(".treino-card");
+        document.getElementById("modalContent").innerHTML = `
+          <h2>Deseja excluir?</h2>
+          <p>Este treino será removido permanentemente.</p>
+          <div class="modal-actions">
+            <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+            <button class="btn-confirm" onclick="confirmDelete()">Excluir</button>
+          </div>
+        `;
+        document.getElementById("modal").style.display = "flex";
+      }
+
+      function confirmDelete() {
+        deleteTarget.remove();
+        closeModal();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dieta | Projeto Emagrecer</title>
+
+    <style>
+      :root {
+        --bg: #0d0c11;
+        --sidebar: #0a0910;
+        --card: #15141b;
+        --card-soft: #1c1b25;
+        --border: #262434;
+        --text: #ffffff;
+        --muted: #9c9ab3;
+        --primary: #8e2de2;
+        --primary-soft: #b36bff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        width: 240px;
+        background: var(--sidebar);
+        border-right: 1px solid var(--border);
+        padding: 24px 16px;
+      }
+
+      .sidebar h2 {
+        color: var(--primary-soft);
+        margin-bottom: 30px;
+      }
+
+      .sidebar a {
+        display: block;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border-radius: 14px;
+        color: #cfcde8;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .sidebar a.active,
+      .sidebar a:hover {
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+      }
+
+      .main {
+        flex: 1;
+      }
+
+      .navbar {
+        height: 70px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(13, 12, 17, 0.85);
+        backdrop-filter: blur(10px);
+      }
+
+      .content {
+        padding: 30px;
+        display: flex;
+        justify-content: center;
+      }
+
+      .pdf-wrapper {
+        max-width: 1000px;
+        width: 100%;
+        background: linear-gradient(135deg, #1a1333, #120e22);
+        border-radius: 26px;
+        padding: 30px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      .pdf-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .pdf-header h1 {
+        font-size: 26px;
+      }
+
+      .download-btn {
+        padding: 12px 22px;
+        border: none;
+        border-radius: 16px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .download-btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.95;
+      }
+
+      .pdf-viewer {
+        width: 100%;
+        height: 75vh;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: #000;
+      }
+
+      .pdf-viewer iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+
+      .logout-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(8px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+
+      .logout-box {
+        background: linear-gradient(135deg, #1a1333, #120e22);
+        border-radius: 22px;
+        padding: 30px;
+        width: 90%;
+        max-width: 420px;
+        text-align: center;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+        animation: fadeIn 0.3s ease;
+      }
+
+      .logout-box h2 {
+        font-size: 24px;
+        margin-bottom: 10px;
+      }
+
+      .logout-box p {
+        color: var(--muted);
+        margin-bottom: 26px;
+      }
+
+      .logout-actions {
+        display: flex;
+        gap: 16px;
+        justify-content: center;
+      }
+
+      .btn-cancel {
+        background: #1e1d29;
+        color: #fff;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 14px;
+        cursor: pointer;
+      }
+
+      .btn-cancel:hover {
+        background: #2a2838;
+      }
+
+      .btn-exit {
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+        border: none;
+        padding: 12px 26px;
+        border-radius: 14px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="sidebar">
+      <h2>PROJETO<br />EMAGRECER</h2>
+      <a href="dashboard.html">Vista Geral</a>
+      <a href="treinos.html">Treinos</a>
+      <a class="active">Dieta</a>
+      <a href="#" onclick="openLogout()">Sair</a>
+    </div>
+
+    <div class="main">
+      <div class="navbar"></div>
+
+      <div class="content">
+        <div class="pdf-wrapper">
+          <div class="pdf-header">
+            <h1>Plano Alimentar</h1>
+            <a href="pdfs/dieta.pdf" class="download-btn" download>
+              Baixar PDF
+            </a>
+          </div>
+
+          <div class="pdf-viewer">
+            <iframe src="pdfs/dieta.pdf"></iframe>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="logout-modal" id="logoutModal">
+      <div class="logout-box">
+        <h2>Deseja sair?</h2>
+        <p>Você será desconectado da sua conta.</p>
+
+        <div class="logout-actions">
+          <button class="btn-cancel" onclick="closeLogout()">Cancelar</button>
+          <button class="btn-exit" onclick="logout()">Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function openLogout() {
+        document.getElementById("logoutModal").style.display = "flex";
+      }
+
+      function closeLogout() {
+        document.getElementById("logoutModal").style.display = "none";
+      }
+
+      function logout() {
+        window.location.href = "index.html"; // ou login.html
+      }
+    </script>
+  </body>
+</html>

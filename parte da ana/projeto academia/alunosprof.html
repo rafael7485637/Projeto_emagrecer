@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alunos | Projeto Emagrecer</title>
+
+  <style>
+    :root {
+      --bg: #0d0c11;
+      --sidebar: #0a0910;
+      --card: #15141b;
+      --card-soft: #1c1b25;
+      --border: #262434;
+      --text: #ffffff;
+      --muted: #9c9ab3;
+      --primary: #8e2de2;
+      --primary-soft: #b36bff;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      padding: 24px 16px;
+    }
+
+    .sidebar h2 {
+      color: var(--primary-soft);
+      margin-bottom: 30px;
+    }
+
+    .sidebar a {
+      display: block;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      border-radius: 14px;
+      color: #cfcde8;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .sidebar a.active,
+    .sidebar a:hover {
+      background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+      color: #fff;
+    }
+
+    .main {
+      flex: 1;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+    }
+
+    .page-header h1 span {
+      color: var(--primary-soft);
+    }
+
+    .students {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 22px;
+    }
+
+    .student-card {
+      background: linear-gradient(135deg, #1a1333, #120e22);
+      border-radius: 22px;
+      padding: 22px;
+      border: 1px solid var(--border);
+    }
+
+    .student-top {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .student-top img {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 3px solid var(--primary-soft);
+    }
+
+    .student-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .student-actions button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-view {
+      background: #1c1b25;
+      color: #fff;
+    }
+
+    .btn-edit {
+      background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+      color: #fff;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: radial-gradient(circle at top, #2a1654, #12091f);
+      border-radius: 26px;
+      padding: 32px;
+      width: 90%;
+      max-width: 420px;
+      text-align: center;
+      border: 1px solid var(--border);
+    }
+
+    .modal h2 {
+      margin-bottom: 8px;
+    }
+
+    .modal p {
+      font-size: 14px;
+      color: #d6d3ff;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 14px;
+      margin-top: 26px;
+    }
+
+    .btn-cancel {
+      flex: 1;
+      padding: 14px;
+      border-radius: 16px;
+      border: none;
+      background: #1c1b25;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .btn-confirm {
+      flex: 1;
+      padding: 14px;
+      border-radius: 16px;
+      border: none;
+      background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <h2>PROJETO<br />EMAGRECER</h2>
+    <a href="prof.html">Visão Geral</a>
+    <a href="alunosprof.html" class="active">Alunos</a>
+    <a href="treinosoverview.html">Treinos</a>
+    <a href="dietaoverview.html">Dieta</a>
+    <a href="#" onclick="openLogoutModal()">Sair</a>
+  </div>
+
+  <div class="main">
+    <div class="content">
+      <div class="page-header">
+        <h1>Seus <span>Alunos</span></h1>
+      </div>
+
+      <div class="students">
+        <div class="student-card">
+          <div class="student-top">
+            <img src="img/ANA.png" />
+            <strong>Ana</strong>
+          </div>
+
+          <div class="student-actions">
+            <button class="btn-edit" onclick="openDeleteModal(this)">Editar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL EXCLUIR -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <h2>Deseja excluir?</h2>
+      <p>Este aluno será removido permanentemente.</p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="confirmDelete()">Excluir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL LOGOUT -->
+  <div class="modal-overlay" id="logoutModal">
+    <div class="modal">
+      <h2>Deseja sair?</h2>
+      <p>Você será desconectada da sua conta.</p>
+
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeLogoutModal()">Cancelar</button>
+        <button class="btn-confirm" onclick="confirmLogout()">Sair</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedStudent = null;
+
+    function openDeleteModal(button) {
+      selectedStudent = button.closest(".student-card");
+      document.getElementById("deleteModal").classList.add("active");
+    }
+
+    function closeDeleteModal() {
+      document.getElementById("deleteModal").classList.remove("active");
+      selectedStudent = null;
+    }
+
+    function confirmDelete() {
+      if (selectedStudent) {
+        selectedStudent.remove();
+      }
+      closeDeleteModal();
+    }
+
+    function openLogoutModal() {
+      document.getElementById("logoutModal").classList.add("active");
+    }
+
+    function closeLogoutModal() {
+      document.getElementById("logoutModal").classList.remove("active");
+    }
+
+    function confirmLogout() {
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
