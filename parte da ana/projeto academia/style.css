@@ -568,7 +568,7 @@ body {
   }
 }
 .testimonial-slider {
-  background: linear-gradient(135deg, #0a0a0a; #1a1522);
+  background: linear-gradient(135deg, #0a0a0a, #1a1522);
   padding: 80px 0;
 }
 
