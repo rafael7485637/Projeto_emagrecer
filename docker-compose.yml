@@ -1,0 +1,45 @@
+name: projeto_emagrecer
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: projeto-emagrecer-app
+    restart: always
+    env_file:
+      - .env
+    depends_on:
+      - db
+    ports:
+      - "${PORT}:${PORT}"
+    volumes:
+      - ./public:/app/public:ro
+      - ./uploads:/app/uploads
+    networks:
+      - emagrecer-network
+
+  db:
+    image: postgres:17-alpine
+    container_name: projeto-emagrecer-db
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASS}
+      POSTGRES_DB: ${PG_DB}
+    ports:
+      - "${PG_PORT}:5432"
+    volumes:
+      - emagrecer_pgdata:/var/lib/postgresql/data
+      - ./utils/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - emagrecer-network
+
+volumes:
+  emagrecer_pgdata:
+
+networks:
+  emagrecer-network:
+    driver: bridge
