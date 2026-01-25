@@ -34,6 +34,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
+
         scriptSrc: [
           "'self'",
           "'unsafe-inline'",
@@ -41,14 +42,28 @@ app.use(
           "https://www.google.com",
           "blob:"
         ],
+
         frameSrc: ["https://www.youtube.com"],
+
         imgSrc: [
           "'self'",
           "data:",
           "blob:",
           "https://i.ytimg.com"
         ],
-        styleSrc: ["'self'", "'unsafe-inline'"]
+
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://fonts.googleapis.com",
+          "https://cdnjs.cloudflare.com"
+        ],
+
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com",
+          "https://cdnjs.cloudflare.com"
+        ]
       }
     }
   })

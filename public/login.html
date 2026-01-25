@@ -1,32 +1,224 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
     <title>Login</title>
-    <link rel="stylesheet" href="/css/forms.css">
-</head>
-<body>
-    <nav id="navbar"></nav>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <div class="form-container">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --roxo: #5b22b2;
+        --roxo-card: #4b2b77;
+        --branco: #ffffff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(135deg, #6a2bc5 0%, #140022 100%);
+      }
+
+      /* NAVBAR */
+      .navbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        height: 72px;
+        padding: 0 60px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(8px);
+        z-index: 10;
+      }
+
+      .logo {
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--roxo);
+      }
+
+      .navbar nav a {
+        margin-left: 30px;
+        text-decoration: none;
+        color: var(--branco);
+        font-weight: 500;
+        transition: 0.3s;
+      }
+
+      .btn-login {
+        padding: 8px 18px;
+        border: 2px solid var(--roxo);
+        border-radius: 20px;
+      }
+
+      .btn-login:hover {
+        background: var(--roxo-card);
+        border-color: #fff;
+      }
+
+      /* MAIN */
+      .page-content {
+        flex: 1;
+        padding-top: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      /* CARD */
+      .login-box {
+        background: var(--roxo-card);
+        padding: 42px 38px;
+        width: 360px;
+        border-radius: 18px;
+        color: #fff;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
+      }
+
+      .login-box h2 {
+        text-align: center;
+        margin-bottom: 28px;
+      }
+
+      .input-group {
+        position: relative;
+        margin-bottom: 18px;
+      }
+
+      .input-group input {
+        width: 100%;
+        padding: 14px 44px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        font-size: 14px;
+      }
+
+      .icon {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0.7;
+      }
+
+      .toggle {
+        position: absolute;
+        right: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+        opacity: 0.7;
+      }
+
+      .options {
+        text-align: right;
+        margin-bottom: 22px;
+      }
+
+      .options a {
+        font-size: 13px;
+        color: #e0d6ff;
+        text-decoration: none;
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        background: #ffffff;
+        color: var(--roxo);
+        font-weight: 600;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+
+      .security {
+        text-align: center;
+        font-size: 13px;
+        opacity: 0.85;
+        margin-top: 18px;
+      }
+
+      /* FOOTER */
+      footer {
+        height: 72px;
+        background: rgba(0, 0, 0, 0.65);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.85rem;
+        color: #ffffff;
+        opacity: 0.85;
+      }
+    </style>
+  </head>
+
+  <body>
+    <header class="navbar">
+      <div class="logo">PROJETO EMAGRECER</div>
+      <nav>
+        <a href="#faq">Projeto Emagrecer</a>
+        <a href="/login" class="btn-login">Inscreva-se</a>
+      </nav>
+    </header>
+
+    <main class="page-content">
+      <div class="login-box">
         <h2>Login</h2>
+
         <form id="formLogin">
+          <div class="input-group">
+            <span class="icon">📧</span>
+            <input type="email" id="gmail" name="gmail" placeholder="E-mail" required />
+          </div>
 
-            <label for="gmail">E-mail:</label>
-            <input type="email" id="gmail" name="gmail" required>
+          <div class="input-group">
+            <span class="icon">🔒</span>
+            <input type="password" id="senha" name="senha" placeholder="Senha" required />
+            <span class="toggle" id="toggleSenha">👁️</span>
+          </div>
 
-             <label for="senha">Senha:</label>
-            <input type="password" id="senha" name="senha" required>
+          <div class="options">
+            <a href="recovery.html">Esqueceu a senha?</a>
+          </div>
 
-
-            <button type="submit">Entrar</button>
+          <button type="submit">Entrar</button>
+          <p class="security">🔐 Seus dados estão protegidos</p>
         </form>
-        <br>
-        <a href="recovery.html">Esqueceu a senha?</a>
-    </div>
+      </div>
+    </main>
 
-<script src="./js/login.js"></script>
+    <footer>
+      © 2026 Projeto Emagrecer — Todos os direitos reservados
+    </footer>
 
-</body>
+    <script src="./js/login.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const toggle = document.getElementById("toggleSenha");
+        const input = document.getElementById("senha");
+
+        toggle.addEventListener("click", () => {
+          input.type = input.type === "password" ? "text" : "password";
+        });
+      });
+    </script>
+  </body>
 </html>

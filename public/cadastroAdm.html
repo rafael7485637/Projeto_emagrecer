@@ -1,35 +1,302 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscreva-se</title>
-    <link rel="stylesheet" href="/css/forms.css">
-</head>
-<body>
-    <nav id="navbar"></nav>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro de Administrador</title>
 
-    <div class="form-container">
-        <h2>Adicionar Administrador</h2>
-        <form id="formCadastro">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
+    <style>
+      :root {
+        --bg: #0d0c11;
+        --sidebar: #0a0910;
+        --card: #15141b;
+        --border: #262434;
+        --text: #ffffff;
+        --muted: #9c9ab3;
+        --primary: #8e2de2;
+        --primary-soft: #b36bff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #6a2bc5 0%, #140022 100%);
+        color: var(--text);
+      }
+
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      .sidebar {
+        width: 240px;
+        background: rgba(10, 9, 16, 0.95);
+        backdrop-filter: blur(10px);
+        border-right: 1px solid var(--border);
+        padding: 24px 16px;
+      }
+
+      .sidebar h2 {
+        color: var(--primary-soft);
+        margin-bottom: 32px;
+        line-height: 1.2;
+        font-size: 18px;
+      }
+
+      .sidebar h2 span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #cfcde8;
+      }
+
+      .sidebar a {
+        display: block;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border-radius: 14px;
+        color: #cfcde8;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.3s;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          var(--primary-soft)
+        );
+        color: #fff;
+      }
+
+      .main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+      }
+
+      .form-container {
+        width: 100%;
+        max-width: 420px;
+        background: linear-gradient(135deg, #1b1233, #120e22);
+        padding: 36px;
+        border-radius: 22px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      .form-container h2 {
+        text-align: center;
+        margin-bottom: 28px;
+        font-weight: 600;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: #d6d3ff;
+      }
+
+      input {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: #fff;
+        outline: none;
+      }
+
+      input:focus {
+        border-color: var(--primary-soft);
+        box-shadow: 0 0 0 2px rgba(179, 107, 255, 0.25);
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 14px;
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          var(--primary-soft)
+        );
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 18px;
+        font-size: 13px;
+        color: #cfcde8;
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .logout-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(6px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 999;
+      }
+
+      .logout-overlay.active {
+        display: flex;
+      }
+
+      .logout-modal {
+        background: linear-gradient(135deg, #1a1333, #120e22);
+        border-radius: 24px;
+        padding: 30px;
+        width: 90%;
+        max-width: 380px;
+        text-align: center;
+      }
+
+      .logout-actions {
+        display: flex;
+        gap: 14px;
+      }
+
+      .logout-actions button {
+        flex: 1;
+        padding: 12px;
+        border-radius: 14px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .btn-cancel {
+        background: #1c1b25;
+        color: #fff;
+      }
+
+      .btn-confirm {
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          var(--primary-soft)
+        );
+        color: #fff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>PROJETO<br /><span>EMAGRECER</span></h2>
+
+        <a href="/feed_videos">Vídeos</a>
+        <a href="/lista_usuarios" >Usuários</a>
+        <a href="/cadastroVideos" >Cadastrar Vídeos</a>
+        <a href="/cadastroAdm" class="active">Adicionar Administrador</a>
+
+        <!-- BOTÃO QUE ABRE O MODAL -->
+        <a href="#" onclick="abrirModalLogout()">Sair</a>
+      </aside>
+
+      <main class="main">
+        <div class="form-container">
+          <h2>Adicionar Administrador</h2>
+
+          <form id="formCadastro" autocomplete="off">
             <label for="nome_adm">Nome Completo</label>
-            <input type="text" id="nome_adm" name="nome_adm" required>
+            <input
+              type="text"
+              id="nome_adm"
+              name="nome_adm"
+              autocomplete="off"
+              required
+            />
 
-            <label for="gmail_adm">E-mail:</label>
-            <input type="email" id="gmail_adm" name="gmail_adm" required>
-            
-             <label for="senha_adm">Senha:</label>
-            <input type="password" id="senha_adm" name="senha_adm" required>
+            <label for="gmail_adm">E-mail</label>
+            <input
+              type="email"
+              id="gmail_adm"
+              name="gmail_adm"
+              autocomplete="off"
+              required
+            />
 
+            <label for="senha_adm">Senha</label>
+            <input
+              type="password"
+              id="senha_adm"
+              name="senha_adm"
+              autocomplete="new-password"
+              required
+            />
 
             <button type="submit">Adicionar</button>
-        </form>
-        <br>
-        <a href="index.html">Voltar à Página Inicial</a>
-    </div>
-<script src="/js/logout.js"></script>
-<script src="/js/cadastroAdm.js"></script>
+          </form>
 
-</body>
+          <a href="index.html" class="back-link">
+            Voltar à Página Inicial
+          </a>
+        </div>
+      </main>
+    </div>
+
+    <div class="logout-overlay" id="logoutOverlay">
+      <div class="logout-modal">
+        <h2>Deseja sair?</h2>
+        <p>Você será desconectado da sua conta.</p>
+
+        <div class="logout-actions">
+          <button class="btn-cancel" onclick="closeLogout()">
+            Cancelar
+          </button>
+          <button class="btn-confirm" onclick="logout()">Sair</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="/js/logout.js"></script>
+    <script src="/js/cadastroAdm.js"></script>
+
+    <script>
+      function openLogout() {
+        document.getElementById("logoutOverlay").classList.add("active");
+      }
+
+      function closeLogout() {
+        document.getElementById("logoutOverlay").classList.remove("active");
+      }
+
+      function logout() {
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
 </html>
