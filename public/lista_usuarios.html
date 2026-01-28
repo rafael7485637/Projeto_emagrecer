@@ -308,11 +308,10 @@
         <h2>PROJETO<br /><span>EMAGRECER</span></h2>
 
         <a href="/feed_videos">Vídeos</a>
-        <a href="/lista_usuarios" >Usuários</a>
+        <a href="/lista_usuarios" class="active">Usuários</a>
         <a href="/cadastroVideos" >Cadastrar Vídeos</a>
-        <a href="/cadastroAdm" class="active">Adicionar Administrador</a>
+        <a href="/cadastroAdm" >Adicionar Administrador</a>
 
-        <!-- BOTÃO QUE ABRE O MODAL -->
         <a href="#" id="btnLogout" class="btn btn-signup">Sair</a>
       </aside>
       
@@ -331,14 +330,9 @@
     </div>
 
     <script src="/js/lista_usuarios.js"></script>
-    <script>
-      function abrirModalLogout() {
-        document.getElementById("logoutModal").style.display = "flex";
-      }
 
-      function fecharModalLogout() {
-        document.getElementById("logoutModal").style.display = "none";
-      }
-    </script>
+    <script src="/js/logout.js"></script>
+
+
   </body>
 </html>

@@ -45,6 +45,10 @@
         z-index: 10;
       }
 
+      .navbar nav a:hover {
+        color: var(--roxo);
+      }
+
       .logo {
         font-size: 22px;
         font-weight: 700;
@@ -56,6 +60,17 @@
         text-decoration: none;
         color: var(--branco);
         font-weight: 500;
+        transition: 0.3s;
+      }
+
+      .navbar nav a:hover {
+        color: var(--roxo);
+      }
+
+      .btn-login {
+        padding: 8px 18px;
+        border: 2px solid var(--roxo);
+        border-radius: 20px;
       }
 
       .btn-login {
@@ -67,10 +82,10 @@
       /* CONTEÚDO */
       .page-content {
         min-height: calc(100vh - 72px);
-        padding-top: 120px; 
+        padding-top: 120px;
         display: flex;
         justify-content: center;
-        align-items: flex-start; 
+        align-items: flex-start;
       }
 
       .card {
@@ -197,7 +212,7 @@
     <header class="navbar">
       <div class="logo">PROJETO EMAGRECER</div>
       <nav>
-        <a href="/">Projeto</a>
+        <a href="/">Projeto Emagrecer</a>
         <a href="/login.html" class="btn-login">Login</a>
       </nav>
     </header>

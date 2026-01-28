@@ -1,40 +1,222 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cadastro de Vídeo</title>
-    <link rel="stylesheet" href="/css/forms.css">
-</head>
-<body>
-    <nav id="navbar"></nav>
 
-    <div class="form-container">
-        <h2>Cadastro de Vídeo</h2>
-        <form id="formCadastroVideo">
-            <label for="titulo">Título do Vídeo:</label>
-            <input type="text" id="titulo" name="titulo" required>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
 
-            <label for="descricao">Descrição:</label>
+    <style>
+      :root {
+        --bg: #0d0c11;
+        --sidebar: #0a0910;
+        --card: #15141b;
+        --border: #262434;
+        --text: #ffffff;
+        --muted: #9c9ab3;
+        --primary: #8e2de2;
+        --primary-soft: #b36bff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #6a2bc5 0%, #140022 100%);
+        color: var(--text);
+      }
+
+      .layout {
+        display: flex;
+        min-height: 100vh;
+      }
+
+      /* SIDEBAR */
+      .sidebar {
+        width: 240px;
+        background: rgba(10, 9, 16, 0.95);
+        backdrop-filter: blur(10px);
+        border-right: 1px solid var(--border);
+        padding: 24px 16px;
+      }
+
+      .sidebar h2 {
+        color: var(--primary-soft);
+        margin-bottom: 32px;
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      .sidebar h2 span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #cfcde8;
+      }
+
+      .sidebar a {
+        display: block;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border-radius: 14px;
+        color: #cfcde8;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.3s;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          var(--primary-soft)
+        );
+        color: #fff;
+      }
+
+      /* MAIN */
+      .main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px;
+      }
+
+      .form-container {
+        width: 100%;
+        max-width: 460px;
+        background: linear-gradient(135deg, #1b1233, #120e22);
+        padding: 36px;
+        border-radius: 22px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      .form-container h2 {
+        text-align: center;
+        margin-bottom: 28px;
+        font-weight: 600;
+      }
+
+      label {
+        display: block;
+        font-size: 13px;
+        margin-bottom: 6px;
+        color: #d6d3ff;
+      }
+
+      input,
+      textarea,
+      select {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 18px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: #fff;
+        outline: none;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 90px;
+      }
+
+      input:focus,
+      textarea:focus,
+      select:focus {
+        border-color: var(--primary-soft);
+        box-shadow: 0 0 0 2px rgba(179, 107, 255, 0.25);
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        border: none;
+        border-radius: 14px;
+        background: linear-gradient(
+          90deg,
+          var(--primary),
+          var(--primary-soft)
+        );
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 10px;
+      }
+
+      .back-link {
+        display: block;
+        text-align: center;
+        margin-top: 18px;
+        font-size: 13px;
+        color: #cfcde8;
+        text-decoration: none;
+      }
+
+      .back-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="layout">
+      <aside class="sidebar">
+        <h2>PROJETO<br /><span>EMAGRECER</span></h2>
+
+        <a href="/feed_videos">Vídeos</a>
+        <a href="/lista_usuarios">Usuários</a>
+        <a href="/cadastroVideos" class="active">Cadastrar Vídeos</a>
+        <a href="/cadastroAdm">Adicionar Administrador</a>
+
+        <a href="#" id="btnLogout">Sair</a>
+      </aside>
+
+      <main class="main">
+        <div class="form-container">
+          <h2>Cadastro de Vídeo</h2>
+
+          <form id="formCadastroVideo" enctype="multipart/form-data">
+            <label for="titulo">Título do Vídeo</label>
+            <input type="text" id="titulo" name="titulo" required />
+
+            <label for="descricao">Descrição</label>
             <textarea id="descricao" name="descricao" required></textarea>
 
-            <label for="imagem">Imagem do vídeo:</label>
-            <input type="file" id="imagem" name="imagem" accept="image/*">
+            <label for="imagem">Imagem do vídeo</label>
+            <input type="file" id="imagem" name="imagem" accept="image/*" />
 
-            <label for="categoria">Categoria:</label>
+            <label for="categoria">Categoria</label>
             <select id="categoria" name="idcategoria" required>
-                <option value="">Selecione uma categoria</option>
+              <option value="">Selecione uma categoria</option>
             </select>
 
-            <label for="link">Link do Vídeo:</label>
-            <input type="url" id="link" name="link" required>
+            <label for="link">Link do Vídeo</label>
+            <input type="url" id="link" name="link" required />
 
             <button type="submit">Cadastrar Vídeo</button>
-        </form>
-        <br>
-        <a href="index.html">Voltar à Página Inicial</a>
+          </form>
+
+          <a href="index.html" class="back-link">
+            Voltar à Página Inicial
+          </a>
+        </div>
+      </main>
     </div>
-<script src="/js/logout.js"></script>
-<script src="/js/cadastroVideos.js"></script>
-</body>
+
+    <script src="/js/logout.js"></script>
+    <script src="/js/cadastroVideos.js"></script>
+  </body>
 </html>

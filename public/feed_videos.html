@@ -1,32 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Card Básico</title>
-    <link rel="stylesheet" href="/css/feed_videos.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="/css/feed_videos.css" />
+  </head>
+  <body>
     <nav id="navbar"></nav>
-
-    <div class="container-filtros">
+    <main class="dashboard-main">
+      <div class="container-filtros">
         <div class="filtro-grupo">
-            <label for="selecionar-categoria">Categoria:</label>
-            <select id="selecionar-categoria">
-                <option value="">Todas as categorias</option>
-            </select>
+          <label for="selecionar-categoria">Categoria:</label>
+          <select id="selecionar-categoria">
+            <option value="">Todas as categorias</option>
+          </select>
         </div>
 
         <div id="divBusca">
-            <input type="text" id="txtBusca" placeholder="Pesquisar por nome..."/>
-            <div id="containerBotao">
-                <img src="./image/searth.png" id="btnBusca" alt="Buscar"/>
-            </div>
+          <input
+            type="text"
+            id="txtBusca"
+            placeholder="Pesquisar por nome..."
+          />
+          <div id="containerBotao">
+            <img src="./image/searth.png" id="btnBusca" alt="Buscar" />
+          </div>
         </div>
-    </div>
-    <div class="feed" id="feed"></div>
-<script src="/js/logout.js"></script>
-<script src="/js/feed_videos.js"></script>
-</body>
+      </div>
+      <div class="feed" id="feed"></div>
+    </main>
+    <script src="/js/logout.js"></script>
+    <script src="/js/feed_videos.js"></script>
+  </body>
 </html>

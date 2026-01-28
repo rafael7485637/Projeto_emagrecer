@@ -60,16 +60,22 @@
         transition: 0.3s;
       }
 
+      .navbar nav a:hover {
+        color: var(--roxo);
+      }
+
       .btn-login {
         padding: 8px 18px;
         border: 2px solid var(--roxo);
         border-radius: 20px;
       }
 
-      .btn-login:hover {
-        background: var(--roxo-card);
-        border-color: #fff;
+      .btn-login {
+        padding: 8px 18px;
+        border: 2px solid var(--roxo);
+        border-radius: 20px;
       }
+
 
       /* MAIN */
       .page-content {
@@ -174,8 +180,8 @@
     <header class="navbar">
       <div class="logo">PROJETO EMAGRECER</div>
       <nav>
-        <a href="#faq">Projeto Emagrecer</a>
-        <a href="/login" class="btn-login">Inscreva-se</a>
+        <a href="index.html">Projeto Emagrecer</a>
+        <a href="/cadastro" class="btn-login">Inscreva-se</a>
       </nav>
     </header>
 
@@ -186,12 +192,24 @@
         <form id="formLogin">
           <div class="input-group">
             <span class="icon">📧</span>
-            <input type="email" id="gmail" name="gmail" placeholder="E-mail" required />
+            <input
+              type="email"
+              id="gmail"
+              name="gmail"
+              placeholder="E-mail"
+              required
+            />
           </div>
 
           <div class="input-group">
             <span class="icon">🔒</span>
-            <input type="password" id="senha" name="senha" placeholder="Senha" required />
+            <input
+              type="password"
+              id="senha"
+              name="senha"
+              placeholder="Senha"
+              required
+            />
             <span class="toggle" id="toggleSenha">👁️</span>
           </div>
 
@@ -205,9 +223,7 @@
       </div>
     </main>
 
-    <footer>
-      © 2026 Projeto Emagrecer — Todos os direitos reservados
-    </footer>
+    <footer>© 2026 Projeto Emagrecer — Todos os direitos reservados</footer>
 
     <script src="./js/login.js"></script>
     <script>
