@@ -1,22 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Vídeo</title>
-  <link rel="stylesheet" href="/css/player.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Vídeo</title>
+    <link rel="stylesheet" href="/css/player.css" />
+  </head>
+  <body>
     <nav id="navbar"></nav>
+    <main class="content">
+      
 
-<h1 id="titulo"></h1>
+      <h1 id="titulo"></h1>
+      <div id="player"></div>
+      <p id="descricao"></p>
 
-<div id="player"></div>
+      <div class="top-actions">
+        <a href="/feed_videos" class="btn-back">← Voltar para vídeos</a>
+      </div>
+    </main>
 
-<p id="descricao"></p>
+    <script src="https://www.youtube.com/iframe_api"></script>
 
-<script src="https://www.youtube.com/iframe_api"></script>
-
-<script src="/js/player.js"></script>
-
-</body>
+    <script src="/js/player.js"></script>
+  </body>
 </html>

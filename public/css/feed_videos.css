@@ -40,6 +40,7 @@ body {
 
 .sidebar {
   height: 120vh;
+  width: 240px;
   position: fixed;
   background: rgba(10, 9, 16, 0.95);
   backdrop-filter: blur(10px);
@@ -50,12 +51,12 @@ body {
 .sidebar h2 {
   color: var(--primary-soft);
   margin-bottom: 32px;
-  font-size: 22px;
+  font-size: 18px;
   line-height: 1.2;
 }
 
 .sidebar h2 span {
-  font-size: 18px;
+  font-size: 14px;
   font-weight: 400;
   color: #cfcde8;
 }

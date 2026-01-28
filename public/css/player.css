@@ -1,91 +1,210 @@
-/* Reset e Configurações Gerais */
+/* ===== VARIÁVEIS ===== */
+:root {
+  --bg: #0d0c11;
+  --sidebar: #0a0910;
+  --card: #15141b;
+  --border: #262434;
+  --text: #ffffff;
+  --muted: #9c9ab3;
+  --primary: #8e2de2;
+  --primary-soft: #b36bff;
+}
+
+/* ===== RESET ===== */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-    background-color: #f4f4f9;
-    padding: 20px;
-    padding-top: 80px; /* Espaço para a nav não cobrir o conteúdo */
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6a2bc5 0%, #140022 100%);
+  color: var(--text);
 }
 
-/* --- ESTILO DA NAV --- */
-nav {
-    background-color: #fff;
-    padding: 0 5%;
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: fixed; /* Fixa no topo */
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+
+/* ===== SIDEBAR ===== */
+.dashboard-nav {
+  width: 240px;
 }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #4A90E2;
-    text-decoration: none;
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  height: 100vh;
+  background: rgba(10, 9, 16, 0.95);
+  backdrop-filter: blur(10px);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
 }
 
-.btn {
-    padding: 0.6rem 1.2rem;
-    margin-left: 10px;
-    border-radius: 5px;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-block;
-    transition: 0.3s;
-    font-size: 14px;
+
+.sidebar h2 {
+  color: var(--primary-soft);
+  margin-bottom: 32px;
+  font-size: 18px;
+  line-height: 1.2;
 }
 
-.btn-login {
-    border: 1px solid #4A90E2;
-    color: #4A90E2;
+.sidebar h2 span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #cfcde8;
 }
 
-.btn-login:hover {
-    background: #f0f7ff;
+.sidebar a {
+  display: block;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  color: #cfcde8;
+  text-decoration: none;
+  font-size: 15px;
+  transition: 0.3s;
 }
 
-.btn-signup {
-    background: #4A90E2;
-    border: 1px solid #4A90E2;
-    color: white;
+.sidebar a:hover,
+.sidebar a.active {
+  background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+  color: #fff;
 }
 
-.btn-signup:hover {
-    background: #357ABD;
+/* ===== CONTEÚDO ===== */
+main.content {
+  margin-left: 240px;
+  padding: 40px;
 }
 
-/* --- ESTILO DO PLAYER --- */
+/* ===== TÍTULO ===== */
 #titulo {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 2rem;
-    color: #333;
+  text-align: center;
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  padding: 0 40px;
 }
 
+/* ===== PLAYER ===== */
+/* ===== PLAYER ===== */
 #player {
-    display: flex;
-    justify-content: center;
-    margin: 20px 0;
+  display: flex;
+  justify-content: center;
+  margin: 30px 0;
 }
 
+#player > div {
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 16 / 9; /* padrão */
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+}
+
+/* 🔥 deixa o vídeo mais alto */
+@media (min-width: 768px) {
+  #player > div {
+    aspect-ratio: 16 / 10; /* mais “cinema” */
+  }
+}
+
+#player iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+
+#player iframe,
+#yt-player iframe {
+  width: 100%;
+  max-width: 960px;
+  aspect-ratio: 16 / 9;
+  border-radius: 22px;
+  border: 1px solid var(--border);
+}
+
+
+/* ===== DESCRIÇÃO ===== */
 #descricao {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 1.1rem;
-    color: #666;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    line-height: 1.6;
+  max-width: 960px;
+  margin: 15px auto 15px;
+  padding: 24px 28px;
+  background: linear-gradient(145deg, #1a1333, #120e22);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 900px) {
+  .dashboard-nav {
+    width: 200px;
+  }
+
+  .sidebar {
+    width: 200px;
+  }
+
+  main,
+  #titulo,
+  #player,
+  #descricao {
+    margin-left: 200px;
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    display: none;
+  }
+
+  main,
+  #titulo,
+  #player,
+  #descricao {
+    margin-left: 0;
+  }
+
+  #titulo {
+    font-size: 1.7rem;
+    padding: 0 20px;
+  }
+
+  #player,
+  #descricao {
+    padding: 0 20px;
+  }
+}
+
+/* ===== BOTÃO VOLTAR ===== */
+.top-actions {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+
+.btn-back {
+  display: inline-block;
+  padding: 12px 20px;
+  border-radius: 14px;
+  background: #1c1b25;
+  border: 1px solid var(--border);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-back:hover {
+  background: linear-gradient(90deg, var(--primary), var(--primary-soft));
 }
