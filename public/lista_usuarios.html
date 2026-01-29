@@ -86,6 +86,12 @@
         color: #fff;
       }
 
+      .logout-link {
+        margin-top: auto;
+        background: #1c1b25;
+        border: 1px solid var(--border);
+      }
+
       /* MAIN */
       .main {
         flex: 1;
@@ -304,18 +310,19 @@
 
   <body>
     <div class="layout">
-       <aside class="sidebar">
+      <aside class="sidebar">
         <h2>PROJETO<br /><span>EMAGRECER</span></h2>
 
         <a href="/feed_videos">Vídeos</a>
+        <a href="/dieta">Dieta</a>
         <a href="/cadastroDieta">Atualizar Dieta</a>
         <a href="/lista_usuarios" class="active">Usuários</a>
-        <a href="/cadastroVideos" >Cadastrar Vídeos</a>
-        <a href="/cadastroAdm" >Adicionar Administrador</a>
+        <a href="/cadastroVideos">Cadastrar Vídeos</a>
+        <a href="/cadastroAdm">Adicionar Administrador</a>
 
-        <a href="#" id="btnLogout" class="btn btn-signup">Sair</a>
+        <a href="#" id="btnLogout" class="logout-link">Sair</a>
       </aside>
-      
+
       <main class="main">
         <h2>Gerenciamento de Usuários</h2>
 
@@ -333,7 +340,5 @@
     <script src="/js/lista_usuarios.js"></script>
 
     <script src="/js/logout.js"></script>
-
-
   </body>
 </html>

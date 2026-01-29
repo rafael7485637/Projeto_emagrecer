@@ -82,6 +82,12 @@
         color: #fff;
       }
 
+      .logout-link {
+  margin-top: auto;
+  background: #1c1b25;
+  border: 1px solid var(--border);
+}
+
       .main {
         flex: 1;
         display: flex;
@@ -209,6 +215,7 @@
         );
         color: #fff;
       }
+
     </style>
   </head>
 
@@ -218,13 +225,14 @@
         <h2>PROJETO<br /><span>EMAGRECER</span></h2>
 
         <a href="/feed_videos">Vídeos</a>
+        <a href="/dieta">Dieta</a>
         <a href="/cadastroDieta">Atualizar Dieta</a>
         <a href="/lista_usuarios" >Usuários</a>
         <a href="/cadastroVideos" >Cadastrar Vídeos</a>
         <a href="/cadastroAdm" class="active">Adicionar Administrador</a>
 
         <!-- BOTÃO QUE ABRE O MODAL -->
-        <a href="#" id="btnLogout" class="btn btn-signup">Sair</a>
+        <a href="#" id="btnLogout" class="logout-link">Sair</a>
       </aside>
 
       <main class="main">

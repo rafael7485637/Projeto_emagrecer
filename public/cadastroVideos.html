@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
@@ -75,12 +75,14 @@
 
       .sidebar a:hover,
       .sidebar a.active {
-        background: linear-gradient(
-          90deg,
-          var(--primary),
-          var(--primary-soft)
-        );
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
         color: #fff;
+      }
+
+      .logout-link {
+        margin-top: auto;
+        background: #1c1b25;
+        border: 1px solid var(--border);
       }
 
       /* MAIN */
@@ -98,7 +100,8 @@
         background: linear-gradient(135deg, #1b1233, #120e22);
         padding: 36px;
         border-radius: 22px;
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+        box-shadow:
+          0 25px 60px rgba(0, 0, 0, 0.6),
           inset 0 0 0 1px rgba(255, 255, 255, 0.04);
       }
 
@@ -145,11 +148,7 @@
         padding: 14px;
         border: none;
         border-radius: 14px;
-        background: linear-gradient(
-          90deg,
-          var(--primary),
-          var(--primary-soft)
-        );
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
         color: #fff;
         font-weight: 600;
         cursor: pointer;
@@ -177,12 +176,13 @@
         <h2>PROJETO<br /><span>EMAGRECER</span></h2>
 
         <a href="/feed_videos">Vídeos</a>
+        <a href="/dieta">Dieta</a>
         <a href="/cadastroDieta">Atualizar Dieta</a>
         <a href="/lista_usuarios">Usuários</a>
         <a href="/cadastroVideos" class="active">Cadastrar Vídeos</a>
         <a href="/cadastroAdm">Adicionar Administrador</a>
 
-        <a href="#" id="btnLogout">Sair</a>
+        <a href="#" id="btnLogout" class="logout-link">Sair</a>
       </aside>
 
       <main class="main">
@@ -210,9 +210,7 @@
             <button type="submit">Cadastrar Vídeo</button>
           </form>
 
-          <a href="index.html" class="back-link">
-            Voltar à Página Inicial
-          </a>
+          <a href="index.html" class="back-link"> Voltar à Página Inicial </a>
         </div>
       </main>
     </div>
