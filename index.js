@@ -27,6 +27,7 @@ const userRoutes = require("./routes/users");
 const videoRoutes = require("./routes/videos");
 const authRoutes = require("./routes/auth");
 const mailerRoutes = require("./routes/mailer");
+const dietaRoutes = require("./routes/Dieta");
 
 // Middlewares de segurança
 app.use(
@@ -42,8 +43,13 @@ app.use(
           "https://www.google.com",
           "blob:"
         ],
+        objectSrc: [
+          "'self'"
+        ],
 
-        frameSrc: ["https://www.youtube.com"],
+        frameSrc: [
+          "'self'",
+          "https://www.youtube.com"],
 
         imgSrc: [
           "'self'",
@@ -80,11 +86,22 @@ app.use("/foto", express.static(path.join(__dirname, "public", "uploads", "foto"
 // Servir arquivos estáticos (HTML, CSS, JS, uploads)
 app.use(express.static(path.join(__dirname, "public")));
 
+// Servir PDF da dieta (protegido ou não)
+app.use(
+  "/dieta",
+  auth,
+  express.static(
+    path.join(__dirname, "public", "uploads", "dieta")
+  )
+);
+
+
 // Usar rotas
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/videos", videoRoutes);
 app.use("/api/mailer", mailerRoutes);
+app.use("/api/dieta", dietaRoutes);
 
 // Garantir que as pastas de upload existam
 const ensureDirectoriesExist = () => {
@@ -145,6 +162,16 @@ app.get("/player", auth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "player.html"));
 });
 
+app.get("/feed_videos", auth, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "feed_videos.html"));
+});
+
+// Somente USUÁRIO comum
+app.get("/dieta", auth, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "dieta.html"));
+});
+
+
 
 // Somente ADMIN
 app.get("/cadastroAdm", auth, apenasAdmin, (req, res) => {
@@ -154,6 +181,11 @@ app.get("/cadastroAdm", auth, apenasAdmin, (req, res) => {
 app.get("/cadastroVideos", auth, apenasAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "cadastroVideos.html"));
 });
+
+app.get("/cadastroDieta", auth, apenasAdmin, (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "cadastroDieta.html"));
+});
+
 
 app.get("/lista_usuarios", auth, apenasAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));

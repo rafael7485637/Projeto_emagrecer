@@ -1,16 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cadastro de Vídeo</title>
-
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <title>Atualizar Dieta</title>
 
     <style>
+      /* ===== VARIÁVEIS (PADRÃO DO SISTEMA) ===== */
       :root {
         --bg: #0d0c11;
         --sidebar: #0a0910;
@@ -18,10 +14,12 @@
         --border: #262434;
         --text: #ffffff;
         --muted: #9c9ab3;
+
         --primary: #8e2de2;
         --primary-soft: #b36bff;
       }
 
+      /* ===== RESET ===== */
       * {
         margin: 0;
         padding: 0;
@@ -35,14 +33,25 @@
         color: var(--text);
       }
 
-      .layout {
-        display: flex;
+      /* ===== ÁREA PRINCIPAL (RESPEITA SIDEBAR DO NAVBAR) ===== */
+      .dashboard-main {
+        margin-left: 240px; /* largura da sidebar do navbar */
         min-height: 100vh;
+        display: flex;
+        align-items: center; /* centraliza vertical */
+        justify-content: center; /* centraliza horizontal */
+        padding: 40px;
+      }
+      /* ===== SIDEBAR ===== */
+      .dashboard-nav {
+        width: 280px;
+        flex-shrink: 0;
       }
 
-      /* SIDEBAR */
       .sidebar {
+        height: 120vh;
         width: 240px;
+        position: fixed;
         background: rgba(10, 9, 16, 0.95);
         backdrop-filter: blur(10px);
         border-right: 1px solid var(--border);
@@ -75,39 +84,36 @@
 
       .sidebar a:hover,
       .sidebar a.active {
-        background: linear-gradient(
-          90deg,
-          var(--primary),
-          var(--primary-soft)
-        );
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
         color: #fff;
       }
 
-      /* MAIN */
-      .main {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 40px;
+      .logout-link {
+        margin-top: auto;
+        background: #1c1b25;
+        border: 1px solid var(--border);
       }
 
+      /* ===== CARD DO FORM ===== */
       .form-container {
         width: 100%;
-        max-width: 460px;
+        max-width: 420px;
         background: linear-gradient(135deg, #1b1233, #120e22);
         padding: 36px;
         border-radius: 22px;
-        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6),
+        border: 1px solid var(--border);
+        box-shadow:
+          0 25px 60px rgba(0, 0, 0, 0.6),
           inset 0 0 0 1px rgba(255, 255, 255, 0.04);
       }
 
       .form-container h2 {
         text-align: center;
-        margin-bottom: 28px;
+        margin-bottom: 26px;
         font-weight: 600;
       }
 
+      /* ===== FORM ===== */
       label {
         display: block;
         font-size: 13px;
@@ -115,29 +121,30 @@
         color: #d6d3ff;
       }
 
-      input,
-      textarea,
-      select {
+      input[type="file"] {
         width: 100%;
         padding: 14px;
-        margin-bottom: 18px;
+        margin-bottom: 20px;
         border-radius: 12px;
-        border: 1px solid var(--border);
+        border: 1px dashed var(--border);
         background: var(--card);
         color: #fff;
-        outline: none;
+        cursor: pointer;
       }
 
-      textarea {
-        resize: vertical;
-        min-height: 90px;
+      input[type="file"]::file-selector-button {
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        border: none;
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 10px;
+        margin-right: 12px;
+        cursor: pointer;
+        font-weight: 500;
       }
 
-      input:focus,
-      textarea:focus,
-      select:focus {
+      input[type="file"]:hover {
         border-color: var(--primary-soft);
-        box-shadow: 0 0 0 2px rgba(179, 107, 255, 0.25);
       }
 
       button {
@@ -145,17 +152,14 @@
         padding: 14px;
         border: none;
         border-radius: 14px;
-        background: linear-gradient(
-          90deg,
-          var(--primary),
-          var(--primary-soft)
-        );
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
         color: #fff;
         font-weight: 600;
         cursor: pointer;
         margin-top: 10px;
       }
 
+      /* ===== LINK VOLTAR ===== */
       .back-link {
         display: block;
         text-align: center;
@@ -168,56 +172,54 @@
       .back-link:hover {
         text-decoration: underline;
       }
+
+      /* ===== RESPONSIVO ===== */
+      @media (max-width: 768px) {
+        .dashboard-main {
+          margin-left: 0;
+          padding: 20px;
+        }
+      }
     </style>
   </head>
 
   <body>
-    <div class="layout">
-      <aside class="sidebar">
+    <!-- SIDEBAR / NAVBAR VEM COMO COMPONENTE -->
+    <aside class="sidebar">
         <h2>PROJETO<br /><span>EMAGRECER</span></h2>
 
         <a href="/feed_videos">Vídeos</a>
-        <a href="/cadastroDieta">Atualizar Dieta</a>
+        <a href="/cadastroDieta" class="active">Atualizar Dieta</a>
         <a href="/lista_usuarios">Usuários</a>
-        <a href="/cadastroVideos" class="active">Cadastrar Vídeos</a>
+        <a href="/cadastroVideos" >Cadastrar Vídeos</a>
         <a href="/cadastroAdm">Adicionar Administrador</a>
 
         <a href="#" id="btnLogout">Sair</a>
       </aside>
 
-      <main class="main">
-        <div class="form-container">
-          <h2>Cadastro de Vídeo</h2>
+    <!-- CONTEÚDO -->
+    <main class="dashboard-main">
+      <div class="form-container">
+        <h2>Atualizar Dieta</h2>
 
-          <form id="formCadastroVideo" enctype="multipart/form-data">
-            <label for="titulo">Título do Vídeo</label>
-            <input type="text" id="titulo" name="titulo" required />
+        <form id="formCadastro" enctype="multipart/form-data">
+          <label for="pdf">Arquivo da dieta (PDF)</label>
+          <input
+            type="file"
+            id="pdf"
+            name="pdf"
+            accept="application/pdf"
+            required
+          />
 
-            <label for="descricao">Descrição</label>
-            <textarea id="descricao" name="descricao" required></textarea>
+          <button type="submit">Adicionar</button>
+        </form>
 
-            <label for="imagem">Imagem do vídeo</label>
-            <input type="file" id="imagem" name="imagem" accept="image/*" />
-
-            <label for="categoria">Categoria</label>
-            <select id="categoria" name="idcategoria" required>
-              <option value="">Selecione uma categoria</option>
-            </select>
-
-            <label for="link">Link do Vídeo</label>
-            <input type="url" id="link" name="link" required />
-
-            <button type="submit">Cadastrar Vídeo</button>
-          </form>
-
-          <a href="index.html" class="back-link">
-            Voltar à Página Inicial
-          </a>
-        </div>
-      </main>
-    </div>
+        <a href="index.html" class="back-link"> Voltar à Página Inicial </a>
+      </div>
+    </main>
 
     <script src="/js/logout.js"></script>
-    <script src="/js/cadastroVideos.js"></script>
+    <script src="/js/cadastroDieta.js"></script>
   </body>
 </html>

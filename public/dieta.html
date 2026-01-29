@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dieta | Projeto Emagrecer</title>
+
+    <style>
+      :root {
+        --bg: #0d0c11;
+        --card: #15141b;
+        --border: #262434;
+        --text: #ffffff;
+        --muted: #9c9ab3;
+        --primary: #8e2de2;
+        --primary-soft: #b36bff;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, #6a2bc5 0%, #140022 100%);
+        color: var(--text);
+        display: flex;
+      }
+
+      /* ===== SIDEBAR ===== */
+      .dashboard-nav {
+        width: 280px;
+        flex-shrink: 0;
+      }
+
+      .sidebar {
+        height: 120vh;
+        width: 240px;
+        position: fixed;
+        background: rgba(10, 9, 16, 0.95);
+        backdrop-filter: blur(10px);
+        border-right: 1px solid var(--border);
+        padding: 24px 16px;
+      }
+
+      .sidebar h2 {
+        color: var(--primary-soft);
+        margin-bottom: 32px;
+        font-size: 18px;
+        line-height: 1.2;
+      }
+
+      .sidebar h2 span {
+        font-size: 14px;
+        font-weight: 400;
+        color: #cfcde8;
+      }
+
+      .sidebar a {
+        display: block;
+        padding: 14px 16px;
+        margin-bottom: 10px;
+        border-radius: 14px;
+        color: #cfcde8;
+        text-decoration: none;
+        font-size: 14px;
+        transition: 0.3s;
+      }
+
+      .sidebar a:hover,
+      .sidebar a.active {
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+      }
+
+      .logout-link {
+        margin-top: auto;
+        background: #1c1b25;
+        border: 1px solid var(--border);
+      }
+
+      /* ===== MAIN ===== */
+      .dashboard-main {
+        flex: 1;
+        padding: 40px;
+      }
+
+      .pdf-wrapper {
+        max-width: 1000px;
+        width: 100%;
+        background: linear-gradient(135deg, #1a1333, #120e22);
+        border-radius: 26px;
+        padding: 30px;
+        box-shadow:
+          0 20px 60px rgba(0, 0, 0, 0.6),
+          inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      .pdf-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+
+      .pdf-header h1 {
+        font-size: 26px;
+      }
+
+      .download-btn {
+        padding: 12px 22px;
+        border-radius: 16px;
+        background: linear-gradient(90deg, var(--primary), var(--primary-soft));
+        color: #fff;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.3s;
+      }
+
+      .download-btn:hover {
+        transform: translateY(-2px);
+      }
+
+      .pdf-viewer {
+        width: 100%;
+        height: 75vh;
+        border-radius: 20px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        background: #000;
+      }
+
+      .pdf-viewer iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- NAVBAR COMO COMPONENTE -->
+    <nav id="navbar"></nav>
+    <main class="dashboard-main">
+      <div class="content">
+        <div class="pdf-wrapper">
+          <div class="pdf-header">
+            <h1>Plano Alimentar</h1>
+
+            <a
+              href="/dieta/dieta-atual.pdf"
+              class="download-btn"
+              download
+            >
+              Baixar PDF
+            </a>
+          </div>
+
+          <div class="pdf-viewer">
+            <iframe
+              src="/dieta/dieta-atual.pdf"
+              title="Plano Alimentar"
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    </main>
+    <!-- SCRIPT DO COMPONENTE NAVBAR -->
+    <script src="/js/logout.js"></script>
+    <script src="/js/dieta.js"></script>
+  </body>
+</html>
