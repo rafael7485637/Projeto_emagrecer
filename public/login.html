@@ -76,7 +76,6 @@
         border-radius: 20px;
       }
 
-
       /* MAIN */
       .page-content {
         flex: 1;
@@ -172,6 +171,122 @@
         font-size: 0.85rem;
         color: #ffffff;
         opacity: 0.85;
+      }
+
+      /* ========================================================
+                 TABLET 
+ ========================================================= */
+      @media (max-width: 1024px) {
+        .navbar {
+          padding: 0 32px;
+        }
+
+        .login-box {
+          width: 340px;
+        }
+      }
+
+      /* ========================================================
+                  MOBILE
+ ========================================================= */
+      @media (max-width: 768px) {
+        /* ===== NAVBAR ===== */
+        .navbar {
+          height: 64px;
+          padding: 0 20px;
+        }
+
+        .logo {
+          font-size: 18px;
+          white-space: nowrap;
+        }
+
+        .navbar nav {
+          display: flex;
+          align-items: center;
+          gap: 14px; /* 👈 respiro entre links */
+        }
+
+        .navbar nav a {
+          margin-left: 0; /* remove empurrão lateral */
+          font-size: 14px;
+        }
+
+        .btn-login {
+          padding: 6px 14px;
+          font-size: 13px;
+        }
+
+        /* ===== MAIN ===== */
+        .page-content {
+          padding-top: 64px;
+        }
+
+        /* ===== LOGIN CARD ===== */
+        .login-box {
+          width: 100%;
+          max-width: 340px;
+          margin: 0 16px;
+          padding: 34px 28px;
+        }
+
+        .login-box h2 {
+          font-size: 20px;
+        }
+
+        .input-group input {
+          font-size: 14px;
+          padding: 13px 42px;
+        }
+
+        button {
+          font-size: 15px;
+        }
+      }
+
+      /* ========================================================
+                  MOBILE SMALL 
+ ========================================================= */
+      @media (max-width: 480px) {
+        /* ===== NAVBAR ===== */
+        .navbar {
+          padding: 0 16px;
+        }
+
+        .logo {
+          font-size: 16px;
+          max-width: 60%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .navbar nav {
+          gap: 10px;
+        }
+
+        .navbar nav a {
+          font-size: 13px;
+        }
+
+        .btn-login {
+          padding: 6px 12px;
+          font-size: 12px;
+        }
+
+        /* ===== LOGIN CARD ===== */
+        .login-box {
+          max-width: 92%;
+          padding: 30px 22px;
+        }
+
+        .login-box h2 {
+          font-size: 18px;
+        }
+
+        button {
+          padding: 12px;
+          font-size: 14px;
+        }
       }
     </style>
   </head>

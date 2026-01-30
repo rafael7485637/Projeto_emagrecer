@@ -1,117 +1,299 @@
-/* Reset e Configurações Gerais */
+:root {
+  --roxo: #5b22b2;
+  --roxo-card: #4b2b77;
+  --branco: #ffffff;
+}
+
+/* =========================
+   RESET
+========================= */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
 }
 
 body {
-    background-color: #f4f4f4;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding-top: 80px; /* Espaço para a nav não cobrir o conteúdo */
+  min-height: 100vh;
+  background: linear-gradient(135deg, #6a2bc5 0%, #140022 100%);
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
 }
 
-/* --- ESTILO DA NAV --- */
-nav {
-    background-color: #fff;
-    padding: 0 5%;
-    height: 60px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    position: fixed; /* Fixa no topo */
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 1000;
+/* =========================
+   NAVBAR (injetada via JS)
+========================= */
+#navbar .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 72px;
+
+  padding: 0 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  z-index: 10;
 }
 
-.logo {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #4A90E2;
-    text-decoration: none;
+#navbar .logo {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--roxo);
 }
 
-.btn {
-    padding: 0.6rem 1.2rem;
-    margin-left: 10px;
-    border-radius: 5px;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-block;
-    transition: 0.3s;
-    font-size: 14px;
+#navbar nav {
+  display: flex;
+  align-items: center;
+  gap: 28px;
 }
 
-.btn-login {
-    border: 1px solid #4A90E2;
-    color: #4A90E2;
+#navbar nav a {
+  text-decoration: none;
+  color: #ffffff;
+  font-weight: 500;
+  transition: 0.3s;
 }
 
-.btn-login:hover {
-    background: #f0f7ff;
+#navbar nav a:hover {
+  color: var(--roxo);
 }
 
-.btn-signup {
-    background: #4A90E2;
-    border: 1px solid #4A90E2;
-    color: white;
+#navbar .btn-login {
+  padding: 8px 18px;
+  border: 2px solid var(--roxo);
+  border-radius: 20px;
 }
 
-.btn-signup:hover {
-    background: #357ABD;
+/* =========================
+   MAIN (CENTRALIZA O FORM)
+========================= */
+main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 120px; /* espaço da navbar */
+  padding-bottom: 40px;
 }
 
+/* =========================
+   FORM CONTAINER
+========================= */
 .form-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
-    margin: 20px auto;
+  background: var(--roxo-card);
+  width: 100%;
+  max-width: 360px;
+
+  padding: 42px 38px;
+  border-radius: 18px;
+
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.45);
 }
-h2 {
-    text-align: center;
-    margin-bottom: 20px;
+
+/* =========================
+   TITULO
+========================= */
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 28px;
+  font-size: 22px;
+  font-weight: 600;
 }
-label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
+
+/* =========================
+   LABEL
+========================= */
+.form-container label {
+  font-size: 13px;
+  margin-bottom: 6px;
+  display: block;
+  opacity: 0.9;
 }
-input[type="text"],
-input[type="url"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-input[type="file"],
-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+
+/* =========================
+   INPUTS
+========================= */
+.form-container input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 18px;
+
+  border-radius: 10px;
+  border: none;
+  outline: none;
+
+  font-size: 14px;
 }
-textarea {
-    resize: vertical;
-    min-height: 80px;
+
+/* =========================
+   BOTÃO PRINCIPAL
+========================= */
+.form-container button {
+  width: 100%;
+  padding: 14px;
+
+  background: linear-gradient(135deg, #ffffff, #e6dcff);
+  color: var(--roxo);
+
+  font-weight: 600;
+  font-size: 15px;
+
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-button {
-    width: 100%;
-    padding: 10px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+
+.form-container button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* =========================
+   LINK "SE CADASTRAR"
+========================= */
+.form-container a {
+  display: block;
+  margin-top: 18px;
+  text-align: center;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  color: #ffffff;
+  opacity: 0.9;
+  text-decoration: none;
+}
+
+.form-container a:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* =========================
+   MENSAGEM
+========================= */
+#msg {
+  margin-top: 14px;
+  font-size: 13px;
+  text-align: center;
+  opacity: 0.85;
+}
+
+/* =========================
+   FOOTER
+========================= */
+footer {
+  height: 72px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+/* ========================================================
+                    TABLET
+======================================================== */
+@media (max-width: 1024px) {
+  #navbar .navbar {
+    padding: 0 32px;
+  }
+
+  .form-container {
+    max-width: 340px;
+    padding: 38px 34px;
+  }
+}
+
+/* ========================================================
+                     MOBILE
+======================================================== */
+@media (max-width: 768px) {
+  #navbar .navbar {
+    height: 64px;
+    padding: 0 20px;
+  }
+
+  #navbar .logo {
+    font-size: 18px;
+    white-space: nowrap;
+  }
+
+  #navbar nav {
+    gap: 14px;
+  }
+
+  #navbar nav a {
+    font-size: 14px;
+  }
+
+  #navbar .btn-login {
+    padding: 6px 14px;
+    font-size: 13px;
+  }
+
+  main {
+    padding-top: 100px;
+  }
+
+  .form-container {
+    max-width: 340px;
+    padding: 34px 28px;
+  }
+
+  .form-container h2 {
+    font-size: 20px;
+  }
+}
+
+/* ========================================================
+                  MOBILE SMALL
+======================================================== */
+@media (max-width: 480px) {
+  #navbar .navbar {
+    padding: 0 16px;
+  }
+
+  #navbar .logo {
     font-size: 16px;
-}
-button:hover {
-    background-color: #45a049;
+    max-width: 60%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  #navbar nav {
+    gap: 10px;
+  }
+
+  #navbar nav a {
+    font-size: 13px;
+  }
+
+  #navbar .btn-login {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  .form-container {
+    max-width: 92%;
+    padding: 30px 22px;
+  }
+
+  footer {
+    font-size: 0.8rem;
+  }
 }

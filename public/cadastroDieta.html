@@ -173,11 +173,93 @@
         text-decoration: underline;
       }
 
-      /* ===== RESPONSIVO ===== */
+      /* ========================================================
+   MOBILE / TABLET (até 768px)
+   Sidebar vira Bottom Bar com SCROLL
+======================================================== */
       @media (max-width: 768px) {
+        /* ===== RESET DO LAYOUT ===== */
+        body {
+          overflow-x: hidden;
+        }
+
+        /* remove espaço da sidebar lateral */
         .dashboard-main {
           margin-left: 0;
-          padding: 20px;
+          min-height: calc(100vh - 72px); /* desconta bottom bar */
+          padding: 24px 16px 110px;
+
+          display: flex;
+          align-items: center; /* 🔥 CENTRALIZA VERTICAL */
+          justify-content: center; /* 🔥 CENTRALIZA HORIZONTAL */
+        }
+
+        /* ===== SIDEBAR -> BOTTOM BAR ===== */
+        .sidebar {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+
+          width: 100%;
+          height: 72px;
+          padding: 10px 12px;
+
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          overflow-x: auto;
+          overflow-y: hidden;
+          white-space: nowrap;
+
+          border-right: none;
+          border-top: 1px solid var(--border);
+          z-index: 1000;
+
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none; /* Firefox */
+        }
+
+        /* remove scrollbar visual */
+        .sidebar::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* esconde o título */
+        .sidebar h2 {
+          display: none;
+        }
+
+        /* ===== LINKS ===== */
+        .sidebar a {
+          flex: 0 0 auto; /* não encolhe */
+          margin: 0;
+          padding: 10px 14px;
+          border-radius: 14px;
+          font-size: 13px;
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        .logout-link {
+          background: transparent;
+          border: none;
+        }
+
+        /* ===== FORM ===== */
+        .form-container {
+          max-width: 100%;
+          padding: 28px 22px;
+          border-radius: 20px;
+        }
+
+        .form-container h2 {
+          font-size: 20px;
+        }
+
+        button {
+          font-size: 15px;
+          padding: 13px;
         }
       }
     </style>
@@ -186,17 +268,17 @@
   <body>
     <!-- SIDEBAR / NAVBAR VEM COMO COMPONENTE -->
     <aside class="sidebar">
-        <h2>PROJETO<br /><span>EMAGRECER</span></h2>
+      <h2>PROJETO<br /><span>EMAGRECER</span></h2>
 
-        <a href="/feed_videos">Vídeos</a>
-        <a href="/dieta">Dieta</a>
-        <a href="/cadastroDieta" class="active">Atualizar Dieta</a>
-        <a href="/lista_usuarios">Usuários</a>
-        <a href="/cadastroVideos" >Cadastrar Vídeos</a>
-        <a href="/cadastroAdm">Adicionar Administrador</a>
+      <a href="/feed_videos">Vídeos</a>
+      <a href="/dieta">Dieta</a>
+      <a href="/cadastroDieta" class="active">Atualizar Dieta</a>
+      <a href="/lista_usuarios">Usuários</a>
+      <a href="/cadastroVideos">Cadastrar Vídeos</a>
+      <a href="/cadastroAdm">Adicionar Administrador</a>
 
-        <a href="#" id="btnLogout" class="logout-link">Sair</a>
-      </aside>
+      <a href="#" id="btnLogout" class="logout-link">Sair</a>
+    </aside>
 
     <!-- CONTEÚDO -->
     <main class="dashboard-main">

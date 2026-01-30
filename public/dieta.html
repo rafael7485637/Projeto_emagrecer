@@ -138,6 +138,97 @@
         height: 100%;
         border: none;
       }
+
+      /* ========================================================
+   MOBILE / TABLET (até 768px)
+   Sidebar vira Bottom Bar com SCROLL
+======================================================== */
+      @media (max-width: 768px) {
+        /* ===== BODY ===== */
+        body {
+          flex-direction: column;
+        }
+
+        /* ===== SIDEBAR -> BOTTOM BAR ===== */
+        .sidebar {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+
+          width: 100%;
+          height: 82px;
+          padding: 10px 12px;
+
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          overflow-x: auto; /* 🔥 scroll horizontal */
+          overflow-y: hidden;
+
+          border-right: none;
+          border-top: 1px solid var(--border);
+          z-index: 1000;
+        }
+
+        /* Esconde título */
+        .sidebar h2 {
+          display: none;
+        }
+
+        /* Links compactos */
+        .sidebar a {
+          flex-shrink: 0;
+          margin: 0;
+          padding: 10px 14px;
+          border-radius: 14px;
+          font-size: 13px;
+          white-space: nowrap;
+          text-align: center;
+        }
+
+        .logout-link {
+          margin-top: 0;
+          background: transparent;
+          border: none;
+        }
+
+        /* ===== MAIN ===== */
+        .dashboard-main {
+          padding: 20px 14px 130px; /* espaço pro bottom bar */
+          display: flex;
+          justify-content: center;
+        }
+
+        /* ===== PDF WRAPPER ===== */
+        .pdf-wrapper {
+          padding: 20px;
+          border-radius: 20px;
+        }
+
+        .pdf-header {
+          flex-direction: column;
+          gap: 14px;
+          align-items: flex-start;
+        }
+
+        .pdf-header h1 {
+          font-size: 20px;
+        }
+
+        .download-btn {
+          width: 100%;
+          text-align: center;
+          padding: 12px;
+          border-radius: 14px;
+        }
+
+        /* ===== PDF VIEWER ===== */
+        .pdf-viewer {
+          height: 65vh; /* melhor uso da tela no mobile */
+          border-radius: 16px;
+        }
+      }
     </style>
   </head>
 
@@ -150,11 +241,7 @@
           <div class="pdf-header">
             <h1>Plano Alimentar</h1>
 
-            <a
-              href="/dieta/dieta-atual.pdf"
-              class="download-btn"
-              download
-            >
+            <a href="/dieta/dieta-atual.pdf" class="download-btn" download>
               Baixar PDF
             </a>
           </div>

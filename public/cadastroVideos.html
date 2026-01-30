@@ -167,6 +167,92 @@
       .back-link:hover {
         text-decoration: underline;
       }
+
+      /* ========================================================
+   MOBILE / TABLET (até 768px)
+   Sidebar vira Bottom Bar com SCROLL
+======================================================== */
+      @media (max-width: 768px) {
+        /* ===== LAYOUT ===== */
+        .layout {
+          flex-direction: column;
+        }
+
+        /* ===== SIDEBAR -> BOTTOM BAR ===== */
+        .sidebar {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+
+          width: 100%;
+          height: 82px;
+          padding: 10px 12px;
+
+          display: flex;
+          align-items: center;
+          gap: 10px;
+
+          overflow-x: auto; /* 🔥 SCROLL HORIZONTAL */
+          overflow-y: hidden;
+
+          border-right: none;
+          border-top: 1px solid var(--border);
+          z-index: 1000;
+        }
+
+        /* Remove título no mobile */
+        .sidebar h2 {
+          display: none;
+        }
+
+        /* Links viram botões compactos */
+        .sidebar a {
+          flex-shrink: 0; /* 🔥 impede esmagar */
+          margin: 0;
+          padding: 10px 14px;
+          border-radius: 14px;
+          font-size: 13px;
+          white-space: nowrap;
+          text-align: center;
+        }
+
+        /* Botão sair sem destaque pesado */
+        .logout-link {
+          margin-top: 0;
+          background: transparent;
+          border: none;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+          padding: 24px 16px 130px; /* espaço pro bottom bar */
+          align-items: center;
+          justify-content: center;
+        }
+
+        /* ===== FORM ===== */
+        .form-container {
+          max-width: 100%;
+          padding: 28px 22px;
+          border-radius: 20px;
+        }
+
+        .form-container h2 {
+          font-size: 20px;
+        }
+
+        input,
+        textarea,
+        select {
+          padding: 13px;
+          font-size: 14px;
+        }
+
+        button {
+          padding: 13px;
+          font-size: 15px;
+        }
+      }
     </style>
   </head>
 

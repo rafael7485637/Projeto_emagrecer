@@ -305,6 +305,91 @@
         background: linear-gradient(90deg, #8e2de2, #b36bff);
         color: #fff;
       }
+
+      @media (max-width: 768px) {
+        body {
+          overflow-x: hidden;
+        }
+
+        .layout {
+          flex-direction: column;
+        }
+
+        /* ===== SIDEBAR → BOTTOM ===== */
+        .sidebar {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          top: auto;
+
+          width: 100%;
+          height: 72px;
+
+          display: flex;
+          align-items: center;
+          justify-content: space-around;
+
+          padding: 0 10px;
+          border-right: none;
+          border-top: 1px solid var(--border);
+          z-index: 1000;
+        }
+
+        /* esconde o título no mobile */
+        .sidebar h2 {
+          display: none;
+        }
+
+        /* links compactos */
+        .sidebar a {
+          margin: 0;
+          padding: 10px 12px;
+          font-size: 12px;
+          border-radius: 12px;
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        .logout-link {
+          margin-top: 0;
+        }
+
+        /* ===== MAIN ===== */
+        .main {
+          padding: 20px 16px 110px; /* espaço pro bottom */
+        }
+
+        /* busca full width */
+        #divBusca {
+          max-width: 100%;
+        }
+
+        /* cards em 1 coluna */
+        .user-feed {
+          grid-template-columns: 1fr;
+          gap: 18px;
+        }
+
+        /* header do card quebra bem */
+        .card-header {
+          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .status-badge {
+          margin-left: 0;
+        }
+
+        /* infos em coluna única se precisar */
+        .user-info-grid {
+          grid-template-columns: 1fr;
+        }
+
+        /* ações empilhadas */
+        .card-actions {
+          flex-direction: column;
+        }
+      }
     </style>
   </head>
 
