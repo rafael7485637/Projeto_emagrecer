@@ -1,5 +1,5 @@
 // src/RecoveryDAO.js
-const pool = require("./conexaoBD"); // Certifique-se de que este é seu arquivo de conexão
+const pool = require("./ConexaoBD"); // Certifique-se de que este é seu arquivo de conexão
 
 class RecoveryDAO {
   // Salva o token hasheado e a validade

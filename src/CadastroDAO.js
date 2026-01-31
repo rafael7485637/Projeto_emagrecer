@@ -1,5 +1,5 @@
 const Util = require("./Util");
-const pool = require("./conexaoBD"); // sua conexão já pronta
+const pool = require("./ConexaoBD"); // sua conexão já pronta
 
 class CadastroDAO {
 

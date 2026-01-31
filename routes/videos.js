@@ -7,7 +7,7 @@ const VideosDAO = require("../src/VideosDAO");
 const CategoriaDAO = require("../src/CategoriaDAO");
 const VisualizacaoDAO = require("../src/VisualizacaoDAO");
 const { auth, apenasAdmin, apenasUsuario } = require("../middlewares/auth");
- const pool = require("../src/conexaoBD");
+ const pool = require("../src/ConexaoBD");
 
 // Configuração do Multer para upload de imagens de vídeos
 const uploadDir = path.join(__dirname, "..", "public", "uploads", "imagem");
