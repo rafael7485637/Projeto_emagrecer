@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict DpR9oe6WDNjJYG0ehVaxXCgReBxkJUXJuPBDGWg2nytr6OiiZYoxOVXbDLQyP1X
+\restrict diE8cRRstnN12rzG2R4XvneIOGq6r61IGK42cvhd2nTsdbjhaSOg0INvbWMQYoc
 
 -- Dumped from database version 17.7
 -- Dumped by pg_dump version 17.7
@@ -251,7 +251,6 @@ ALTER TABLE ONLY public.visualizacao ALTER COLUMN idvisualizacao SET DEFAULT nex
 
 COPY public.administrador (idadministrador, nome_adm, gmail_adm, senha_adm) FROM stdin;
 1	Rafael Zanelatto dos Santos	rafael.ifc34@gmail.com	$2b$10$.WHysNas/nKKxtcoWMGvjeSsB1NgJKQIpuzvI0wnVqXLjgjBH/l.i
-2	Raquel	raquel@gmail.com	$2b$10$jdOLAElp591WlRh3j0SVZOXHSunQwN48qVcSkBC5cosdC1XZIqaZy
 \.
 
 
@@ -400,5 +399,5 @@ ALTER TABLE ONLY public.visualizacao
 -- PostgreSQL database dump complete
 --
 
-\unrestrict DpR9oe6WDNjJYG0ehVaxXCgReBxkJUXJuPBDGWg2nytr6OiiZYoxOVXbDLQyP1X
+\unrestrict diE8cRRstnN12rzG2R4XvneIOGq6r61IGK42cvhd2nTsdbjhaSOg0INvbWMQYoc
 
