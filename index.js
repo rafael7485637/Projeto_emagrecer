@@ -157,7 +157,7 @@ app.get("/contato", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "contato.html"));
 });
 
-// Somente usuários logados (qualquer tipo) podem ver o player e contato
+// Somente usuários logados
 app.get("/player", auth, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "player.html"));
 });
@@ -189,11 +189,6 @@ app.get("/cadastroDieta", auth, apenasAdmin, (req, res) => {
 
 app.get("/lista_usuarios", auth, apenasAdmin, (req, res) => {
   res.sendFile(path.join(__dirname, "public", "lista_usuarios.html"));
-});
-
-// Somente USUÁRIO comum (ou conforme sua lógica de 'apenasUsuario')
-app.get("/feed_videos", auth, (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "feed_videos.html"));
 });
 
 

@@ -2,10 +2,10 @@
 -- PostgreSQL database dump
 --
 
-\restrict JlwZf2xcJ4HT2fSFY0fo2JCt1zm0EJq3lQpoydGGriO1Dm3hw9uaG15naoa620s
+\restrict DpR9oe6WDNjJYG0ehVaxXCgReBxkJUXJuPBDGWg2nytr6OiiZYoxOVXbDLQyP1X
 
--- Dumped from database version 17.0
--- Dumped by pg_dump version 17.0
+-- Dumped from database version 17.7
+-- Dumped by pg_dump version 17.7
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -260,8 +260,8 @@ COPY public.administrador (idadministrador, nome_adm, gmail_adm, senha_adm) FROM
 --
 
 COPY public.categorias (idcategoria, nome_categoria) FROM stdin;
-1	Nutrição
-2	Treinos
+1	Treinos
+2	Treinos Extras
 \.
 
 
@@ -270,10 +270,6 @@ COPY public.categorias (idcategoria, nome_categoria) FROM stdin;
 --
 
 COPY public.usuario (idusuario, gmail, nome, data_nascimento, peso, altura, telefone, status, foto, senha_usuario, "passwordResetToken", "passwordResetExpires") FROM stdin;
-2	gostoso@gmail.com	Willian	2001-05-04	900	1.4	78548261742	Pago	/foto/1768849152018-homem-muito-gordo-34231060.webp	$2b$10$oRyqxsMd4mj/rq1JFR36/.IsMvm8SskSWNsQ1XRFvWaey4UZAM.NO	\N	\N
-1	rafa@gmail.com	Rafael Zanelatto dos Santos	2007-03-05	80	1.7	(49) 99816-1984	Pago	\N	$2b$10$vp8QaVpSl5WvlZqm8D5N1e7wCSbe.Y1KtPrWlc6dFmYXNij4ucSqO	\N	\N
-3	antoninhosantos11@gmail.com	Antoninho dos santos	1998-06-08	50	1.7	49998105861	Pago	\N	$2b$10$q6.n0OtzKO9ORvPGz03rI.ioqKS35InT2s3iU8nXbNrwqYgTRoxl6	2fd542d536b83317e7e8a096337297cdcaa90d8376b87cca6f83e82d979cc296	2026-01-20 17:24:28.406-03
-4	rafazanelatto01849@gmail.com	textegmail	2008-02-05	60	1.2	(49) 99816-1984	Pago	\N	$2b$10$m/xona/QgNrvJL8nUlUC6.0AxotWTVhPa/q5QtkEgMZc3SMAgAMlu	\N	\N
 \.
 
 
@@ -282,8 +278,6 @@ COPY public.usuario (idusuario, gmail, nome, data_nascimento, peso, altura, tele
 --
 
 COPY public.video (idvideo, imagem, titulo, link, descricao, idcategoria) FROM stdin;
-2	/uploads/imagem/1768852777390-images.jpg	Red Dead Redemprion 2	https://youtu.be/gmA6MrX81z4?si=uW_02FWLBMrucVq5	O melhor jogo do mundo!	2
-3	/uploads/imagem/1768957789387-3f7ee6aa3482b514bd443e116022b038a9728f017916ed37da3f09f731a7d5f2.avif	The witcher 3	https://youtu.be/c0i88t0Kacs?si=MSVoMFOwZaOkQeZo	segundo melhor jogo!	2
 \.
 
 
@@ -292,8 +286,6 @@ COPY public.video (idvideo, imagem, titulo, link, descricao, idcategoria) FROM s
 --
 
 COPY public.visualizacao (idvisualizacao, idusuario, idvideo) FROM stdin;
-1	1	2
-2	1	3
 \.
 
 
@@ -315,21 +307,21 @@ SELECT pg_catalog.setval('public.categoria_videos_idcategoria_seq', 2, true);
 -- Name: usuario_idusuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.usuario_idusuario_seq', 5, true);
+SELECT pg_catalog.setval('public.usuario_idusuario_seq', 1, false);
 
 
 --
 -- Name: video_idvideo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.video_idvideo_seq', 3, true);
+SELECT pg_catalog.setval('public.video_idvideo_seq', 1, false);
 
 
 --
 -- Name: visualizacao_idvisualizacao_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.visualizacao_idvisualizacao_seq', 2, true);
+SELECT pg_catalog.setval('public.visualizacao_idvisualizacao_seq', 1, false);
 
 
 --
@@ -408,5 +400,5 @@ ALTER TABLE ONLY public.visualizacao
 -- PostgreSQL database dump complete
 --
 
-\unrestrict JlwZf2xcJ4HT2fSFY0fo2JCt1zm0EJq3lQpoydGGriO1Dm3hw9uaG15naoa620s
+\unrestrict DpR9oe6WDNjJYG0ehVaxXCgReBxkJUXJuPBDGWg2nytr6OiiZYoxOVXbDLQyP1X
 

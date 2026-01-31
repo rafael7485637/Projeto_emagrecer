@@ -121,10 +121,9 @@ router.post("/registrar-visualizacao", auth, apenasUsuario, async (req, res) => 
 });
 
 // Feed de vídeos com visualizações
-// Feed de vídeos com visualizações
 router.get("/videos-feed", auth, async (req, res) => {
   try {
-    const { tipo, idusuario } = req.session.user;
+    const { tipo, id: idusuario } = req.session.user;
     const { idcategoria, nome } = req.query; // Captura os dois parâmetros
 
     // Base da Query

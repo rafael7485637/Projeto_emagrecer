@@ -1,8 +1,7 @@
 reset tabelas
-TRUNCATE TABLE nome_da_tabela RESTART IDENTITY;
+usuario e visualização: docker exec -it projeto-emagrecer-db psql -U postgres -d projeto_emagrecer -c "TRUNCATE TABLE usuario, visualizacao RESTART IDENTITY CASCADE;"
 
-reset tabela referenciada
-TRUNCATE TABLE usuario RESTART IDENTITY CASCADE;
+videos: docker exec -it projeto-emagrecer-db psql -U postgres -d projeto_emagrecer -c "TRUNCATE TABLE video, visualizacao RESTART IDENTITY CASCADE;"
 
 
 isso é pra vc acessar
