@@ -49,8 +49,18 @@ router.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
     const saltRounds = 10;
     const senhaHash = await bcrypt.hash(senha_usuario, saltRounds);
 
-    // Salvar usuário
-    const usuario = await dao.salvar({
+    let fotoPath = null;
+
+    // Salvar a foto se existir
+    if (req.file) {
+      const uniqueName = Date.now() + "-" + req.file.originalname;
+      const filePath = path.join(userPhotoDir, uniqueName);
+      fs.writeFileSync(filePath, req.file.buffer);
+      fotoPath = `/foto/${uniqueName}`;
+    }
+
+    // Agora cadastra TUDO de uma vez
+    await dao.salvar({
       nome,
       gmail,
       data_nascimento,
@@ -58,17 +68,10 @@ router.post("/cadastrar-usuario", upload.single("foto"), async (req, res) => {
       altura,
       telefone,
       senha_usuario: senhaHash,
-      foto: null
+      foto: fotoPath
     });
 
-    // Salvar foto se existir
-    if (req.file) {
-      const uniqueName = Date.now() + "-" + req.file.originalname;
-      const filePath = path.join(userPhotoDir, uniqueName);
-      fs.writeFileSync(filePath, req.file.buffer);
-      const fotoPath = `/foto/${uniqueName}`;
-      await dao.atualizarFoto(usuario.idusuario, fotoPath);
-    }
+res.status(201).send("Usuário cadastrado");
 
     res.status(201).send("Usuário cadastrado");
   } catch (error) {

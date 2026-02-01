@@ -4,12 +4,14 @@ const pool = require("./ConexaoBD"); // sua conexão já pronta
 class VisualizacaoDAO {
 
    async registrar(idusuario, idvideo) {
-    const sql = `
-      INSERT INTO visualizacao (idusuario, idvideo)
-      VALUES ($1, $2)
-    `;
-    await pool.query(sql, [idusuario, idvideo]);
-  }
+  const sql = `
+    INSERT INTO visualizacao (idusuario, idvideo)
+    VALUES ($1, $2)
+    ON CONFLICT (idusuario, idvideo) DO NOTHING
+  `;
+  await pool.query(sql, [idusuario, idvideo]);
+}
+
 
   async contarPorVideo(idvideo) {
     const sql = `
