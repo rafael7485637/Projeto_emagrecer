@@ -1,4 +1,4 @@
-name: projeto_emagrecer
+version: "3.9"
 
 services:
   app:
@@ -12,7 +12,7 @@ services:
     depends_on:
       - db
     ports:
-      - "${PORT}:${PORT}"
+      - "3001:3001"        # Porta mapeada explicitamente
     volumes:
       - ./public:/app/public
       - ./uploads:/app/uploads
@@ -29,8 +29,9 @@ services:
       POSTGRES_USER: ${PG_USER}
       POSTGRES_PASSWORD: ${PG_PASS}
       POSTGRES_DB: ${PG_DB}
-    ports:
-      - "${PG_PORT}:5432"
+    # ⚠️ Não exponha o PostgreSQL para fora da instância
+    # ports:
+    #   - "${PG_PORT}:5432"
     volumes:
       - emagrecer_pgdata:/var/lib/postgresql/data
       - ./utils/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
