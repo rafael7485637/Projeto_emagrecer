@@ -82,6 +82,11 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Servir fotos de usuários
 app.use("/foto", express.static(path.join(__dirname, "public", "uploads", "foto")));
 
+// Servir arquivos públicos
+app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
+app.use('/img', express.static(path.join(__dirname, 'public', 'img')));
+app.use('/image', express.static(path.join(__dirname, 'public', 'image')));
 
 // Servir arquivos estáticos (HTML, CSS, JS, uploads)
 app.use(express.static(path.join(__dirname, "public")));
