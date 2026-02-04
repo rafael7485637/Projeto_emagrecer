@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Raquel Zanellatto | Personal Trainer</title>
 
+    <!-- Fonts e ícones -->
     <link
       href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap"
       rel="stylesheet"
@@ -14,7 +15,8 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     />
 
-    <link rel="stylesheet" href="css/index.css" />
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/index.css" />
 
     <style>
       .hero-image {
@@ -62,7 +64,7 @@
     <section class="about" id="about">
       <div class="about-container">
         <div class="about-image">
-          <img src="img/oi.jpg" alt="Raquel Zanelato - Personal Trainer" />
+          <img src="/img/oi.jpg" alt="Raquel Zanelato - Personal Trainer" />
         </div>
 
         <div class="about-content">
@@ -164,11 +166,11 @@
 
         <div class="slider-viewport">
           <div class="slider-track">
-            <img src="img/dep1.jpeg" alt="Depoimento 1" />
-            <img src="img/dep2.jpeg" alt="Depoimento 2" />
-            <img src="img/dep3.jpeg" alt="Depoimento 3" />
-            <img src="img/dep4.jpeg" alt="Depoimento 4" />
-            <img src="img/dep5.jpeg" alt="Depoimento 5" />
+            <img src="/img/dep1.jpeg" alt="Depoimento 1" />
+            <img src="/img/dep2.jpeg" alt="Depoimento 2" />
+            <img src="/img/dep3.jpeg" alt="Depoimento 3" />
+            <img src="/img/dep4.jpeg" alt="Depoimento 4" />
+            <img src="/img/dep5.jpeg" alt="Depoimento 5" />
           </div>
         </div>
 
@@ -244,6 +246,7 @@
         </div>
       </div>
     </section>
+
     <footer class="footer">
       <div class="footer-container">
         <div class="footer-brand">
@@ -296,16 +299,13 @@
 
     <script>
       const faqItems = document.querySelectorAll(".faq-item");
-
       faqItems.forEach((item) => {
         const question = item.querySelector(".faq-question");
-
         question.addEventListener("click", () => {
           item.classList.toggle("active");
         });
       });
-    </script>
-    <script>
+
       const track = document.querySelector(".slider-track");
       const viewport = document.querySelector(".slider-viewport");
       const prevBtn = document.querySelector(".prev");
