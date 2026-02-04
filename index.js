@@ -161,7 +161,7 @@ app.get("/lista_usuarios", auth, apenasAdmin, (req, res) => {
 
 
 // Inicialização do servidor
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 80;
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Servidor rodando em http://0.0.0.0:${PORT}`);
 });
