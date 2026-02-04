@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   app:
     build:
@@ -12,7 +10,7 @@ services:
     depends_on:
       - db
     ports:
-      - "3001:3001"        # Porta mapeada explicitamente
+      - "3001:3001"
     volumes:
       - ./public:/app/public
       - ./uploads:/app/uploads
