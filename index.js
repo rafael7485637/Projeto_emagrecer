@@ -32,46 +32,9 @@ const dietaRoutes = require("./routes/Dieta");
 // Middlewares de segurança
 app.use(
   helmet({
-    contentSecurityPolicy: {
-      directives: {
-        defaultSrc: ["'self'"],
-
-        scriptSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          "https://www.youtube.com",
-          "https://www.google.com",
-          "blob:"
-        ],
-        objectSrc: [
-          "'self'"
-        ],
-
-        frameSrc: [
-          "'self'",
-          "https://www.youtube.com"],
-
-        imgSrc: [
-          "'self'",
-          "data:",
-          "blob:",
-          "https://i.ytimg.com"
-        ],
-
-        styleSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          "https://fonts.googleapis.com",
-          "https://cdnjs.cloudflare.com"
-        ],
-
-        fontSrc: [
-          "'self'",
-          "https://fonts.gstatic.com",
-          "https://cdnjs.cloudflare.com"
-        ]
-      }
-    }
+    contentSecurityPolicy: false,
+    crossOriginOpenerPolicy: false,
+    crossOriginEmbedderPolicy: false
   })
 );
 
