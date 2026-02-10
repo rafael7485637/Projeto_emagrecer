@@ -327,12 +327,44 @@
 
           display: flex;
           align-items: center;
-          justify-content: space-around;
+          justify-content: flex-start;
+          
+          overflow-x: auto;
+          overflow-y: hidden;
+          scroll-behavior: smooth;
+          
+          -webkit-overflow-scrolling: touch;
 
           padding: 0 10px;
           border-right: none;
           border-top: 1px solid var(--border);
           z-index: 1000;
+          
+          -webkit-overflow-scrolling: touch;
+        }
+        
+        /* Estilo do scrollbar */
+        .sidebar::-webkit-scrollbar {
+          height: 3px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+          background: rgba(142, 45, 226, 0.5);
+          border-radius: 10px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+          background: rgba(142, 45, 226, 0.8);
+        }
+        
+        /* Firefox */
+        .sidebar {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(142, 45, 226, 0.5) transparent;
         }
 
         /* esconde o título no mobile */
@@ -348,6 +380,7 @@
           border-radius: 12px;
           text-align: center;
           white-space: nowrap;
+          flex-shrink: 0;
         }
 
         .logout-link {

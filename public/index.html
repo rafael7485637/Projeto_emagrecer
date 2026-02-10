@@ -314,6 +314,9 @@
 
       const gap = 30;
       let index = 0;
+      let isDragging = false;
+      let startX = 0;
+      let scrollLeft = 0;
 
       function slideWidth() {
         return track.children[0].offsetWidth + gap;
@@ -343,6 +346,80 @@
           index--;
           update();
         }
+      });
+
+      // Suporte a swipe/drag
+      viewport.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        startX = e.pageX - viewport.offsetLeft;
+        scrollLeft = index * slideWidth();
+        track.classList.add("dragging");
+      });
+
+      viewport.addEventListener("mouseleave", () => {
+        isDragging = false;
+        track.classList.remove("dragging");
+      });
+
+      viewport.addEventListener("mouseup", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        track.classList.remove("dragging");
+        
+        // Snap para slide mais próximo
+        const dx = Math.abs((e.pageX - viewport.offsetLeft) - startX);
+        if (dx > slideWidth() * 0.2) {
+          // Se deslizou mais de 20%, vai para próximo slide
+          if ((e.pageX - viewport.offsetLeft) < startX) {
+            // Deslizou para esquerda (próximo)
+            if (index < maxIndex()) index++;
+          } else {
+            // Deslizou para direita (anterior)
+            if (index > 0) index--;
+          }
+        }
+        update();
+      });
+
+      viewport.addEventListener("mousemove", (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - viewport.offsetLeft;
+        const walk = (x - startX) * 0.5;
+        const newTranslate = scrollLeft - walk;
+        track.style.transform = `translateX(-${newTranslate}px)`;
+      });
+
+      // Suporte a touch para mobile
+      viewport.addEventListener("touchstart", (e) => {
+        isDragging = true;
+        startX = e.touches[0].pageX - viewport.offsetLeft;
+        scrollLeft = index * slideWidth();
+        track.classList.add("dragging");
+      });
+
+      viewport.addEventListener("touchend", (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        track.classList.remove("dragging");
+        
+        const dx = Math.abs((e.changedTouches[0].pageX - viewport.offsetLeft) - startX);
+        if (dx > slideWidth() * 0.2) {
+          if ((e.changedTouches[0].pageX - viewport.offsetLeft) < startX) {
+            if (index < maxIndex()) index++;
+          } else {
+            if (index > 0) index--;
+          }
+        }
+        update();
+      });
+
+      viewport.addEventListener("touchmove", (e) => {
+        if (!isDragging) return;
+        const x = e.touches[0].pageX - viewport.offsetLeft;
+        const walk = (x - startX) * 0.5;
+        const newTranslate = scrollLeft - walk;
+        track.style.transform = `translateX(-${newTranslate}px)`;
       });
 
       window.addEventListener("resize", () => {

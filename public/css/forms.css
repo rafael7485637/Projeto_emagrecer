@@ -56,7 +56,8 @@ body {
 }
 
 #navbar nav a {
-  text-decoration: none;
+    white-space: nowrap;
+    flex-shrink: 0;
   color: #ffffff;
   font-weight: 500;
   transition: 0.3s;
@@ -235,10 +236,34 @@ footer {
 
   #navbar nav {
     gap: 14px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 70vw;
+    scroll-behavior: smooth;
+  }
+  
+  /* Ocultar scrollbar no navegador enquanto mantém funcionalidade */
+  #navbar nav::-webkit-scrollbar {
+    height: 3px;
+  }
+  
+  #navbar nav::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  #navbar nav::-webkit-scrollbar-thumb {
+    background: rgba(91, 34, 178, 0.5);
+    border-radius: 10px;
+  }
+  
+  #navbar nav::-webkit-scrollbar-thumb:hover {
+    background: rgba(91, 34, 178, 0.8);
   }
 
   #navbar nav a {
     font-size: 14px;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   #navbar .btn-login {

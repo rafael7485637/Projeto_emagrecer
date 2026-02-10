@@ -152,6 +152,17 @@
         font-size: 14px;
       }
 
+      /* Campo de data com máscara */
+      input#data_nascimento {
+        font-size: 16px;
+        letter-spacing: 1px;
+        color: #333;
+      }
+
+      input#data_nascimento::placeholder {
+        color: #6f6f6f;
+      }
+
       .btn {
         width: 100%;
         padding: 14px;
@@ -246,11 +257,35 @@
           display: flex;
           align-items: center;
           gap: 14px;
+          overflow-x: auto;
+          overflow-y: hidden;
+          max-width: 70vw;
+          scroll-behavior: smooth;
+        }
+        
+        /* Estilo do scrollbar */
+        .navbar nav::-webkit-scrollbar {
+          height: 3px;
+        }
+        
+        .navbar nav::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .navbar nav::-webkit-scrollbar-thumb {
+          background: rgba(91, 34, 178, 0.5);
+          border-radius: 10px;
+        }
+        
+        .navbar nav::-webkit-scrollbar-thumb:hover {
+          background: rgba(91, 34, 178, 0.8);
         }
 
         .navbar nav a {
           margin-left: 0;
           font-size: 14px;
+          white-space: nowrap;
+          flex-shrink: 0;
         }
 
         .btn-login {
@@ -415,10 +450,13 @@
         <div class="input-box">
           <span>🎂</span>
           <input
-            type="date"
+            type="text"
             id="data_nascimento"
             name="data_nascimento"
+            placeholder="DD/MM/YYYY"
+            inputmode="numeric"
             autocomplete="off"
+            maxlength="10"
             required
           />
         </div>
@@ -520,6 +558,57 @@
           placeholder.style.display = "none";
         };
         reader.readAsDataURL(file);
+      });
+
+      // Melhorar campo de data para permitir digitação manual
+      const dataNascimento = document.getElementById("data_nascimento");
+      const form = document.querySelector("form");
+      
+      // Aplicar máscara automática (DD/MM/YYYY)
+      dataNascimento.addEventListener("input", (e) => {
+        let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
+        
+        if (value.length > 0) {
+          // Adiciona barras automaticamente
+          if (value.length <= 2) {
+            value = value;
+          } else if (value.length <= 4) {
+            value = value.slice(0, 2) + "/" + value.slice(2);
+          } else {
+            value = value.slice(0, 2) + "/" + value.slice(2, 4) + "/" + value.slice(4, 8);
+          }
+        }
+        
+        e.target.value = value;
+      });
+      
+      // Validar e converter data ao submeter
+      form.addEventListener("submit", (e) => {
+        const dateValue = dataNascimento.value;
+        
+        // Regex para validar DD/MM/YYYY
+        const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/\d{4}$/;
+        
+        if (!dateRegex.test(dateValue)) {
+          e.preventDefault();
+          alert("Data inválida! Use o formato DD/MM/YYYY (ex: 15/05/1990)");
+          dataNascimento.focus();
+          return;
+        }
+        
+        // Converter DD/MM/YYYY para YYYY-MM-DD
+        const [dia, mes, ano] = dateValue.split("/");
+        const dataFormatada = `${ano}-${mes}-${dia}`;
+        
+        // Armazenar data formatada no campo
+        dataNascimento.value = dataFormatada;
+      });
+      
+      // Permitir backspace funcionar normalmente
+      dataNascimento.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace" && dataNascimento.value.endsWith("/")) {
+          e.target.value = e.target.value.slice(0, -1);
+        }
       });
     </script>
   </body>

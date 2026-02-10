@@ -185,19 +185,39 @@
           left: 0;
 
           width: 100%;
-          height: 82px;
-          padding: 10px 12px;
+          height: 72px;
+          padding: 0 10px;
 
           display: flex;
           align-items: center;
+          justify-content: flex-start;
           gap: 10px;
 
           overflow-x: auto; /* 🔥 SCROLL HORIZONTAL */
           overflow-y: hidden;
+          scroll-behavior: smooth;
 
           border-right: none;
           border-top: 1px solid var(--border);
           z-index: 1000;
+        }
+        
+        /* Estilo do scrollbar */
+        .sidebar::-webkit-scrollbar {
+          height: 3px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+          background: rgba(142, 45, 226, 0.5);
+          border-radius: 10px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+          background: rgba(142, 45, 226, 0.8);
         }
 
         /* Remove título no mobile */
@@ -209,9 +229,9 @@
         .sidebar a {
           flex-shrink: 0; /* 🔥 impede esmagar */
           margin: 0;
-          padding: 10px 14px;
-          border-radius: 14px;
-          font-size: 13px;
+          padding: 10px 12px;
+          border-radius: 12px;
+          font-size: 12px;
           white-space: nowrap;
           text-align: center;
         }
@@ -225,7 +245,7 @@
 
         /* ===== MAIN ===== */
         .main {
-          padding: 24px 16px 130px; /* espaço pro bottom bar */
+          padding: 24px 16px 110px; /* espaço pro bottom bar */
           align-items: center;
           justify-content: center;
         }

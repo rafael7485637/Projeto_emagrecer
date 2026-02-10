@@ -179,12 +179,34 @@ main.content {
 
     flex-direction: row !important;
     align-items: center !important;
-    justify-content: space-around !important;
+    justify-content: flex-start !important;
+    gap: 10px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-behavior: smooth !important;
 
     padding: 0 10px !important;
     border-top: 1px solid var(--border);
     border-right: none !important;
     z-index: 1000;
+  }
+  
+  /* Ocultar scrollbar no navegador enquanto mantém funcionalidade */
+  .sidebar::-webkit-scrollbar {
+    height: 3px;
+  }
+  
+  .sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb {
+    background: rgba(142, 45, 226, 0.5);
+    border-radius: 10px;
+  }
+  
+  .sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(142, 45, 226, 0.8);
   }
 
   .sidebar h2 {
@@ -198,6 +220,7 @@ main.content {
     border-radius: 12px;
     text-align: center;
     white-space: nowrap;
+    flex-shrink: 0 !important;
   }
 
   /* ===== CONTEÚDO ===== */
